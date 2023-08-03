@@ -19,19 +19,21 @@ public class AnimateHand : MonoBehaviour
 
     void Update()
     {
-        AnimateGrip();
+        //AnimateGrip();
         AnimateTrigger();
     }
 
+    /* por ahora no necesitamos esta accion
     void AnimateGrip()
     {
         _gripValue = gripReference.action.ReadValue<float>();
         _handAnimator.SetFloat("Grip", _gripValue);
     }
+    */
 
     void AnimateTrigger()
     {
         _triggerValue = triggerReference.action.ReadValue<float>();
-        _handAnimator.SetFloat("Trigger", _triggerValue);
+        _handAnimator.SetFloat("Grip", _triggerValue);
     }
 }
