@@ -11,8 +11,8 @@ public class Energy : MonoBehaviour
     [SerializeField] float _drainAmount;
 
     MeshRenderer handMesh;
-    public Material handMaterial;
-    public Color clr;
+    Material handMaterial;
+    Color newColor;
 
     private void Start()
     {
@@ -37,6 +37,7 @@ public class Energy : MonoBehaviour
         }
     }
 
+    //note: mantener variables en 1 debido a que el maximo de opacidad es 1
     private IEnumerator DrainEnergy(bool drainOn)
     {
         while (drainOn && EnergyPoints > 0)
@@ -44,16 +45,20 @@ public class Energy : MonoBehaviour
             Debug.Log("DRAIN ON");
             yield return new WaitForSeconds(_drainRate);
             EnergyPoints -= _drainAmount;
-            clr = Color.white;
-            handMaterial.color = clr;
+
+            newColor = handMaterial.color;
+            newColor.a -= _drainAmount;
+            handMaterial.color = newColor;
         }
         while (!drainOn && EnergyPoints < _energyLimit)
         {
             Debug.Log("DRAIN OFF");
             yield return new WaitForSeconds(_drainRate);
             EnergyPoints += _drainAmount;
-            clr = Color.white;
-            handMaterial.color = clr;
+
+            newColor = handMaterial.color;
+            newColor.a += _drainAmount;
+            handMaterial.color = newColor;
         }
     }
 }

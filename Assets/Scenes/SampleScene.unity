@@ -1335,12 +1335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b54f7685802c94ba8457a7754d3927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnergyPoints: 255
-  _energyLimit: 255
-  _drainRate: 0.5
-  _drainAmount: 5
-  handMaterial: {fileID: 0}
-  clr: {r: 0, g: 0, b: 0, a: 0}
+  EnergyPoints: 1
+  _energyLimit: 1
+  _drainRate: 0.1
+  _drainAmount: 0.01
 --- !u!65 &1261792895
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1421,7 +1419,7 @@ Transform:
   m_GameObject: {fileID: 1261792893}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.693, y: 1.123, z: 0.253}
+  m_LocalPosition: {x: -2.549, y: 1.123, z: 0.253}
   m_LocalScale: {x: 0.26638, y: 0.26638, z: 0.26638}
   m_ConstrainProportionsScale: 0
   m_Children: []
