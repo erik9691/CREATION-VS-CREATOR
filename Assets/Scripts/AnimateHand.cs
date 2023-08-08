@@ -5,16 +5,16 @@ using UnityEngine.InputSystem;
 
 public class AnimateHand : MonoBehaviour
 {
-    public InputActionReference gripReference;
-    public InputActionReference triggerReference;
+    [SerializeField] InputActionReference _gripReference;
+    [SerializeField] InputActionReference _triggerReference;
 
-    Animator _handAnimator;
-    float _gripValue;
-    float _triggerValue;
+    Animator handAnimator;
+    float gripValue;
+    float triggerValue;
 
     void Start()
     {
-        _handAnimator = GetComponent<Animator>();
+        handAnimator = GetComponent<Animator>();
     }
 
     void Update()
@@ -26,14 +26,14 @@ public class AnimateHand : MonoBehaviour
     /* por ahora no necesitamos esta accion
     void AnimateGrip()
     {
-        _gripValue = gripReference.action.ReadValue<float>();
-        _handAnimator.SetFloat("Grip", _gripValue);
+        gripValue = _gripReference.action.ReadValue<float>();
+        handAnimator.SetFloat("Grip", gripValue);
     }
     */
 
     void AnimateTrigger()
     {
-        _triggerValue = triggerReference.action.ReadValue<float>();
-        _handAnimator.SetFloat("Grip", _triggerValue);
+        triggerValue = _triggerReference.action.ReadValue<float>();
+        handAnimator.SetFloat("Grip", triggerValue);
     }
 }
