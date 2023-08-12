@@ -8,11 +8,11 @@ public class CameraController : NetworkBehaviour
     [SerializeField] Vector3 offset;
     [SerializeField] GameObject playerCamera;
 
-    public override void OnStartAuthority()
+    public override void OnNetworkSpawn()
     {
-            playerCamera.SetActive(true);
+        playerCamera.SetActive(IsOwner);
+        base.OnNetworkSpawn();
     }
-
     private void Update()
     {
         gameObject.transform.position = transform.position + offset;
