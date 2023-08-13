@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 719020644}
   m_Layer: 0
   m_Name: Platform
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -598,6 +598,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3109957310596434830, guid: aca786737f6995742adba1f39efaae5b,
+        type: 3}
+      propertyPath: NetworkConfig.PlayerPrefab
+      value: 
+      objectReference: {fileID: 2099672828647842162, guid: 00d4ba2e233b12c42901dd875240dead,
+        type: 3}
     - target: {fileID: 5787742508333209321, guid: aca786737f6995742adba1f39efaae5b,
         type: 3}
       propertyPath: m_LocalPosition.x
