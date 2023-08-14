@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Netcode;
 
-public class AnimateHand : MonoBehaviour
+public class AnimateHand : NetworkBehaviour
 {
     [SerializeField] InputActionReference _gripReference;
     [SerializeField] InputActionReference _triggerReference;
@@ -12,11 +13,10 @@ public class AnimateHand : MonoBehaviour
     float gripValue;
     float triggerValue;
 
-    void Start()
+    private void Awake()
     {
         handAnimator = GetComponent<Animator>();
     }
-
     void Update()
     {
         //AnimateGrip();

@@ -15,14 +15,17 @@ public class NetworkManagerUI : MonoBehaviour
         _serverBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartServer();
+            Destroy(this.gameObject);
         });
         _hostBtn.onClick.AddListener(() =>
         {
             Host();
+            Destroy(this.gameObject);
         });
         _clientBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
+            Destroy(this.gameObject);
         });
     }
 
