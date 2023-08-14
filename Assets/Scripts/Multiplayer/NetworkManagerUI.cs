@@ -10,9 +10,6 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button _hostBtn;
     [SerializeField] Button _clientBtn;
 
-    [SerializeField] GameObject _minionPrefab;
-    [SerializeField] GameObject _overlordPrefab;
-
     private void Awake()
     {
         _serverBtn.onClick.AddListener(() =>
