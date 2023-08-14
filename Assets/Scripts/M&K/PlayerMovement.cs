@@ -98,7 +98,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (Time.time > shootRateTime)
         {
-            SpawnBulletServerRpc();
+            SpawnBulletServerRpc(spawnBala.position, spawnBala.rotation);
             shootRateTime = Time.time + shootRate;
         }
     }
@@ -111,17 +111,16 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SpawnBulletServerRpc()
+    private void SpawnBulletServerRpc(Vector3 position, Quaternion rotation)
     {
         GameObject newBullet;
 
-        newBullet = Instantiate(bala, spawnBala.position, spawnBala.transform.rotation);
+        newBullet = Instantiate(bala, position, rotation);
         newBullet.GetComponent<NetworkObject>().Spawn();
 
-        newBullet.GetComponent<Rigidbody>().AddForce(spawnBala.up * -bulSpeed);
+        newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.up * -bulSpeed);
 
         StartCoroutine(DeleteBulletDelay(newBullet));
-        
     }
 
 }
