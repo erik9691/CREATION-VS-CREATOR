@@ -27,6 +27,9 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] float shootRate = 1f;
     float shootRateTime = 0;
 
+    [SerializeField] float hp = 1f;
+
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,7 +50,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        transform.Translate(moveInput.x * Time.deltaTime * _speed, 0, moveInput.y * Time.deltaTime * _speed);
+        transform.Translate(moveInput.x * Time.deltaTime * _speed, 0, moveInput.y * Time.deltaTime * _speed * hp);
     }
 
     private void OnCollisionEnter(Collision collision)
