@@ -330,12 +330,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8e2c784465ff16459af86a024aa4fc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serverBtn: {fileID: 4361344601974390938}
+  _spawnBtn: {fileID: 4361344601974390938}
   _hostBtn: {fileID: 1071454218344725090}
   _clientBtn: {fileID: 3235395083789569033}
-  _minionPrefab: {fileID: 3970179914285831135, guid: dd9a9b617160ed349bdd0eb68f0f058e,
-    type: 3}
-  _overlordPrefab: {fileID: 4801470288627515918, guid: eb41b512fdffc7b478deb8844a76881b,
+  _interactablePrefab: {fileID: 1261547906231013662, guid: 5002ac7d86996d242afcdd99853be472,
     type: 3}
 --- !u!1 &5788366509686468454
 GameObject:

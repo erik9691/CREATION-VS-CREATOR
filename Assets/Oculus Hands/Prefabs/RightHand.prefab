@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 3240524871626806228}
   - component: {fileID: 3240524871636401154}
   - component: {fileID: -2102016463654223444}
-  - component: {fileID: 5541244697491675961}
+  - component: {fileID: 1027713956051071944}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -391,7 +391,7 @@ MonoBehaviour:
     type: 3}
   _triggerReference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
---- !u!114 &5541244697491675961
+--- !u!114 &1027713956051071944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

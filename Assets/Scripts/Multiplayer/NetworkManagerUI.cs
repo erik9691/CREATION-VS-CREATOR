@@ -6,28 +6,28 @@ using UnityEngine.UI;
 
 public class NetworkManagerUI : MonoBehaviour
 {
-    [SerializeField] Button _serverBtn;
+    [SerializeField] Button _spawnBtn;
     [SerializeField] Button _hostBtn;
     [SerializeField] Button _clientBtn;
 
     bool hostStarted = false;
+    [SerializeField] GameObject _interactablePrefab;
 
     private void Awake()
     {
-        _serverBtn.onClick.AddListener(() =>
+        _spawnBtn.onClick.AddListener(() =>
         {
-            NetworkManager.Singleton.StartServer();
-            Destroy(this.gameObject);
+            SpawnInteractableServerRpc();
         });
         _hostBtn.onClick.AddListener(() =>
         {
             Host();
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         });
         _clientBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         });
     }
 
@@ -36,6 +36,16 @@ public class NetworkManagerUI : MonoBehaviour
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
+    }
+
+    [ServerRpc]
+    private void SpawnInteractableServerRpc()
+    {
+        GameObject interactable;
+
+        interactable = Instantiate(_interactablePrefab, new Vector3(0, 2, 0), Quaternion.identity);
+        interactable.GetComponent<NetworkObject>().Spawn();
+        interactable.GetComponent<NetworkObject>().ChangeOwnership(1739009040);
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
@@ -63,7 +73,7 @@ public class NetworkManagerUI : MonoBehaviour
             response.PlayerPrefabHash = null;
 
             // Position to spawn the player object (if null it uses default of Vector3.zero)
-            response.Position = new Vector3(0, -5, 0);
+            response.Position = new Vector3(0, -20, 0);
 
             hostStarted = true;
         }

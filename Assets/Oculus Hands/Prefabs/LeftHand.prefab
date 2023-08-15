@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 7072478885644867327}
   - component: {fileID: 7072478885652658473}
   - component: {fileID: 576318824869802555}
-  - component: {fileID: -8171884583548158939}
+  - component: {fileID: 4855050172601992825}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -501,7 +501,7 @@ MonoBehaviour:
     type: 3}
   _triggerReference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
---- !u!114 &-8171884583548158939
+--- !u!114 &4855050172601992825
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

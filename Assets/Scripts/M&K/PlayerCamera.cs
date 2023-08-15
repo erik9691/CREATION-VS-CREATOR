@@ -21,7 +21,7 @@ public class PlayerCamera : NetworkBehaviour
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();  
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
