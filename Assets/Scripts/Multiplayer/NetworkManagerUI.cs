@@ -45,7 +45,6 @@ public class NetworkManagerUI : MonoBehaviour
 
         interactable = Instantiate(_interactablePrefab, new Vector3(0, 2, 0), Quaternion.identity);
         interactable.GetComponent<NetworkObject>().Spawn();
-        interactable.GetComponent<NetworkObject>().ChangeOwnership(1739009040);
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
