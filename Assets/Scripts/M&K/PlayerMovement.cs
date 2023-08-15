@@ -7,27 +7,31 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] 
-    float jumpForce = 250f, speed = 7f, runSpeed = 10f, bulSpeed = 1000f;
+    float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _bulSpeed = 1000f;
     
-    private float walkSpeed;
+    float walkSpeed;
 
-    private Rigidbody rb;
-    private PlayerInput pi;
+    Rigidbody rb;
+    PlayerInput playerInput;
 
-    private Vector2 input;
+    private Vector2 moveInput;
 
-    public bool puedoSaltar;
+    bool puedoSaltar;
 
-    public Transform spawnBala;
-    public GameObject bala;
-    public float shootRate = 1f;
-    private float shootRateTime = 0;
+    [SerializeField]
+    Transform _spawnPoint;
+
+    [SerializeField] 
+    GameObject bulletPrefab;
+
+    [SerializeField] float shootRate = 1f;
+    float shootRateTime = 0;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        pi = GetComponent<PlayerInput>();
-        walkSpeed = speed;
+        playerInput = GetComponent<PlayerInput>();
+        walkSpeed = _speed;
 
         EnableActions();
     }
@@ -36,14 +40,14 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        input = pi.actions["Move"].ReadValue<Vector2>();
+        moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
     }
 
     private void FixedUpdate()
     {
         if (!IsOwner) return;
 
-        transform.Translate(input.x * Time.deltaTime * speed, 0, input.y * Time.deltaTime * speed);
+        transform.Translate(moveInput.x * Time.deltaTime * _speed, 0, moveInput.y * Time.deltaTime * _speed);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -62,22 +66,22 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        pi.actions["Jump"].Enable();
-        pi.actions["Jump"].performed += Jump;
+        playerInput.actions["Jump"].Enable();
+        playerInput.actions["Jump"].performed += Jump;
 
-        pi.actions["Sprint"].Enable();
-        pi.actions["Sprint"].started += SprintStart;
-        pi.actions["Sprint"].canceled += SprintCancel;
+        playerInput.actions["Sprint"].Enable();
+        playerInput.actions["Sprint"].started += SprintStart;
+        playerInput.actions["Sprint"].canceled += SprintCancel;
 
-        pi.actions["Shoot"].Enable();
-        pi.actions["Shoot"].started += Shoot;
+        playerInput.actions["Shoot"].Enable();
+        playerInput.actions["Shoot"].started += Shoot;
     }
 
     private void Jump(InputAction.CallbackContext obj)
     {
         if (puedoSaltar)
         {
-            rb.AddForce(Vector3.up * jumpForce);
+            rb.AddForce(Vector3.up * _jumpForce);
             puedoSaltar = false;
         }
     }
@@ -86,19 +90,19 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (puedoSaltar)
         {
-            speed = runSpeed;
+            _speed *= _runMult;
         }
     }
     private void SprintCancel(InputAction.CallbackContext obj)
     {
-        speed = walkSpeed;
+        _speed /= _runMult;
     }
 
     private void Shoot(InputAction.CallbackContext obj)
     {
         if (Time.time > shootRateTime)
         {
-            SpawnBulletServerRpc(spawnBala.position, spawnBala.rotation);
+            SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
             shootRateTime = Time.time + shootRate;
         }
     }
@@ -113,14 +117,14 @@ public class PlayerMovement : NetworkBehaviour
     [ServerRpc]
     private void SpawnBulletServerRpc(Vector3 position, Quaternion rotation)
     {
-        GameObject newBullet;
+        GameObject bullet;
 
-        newBullet = Instantiate(bala, position, rotation);
-        newBullet.GetComponent<NetworkObject>().Spawn();
+        bullet = Instantiate(bulletPrefab, position, rotation);
+        bullet.GetComponent<NetworkObject>().Spawn();
 
-        newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.up * -bulSpeed);
+        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up * -_bulSpeed);
 
-        StartCoroutine(DeleteBulletDelay(newBullet));
+        StartCoroutine(DeleteBulletDelay(bullet));
     }
 
 }

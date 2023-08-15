@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Energy : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Energy : MonoBehaviour
 
     [SerializeField] float _drainRate;
     [SerializeField] float _drainAmount;
+
+    [SerializeField] InputAction grabInput;
 
     MeshRenderer handMesh;
     Material handMaterial;
@@ -37,7 +40,7 @@ public class Energy : MonoBehaviour
         }
     }
 
-    //note: mantener variables en 1 debido a que el maximo de opacidad es 1
+    //note: mantener energylimit en 1 debido a que el maximo de opacidad es 1
     private IEnumerator DrainEnergy(bool drainOn)
     {
         while (drainOn && EnergyPoints > 0)
@@ -50,6 +53,10 @@ public class Energy : MonoBehaviour
             newColor.a -= _drainAmount;
             handMaterial.color = newColor;
         }
+        if (EnergyPoints == 0)
+        {
+            grabInput.Disable();
+        }
         while (!drainOn && EnergyPoints < _energyLimit)
         {
             Debug.Log("DRAIN OFF");
@@ -59,6 +66,10 @@ public class Energy : MonoBehaviour
             newColor = handMaterial.color;
             newColor.a += _drainAmount;
             handMaterial.color = newColor;
+        }
+        if (EnergyPoints == _energyLimit)
+        {
+            grabInput.Enable();
         }
     }
 }

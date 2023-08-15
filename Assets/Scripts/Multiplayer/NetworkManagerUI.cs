@@ -10,6 +10,8 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button _hostBtn;
     [SerializeField] Button _clientBtn;
 
+    bool hostStarted = false;
+
     private void Awake()
     {
         _serverBtn.onClick.AddListener(() =>
@@ -31,6 +33,7 @@ public class NetworkManagerUI : MonoBehaviour
 
     private void Host()
     {
+        NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
     }
@@ -47,11 +50,23 @@ public class NetworkManagerUI : MonoBehaviour
         response.Approved = true;
         response.CreatePlayerObject = true;
 
-        // The Prefab hash value of the NetworkPrefab, if null the default NetworkManager player Prefab is used
-        response.PlayerPrefabHash = 1094301109;
+        if (hostStarted)
+        {
+            // The Prefab hash value of the NetworkPrefab, if null the default NetworkManager player Prefab is used
+            response.PlayerPrefabHash = 1094301109;
 
-        // Position to spawn the player object (if null it uses default of Vector3.zero)
-        response.Position = Vector3.zero;
+            // Position to spawn the player object (if null it uses default of Vector3.zero)
+            response.Position = Vector3.zero;
+        }
+        else
+        {
+            response.PlayerPrefabHash = null;
+
+            // Position to spawn the player object (if null it uses default of Vector3.zero)
+            response.Position = new Vector3(0, -5, 0);
+
+            hostStarted = true;
+        }
 
         // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
         response.Rotation = Quaternion.identity;
