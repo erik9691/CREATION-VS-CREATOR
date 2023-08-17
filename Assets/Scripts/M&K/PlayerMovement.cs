@@ -35,8 +35,6 @@ public class PlayerMovement : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         walkSpeed = _speed;
-
-        EnableActions();
     }
 
     private void Update()
@@ -61,49 +59,30 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
-
-
-
-
-    private void EnableActions()
+    public void Jump(InputAction.CallbackContext obj)
     {
-        if (!IsOwner) return;
-
-        playerInput.actions["Jump"].Enable();
-        playerInput.actions["Jump"].performed += Jump;
-
-        playerInput.actions["Sprint"].Enable();
-        playerInput.actions["Sprint"].started += SprintStart;
-        playerInput.actions["Sprint"].canceled += SprintCancel;
-
-        playerInput.actions["Shoot"].Enable();
-        playerInput.actions["Shoot"].started += Shoot;
-    }
-
-    private void Jump(InputAction.CallbackContext obj)
-    {
-        if (puedoSaltar)
+        if (puedoSaltar && obj.performed)
         {
             rb.AddForce(Vector3.up * _jumpForce);
             puedoSaltar = false;
         }
     }
 
-    private void SprintStart(InputAction.CallbackContext obj)
+    public void Sprint(InputAction.CallbackContext obj)
     {
-        if (puedoSaltar)
+        if (puedoSaltar && obj.started)
         {
             _speed *= _runMult;
         }
-    }
-    private void SprintCancel(InputAction.CallbackContext obj)
-    {
-        _speed /= _runMult;
+        else if (obj.canceled)
+        {
+            _speed /= _runMult;
+        }
     }
 
-    private void Shoot(InputAction.CallbackContext obj)
+    public void Shoot(InputAction.CallbackContext obj)
     {
-        if (Time.time > shootRateTime)
+        if (Time.time > shootRateTime && obj.started)
         {
             SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
             shootRateTime = Time.time + shootRate;
