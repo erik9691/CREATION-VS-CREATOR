@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : NetworkBehaviour
 {
@@ -27,7 +28,9 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] float shootRate = 1f;
     float shootRateTime = 0;
 
-    [SerializeField] float hp = 1f;
+    [SerializeField] float hp = 1f; 
+
+    [SerializeField] Slider hpBar;
 
 
     private void Start()
@@ -35,6 +38,9 @@ public class PlayerMovement : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         walkSpeed = _speed;
+
+        hpBar.highValue = hp;
+        hpBar.lowValue = 0f;
     }
 
     private void Update()
@@ -42,6 +48,8 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
 
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
+
+        hpBar.value = hp;
     }
 
     private void FixedUpdate()
