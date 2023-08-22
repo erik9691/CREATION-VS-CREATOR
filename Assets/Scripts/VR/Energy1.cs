@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Energy : MonoBehaviour
+public class Energy1 : MonoBehaviour
 {
     public float EnergyPoints;
     [SerializeField] float _energyLimit;
@@ -13,13 +13,13 @@ public class Energy : MonoBehaviour
 
     [SerializeField] InputAction grabInput;
 
-    [SerializeField] SkinnedMeshRenderer handMesh;
+    MeshRenderer handMesh;
     Material handMaterial;
     Color newColor;
 
     private void Start()
     {
-        //handMesh = GetComponent<MeshRenderer>();
+        handMesh = GetComponent<MeshRenderer>();
         handMaterial = handMesh.material;
     }
 
@@ -55,10 +55,10 @@ public class Energy : MonoBehaviour
             newColor.a -= _drainAmount;
             handMaterial.color = newColor;
         }
-        if (EnergyPoints == 0)
-        {
-            grabInput.Disable();
-        }
+        //if (EnergyPoints == 0)
+        //{
+        //    grabInput.Disable();
+        //}
         while (!drainOn && EnergyPoints < _energyLimit)
         {
             Debug.Log("DRAIN OFF");
@@ -69,9 +69,9 @@ public class Energy : MonoBehaviour
             newColor.a += _drainAmount;
             handMaterial.color = newColor;
         }
-        if (EnergyPoints == _energyLimit)
-        {
-            grabInput.Enable();
-        }
+        //if (EnergyPoints == _energyLimit)
+        //{
+        //    grabInput.Enable();
+        //}
     }
 }

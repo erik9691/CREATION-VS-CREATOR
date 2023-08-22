@@ -9,6 +9,7 @@ public class GrabMinion : NetworkBehaviour
 {
     ulong minionId;
     NetworkObject minionSelected;
+    Transform minionTransform;
     public void OnSelectEnter(SelectEnterEventArgs eventArgs)
     {
         minionSelected = eventArgs.interactableObject.transform.GetComponent<NetworkObject>();
@@ -18,11 +19,11 @@ public class GrabMinion : NetworkBehaviour
         }
     }
 
-    public void OnSelectExit(SelectEnterEventArgs eventArgs)
+    public void OnSelectExit(SelectExitEventArgs eventArgs)
     {
         if (minionSelected != null)
         {
-            RequestOwnershipServerRpc(OwnerClientId, minionSelected);
+            ReturnOwnershipServerRpc(OwnerClientId, minionSelected);
         }
     }
 

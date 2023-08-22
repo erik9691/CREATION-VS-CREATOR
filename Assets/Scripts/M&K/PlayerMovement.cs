@@ -47,9 +47,14 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        if (transform.rotation != Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0))
+        {
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        }
+
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
-        hpBar.value = hp;
+        //hpBar.value = hp;
     }
 
     private void FixedUpdate()
