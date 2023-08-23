@@ -22,17 +22,18 @@ public class NetworkManagerUI : MonoBehaviour
         _hostBtn.onClick.AddListener(() =>
         {
             Host();
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
         });
         _clientBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
         });
     }
 
     private void Host()
     {
+        //Spawnea con setting para Overlord y lo cambia para que los demas spawneen como Minions
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
@@ -62,16 +63,13 @@ public class NetworkManagerUI : MonoBehaviour
         if (hostStarted)
         {
             // The Prefab hash value of the NetworkPrefab, if null the default NetworkManager player Prefab is used
-            response.PlayerPrefabHash = 1094301109;
-
+            response.PlayerPrefabHash = 969;
             // Position to spawn the player object (if null it uses default of Vector3.zero)
             response.Position = Vector3.zero;
         }
         else
         {
             response.PlayerPrefabHash = null;
-
-            // Position to spawn the player object (if null it uses default of Vector3.zero)
             response.Position = new Vector3(0, -20, 0);
 
             hostStarted = true;

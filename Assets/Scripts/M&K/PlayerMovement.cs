@@ -4,65 +4,83 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Cinemachine;
 
 public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] 
-    float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _bulSpeed = 1000f;
-    
-    float walkSpeed;
+    float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f, _bulSpeed = 1000f, shootRate = 1f;
+
+    [SerializeField] Transform _spawnPoint;
+    [SerializeField] GameObject bulletPrefab;
 
     Rigidbody rb;
     PlayerInput playerInput;
-
-    private Vector2 moveInput;
-
+    Vector2 moveInput;
+    Transform cameraTransform;
+    Transform modelTransform;
+    CinemachineVirtualCamera vc;
     bool puedoSaltar;
-
-    [SerializeField]
-    Transform _spawnPoint;
-
-    [SerializeField] 
-    GameObject bulletPrefab;
-
-    [SerializeField] float shootRate = 1f;
     float shootRateTime = 0;
 
-    [SerializeField] float hp = 1f; 
-
-    [SerializeField] Slider hpBar;
-
+    public override void OnNetworkSpawn()
+    {
+        //Solo el dueño puede usar la camara
+        if (IsOwner)
+        {
+            vc.Priority = 1;
+        }
+        else
+        {
+            vc.Priority = 0;
+        }
+    }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
-        walkSpeed = _speed;
+        modelTransform = transform.GetChild(0);
+        cameraTransform = transform.parent.gameObject.transform.GetChild(1);
+        vc = transform.parent.gameObject.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
 
-        hpBar.highValue = hp;
-        hpBar.lowValue = 0f;
+        //lockear el cursor
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
+
+
+
 
     private void Update()
     {
         if (!IsOwner) return;
 
+        //Cuando el Overlord te suelta volves a estar parado
         if (transform.rotation != Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0))
         {
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         }
 
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
-
-        //hpBar.value = hp;
     }
 
     private void FixedUpdate()
     {
         if (!IsOwner) return;
 
-        transform.Translate(moveInput.x * Time.deltaTime * _speed, 0, moveInput.y * Time.deltaTime * _speed * hp);
+        //Movimiento
+        Vector3 move = new Vector3(moveInput.x, 0 , moveInput.y);
+        move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
+        move.y = 0;
+        transform.Translate(move * Time.deltaTime * _speed);
+
+        //Rotacion
+        Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
+        modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
+
+
+
 
     private void OnCollisionEnter(Collision collision)
     {
