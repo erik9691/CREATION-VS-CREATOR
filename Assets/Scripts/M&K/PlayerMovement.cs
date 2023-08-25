@@ -22,6 +22,14 @@ public class PlayerMovement : NetworkBehaviour
     CinemachineVirtualCamera vc;
     bool puedoSaltar;
     float shootRateTime = 0;
+    int ammo;
+    int clipAmmo;
+    int clipCapacity;
+    int maxAmmo;
+    bool isReloading; // para la animacion
+    Transform boxTransform;
+
+
 
     public override void OnNetworkSpawn()
     {
@@ -46,6 +54,10 @@ public class PlayerMovement : NetworkBehaviour
 
         //lockear el cursor
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        
+        ammo = 10;
+        isReloading = false;
+        clipAmmo = 5;
     }
 
 
@@ -62,6 +74,7 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
+
     }
 
     private void FixedUpdate()
@@ -113,10 +126,23 @@ public class PlayerMovement : NetworkBehaviour
 
     public void Shoot(InputAction.CallbackContext obj)
     {
-        if (Time.time > shootRateTime && obj.started)
+        if(ammo > 0)
         {
-            SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
-            shootRateTime = Time.time + shootRate;
+            if (clipAmmo == 0)
+            {
+                Reload();
+            }
+            else
+            {
+                if (Time.time > shootRateTime && obj.started)
+                {
+                    SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
+                    shootRateTime = Time.time + shootRate;
+
+                    clipAmmo -= 1;
+                }
+            }
+            
         }
     }
 
@@ -139,5 +165,49 @@ public class PlayerMovement : NetworkBehaviour
 
         StartCoroutine(DeleteBulletDelay(bullet));
     }
+
+    private void Reload()
+    {
+        if(ammo < clipCapacity)
+        {
+            clipAmmo = ammo;
+            ammo = 0;
+        }
+        else
+        {
+            clipAmmo = clipCapacity;
+            ammo -= clipCapacity;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "AmmoBox")
+        {
+            boxTransform = other.transform;
+
+            if (ammo >= 15)
+            {
+                ammo = maxAmmo;
+            }
+            else
+            {
+                if(ammo > 0)
+                {
+                    ammo += 5;
+                }
+            }
+            
+            DeleteBoxServerRpc();
+        }
+    }
+
+    [ServerRpc]
+    private void DeleteBoxServerRpc()
+    {
+        boxTransform.GetComponent<NetworkObject>().Despawn();
+    }
+
+
 
 }
