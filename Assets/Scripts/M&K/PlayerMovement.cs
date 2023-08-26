@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using Cinemachine;
 
 public class PlayerMovement : NetworkBehaviour
 {
-    [SerializeField] 
-    float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f, _bulSpeed = 1000f, shootRate = 1f;
-
-    [SerializeField] Transform _spawnPoint;
-    [SerializeField] GameObject bulletPrefab;
+    [SerializeField]
+    float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f;
 
     Rigidbody rb;
     PlayerInput playerInput;
@@ -21,15 +17,6 @@ public class PlayerMovement : NetworkBehaviour
     Transform modelTransform;
     CinemachineVirtualCamera vc;
     bool puedoSaltar;
-    float shootRateTime = 0;
-    int ammo;
-    int clipAmmo;
-    int clipCapacity;
-    int maxAmmo;
-    bool isReloading; // para la animacion
-    Transform boxTransform;
-
-
 
     public override void OnNetworkSpawn()
     {
@@ -53,11 +40,7 @@ public class PlayerMovement : NetworkBehaviour
         vc = transform.parent.gameObject.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
 
         //lockear el cursor
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        
-        ammo = 10;
-        isReloading = false;
-        clipAmmo = 5;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
@@ -123,91 +106,4 @@ public class PlayerMovement : NetworkBehaviour
             _speed /= _runMult;
         }
     }
-
-    public void Shoot(InputAction.CallbackContext obj)
-    {
-        if(ammo > 0)
-        {
-            if (clipAmmo == 0)
-            {
-                Reload();
-            }
-            else
-            {
-                if (Time.time > shootRateTime && obj.started)
-                {
-                    SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
-                    shootRateTime = Time.time + shootRate;
-
-                    clipAmmo -= 1;
-                }
-            }
-            
-        }
-    }
-
-    private IEnumerator DeleteBulletDelay(GameObject bullet)
-    {
-        yield return new WaitForSeconds(2);
-
-        bullet.GetComponent<NetworkObject>().Despawn();
-    }
-
-    [ServerRpc]
-    private void SpawnBulletServerRpc(Vector3 position, Quaternion rotation)
-    {
-        GameObject bullet;
-
-        bullet = Instantiate(bulletPrefab, position, rotation);
-        bullet.GetComponent<NetworkObject>().Spawn();
-
-        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up * -_bulSpeed);
-
-        StartCoroutine(DeleteBulletDelay(bullet));
-    }
-
-    private void Reload()
-    {
-        if(ammo < clipCapacity)
-        {
-            clipAmmo = ammo;
-            ammo = 0;
-        }
-        else
-        {
-            clipAmmo = clipCapacity;
-            ammo -= clipCapacity;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "AmmoBox")
-        {
-            boxTransform = other.transform;
-
-            if (ammo >= 15)
-            {
-                ammo = maxAmmo;
-            }
-            else
-            {
-                if(ammo > 0)
-                {
-                    ammo += 5;
-                }
-            }
-            
-            DeleteBoxServerRpc();
-        }
-    }
-
-    [ServerRpc]
-    private void DeleteBoxServerRpc()
-    {
-        boxTransform.GetComponent<NetworkObject>().Despawn();
-    }
-
-
-
 }

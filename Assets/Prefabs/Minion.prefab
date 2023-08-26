@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 7932248839335822911}
   - component: {fileID: 2384657893506139310}
   - component: {fileID: 2784703201145696415}
+  - component: {fileID: 6981921990588840870}
   - component: {fileID: 856140120244910330}
   - component: {fileID: 2039741133828283274}
   - component: {fileID: 444289634267827335}
@@ -378,15 +379,23 @@ MonoBehaviour:
   _speed: 7
   _runMult: 2
   _rotationSpeed: 5
+--- !u!114 &6981921990588840870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3058222408210696036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 341424c0e3549e94ab1639a2a2888810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _bulSpeed: 1000
-  cameraTransform: {fileID: 4564402171959792049}
-  modelTransform: {fileID: 6932885608228770}
-  vc: {fileID: 5500729151932588223}
-  shootRate: 0.25
+  _shootRate: 1
   _spawnPoint: {fileID: 1583292183476529325}
   bulletPrefab: {fileID: 92602612815403785, guid: 252e6db3aea9c214bb2fe9608fefff97,
     type: 3}
-  hp: 1
 --- !u!114 &856140120244910330
 MonoBehaviour:
   m_ObjectHideFlags: 0
