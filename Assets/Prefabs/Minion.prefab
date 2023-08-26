@@ -379,6 +379,7 @@ MonoBehaviour:
   _speed: 7
   _runMult: 2
   _rotationSpeed: 5
+  vc: {fileID: 5500729151932588223}
 --- !u!114 &6981921990588840870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,7 +563,7 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
+  SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
   PositionThreshold: 0.001
@@ -1156,7 +1157,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4426681815582951015}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca0d7ddcf364b9343a350f77e7581937,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7884749462050217526}
   m_SourcePrefab: {fileID: 100100000, guid: ca0d7ddcf364b9343a350f77e7581937, type: 3}
 --- !u!4 &6932885608228770 stripped
 Transform:
@@ -1164,6 +1169,42 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 545524967388676169}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &816121029838650648 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ca0d7ddcf364b9343a350f77e7581937,
+    type: 3}
+  m_PrefabInstance: {fileID: 545524967388676169}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7884749462050217526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816121029838650648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1001 &4243519863298826636
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class PlayerMovement : NetworkBehaviour
     Vector2 moveInput;
     Transform cameraTransform;
     Transform modelTransform;
-    CinemachineVirtualCamera vc;
+    [SerializeField] CinemachineVirtualCamera vc;
     bool puedoSaltar;
 
     public override void OnNetworkSpawn()
@@ -37,7 +37,7 @@ public class PlayerMovement : NetworkBehaviour
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);
         cameraTransform = transform.parent.gameObject.transform.GetChild(1);
-        vc = transform.parent.gameObject.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
+        //vc = transform.parent.gameObject.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
 
         //lockear el cursor
         Cursor.lockState = CursorLockMode.Locked;
