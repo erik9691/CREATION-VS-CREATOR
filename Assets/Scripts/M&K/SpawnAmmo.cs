@@ -15,7 +15,7 @@ public class SpawnAmmo : NetworkBehaviour
     {
         for(int i = 0; i< ammoBoxPosition.Length; i++)
         {
-            ammoBoxPosition[i].position += new Vector3(0, 1, 0);
+            ammoBoxPosition[i].position += new Vector3(0, 0.15f, 0);
         }
     }
 
@@ -30,7 +30,7 @@ public class SpawnAmmo : NetworkBehaviour
     }
 
     
-    [ServerRpc]
+    [ServerRpc (RequireOwnership = false)]
     private void SpawnBoxServerRpc()
     {
         int i = Random.Range(0, ammoBoxPosition.Length);

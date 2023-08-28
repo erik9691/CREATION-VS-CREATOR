@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using UnityEngine;
-
 public class PlayerGun : NetworkBehaviour
 {
     [SerializeField]
@@ -13,33 +12,35 @@ public class PlayerGun : NetworkBehaviour
     [SerializeField] GameObject bulletPrefab;
 
     float shootRateTime = 0;
-    int ammo;
-    int clipAmmo;
-    int clipCapacity;
-    int maxAmmo;
-    int boxAmmo;
+    [SerializeField] int storedAmmo = 20, clipAmmo = 5, clipCapacity = 5, maxAmmo = 25, boxAmmo = 10;
     bool isReloading; // para la animacion
     Transform boxTransform;
 
     public void Shoot(InputAction.CallbackContext obj)
     {
-        if(ammo > 0)
+        if (obj.started)
         {
-            if (clipAmmo == 0)
+            if (storedAmmo > 0 || clipAmmo > 0)
             {
-                Reload();
-            }
-            else
-            {
-                if (Time.time > shootRateTime && obj.started)
+                if (clipAmmo == 0)
                 {
-                    SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
-                    shootRateTime = Time.time + _shootRate;
+                    Reload();
+                }
+                else
+                {
+                    if (Time.time > shootRateTime && obj.started)
+                    {
+                        SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
+                        shootRateTime = Time.time + _shootRate;
 
-                    clipAmmo -= 1;
+                        clipAmmo -= 1;
+                    }
                 }
             }
-            
+            else if (storedAmmo <= 0 && clipAmmo <= 0)
+            {
+                Debug.Log("NO AMMO :'V");
+            }
         }
     }
 
@@ -65,14 +66,14 @@ public class PlayerGun : NetworkBehaviour
 
     private void Reload()
     {
-        if(ammo < clipCapacity)
+        if(storedAmmo < clipCapacity)
         {
-            clipAmmo = ammo;
-            ammo = 0;
+            clipAmmo = storedAmmo;
+            storedAmmo = 0;
         }
         else
         {
-            ammo -= (clipCapacity - clipAmmo);
+            storedAmmo -= (clipCapacity - clipAmmo);
             clipAmmo = clipCapacity;
         }
     }
@@ -83,22 +84,22 @@ public class PlayerGun : NetworkBehaviour
         {
             boxTransform = other.transform;
 
-            if (ammo < maxAmmo)
+            if (storedAmmo < maxAmmo)
             {
-                if (ammo >= (maxAmmo - boxAmmo))
+                if (storedAmmo >= (maxAmmo - boxAmmo))
                 {
-                    ammo = maxAmmo;
+                    storedAmmo = maxAmmo;
                 }
                 else
                 {
-                    ammo += boxAmmo;
+                    storedAmmo += boxAmmo;
                 }
 
                 DeleteBoxServerRpc();
             }
             else
             {
-                //mostrar en pantalla icono de max ammo
+                //mostrar en pantalla icono de max storedAmmo
             }
         }
     }

@@ -36,6 +36,7 @@ public class GrabMinion : NetworkBehaviour
         {
             minionId = networkObject.OwnerClientId;
             networkObject.ChangeOwnership(newOwnerId);
+            networkObject.gameObject.GetComponent<PlayerHealth>().TakeDamage();
         }
         else
         {
