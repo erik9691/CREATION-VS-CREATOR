@@ -6,10 +6,18 @@ using Unity.Netcode;
 public class SpawnAmmo : NetworkBehaviour
 {
 
-    [SerializeField] 
-    Transform[] ammoBoxPosition;
+    [SerializeField] Transform[] ammoBoxPosition;
 
     [SerializeField] GameObject ammoBox;
+
+
+    private void Start()
+    {
+        for(int i = 0; i< ammoBoxPosition.Length; i++)
+        {
+            ammoBoxPosition[i].position += new Vector3(0, 1, 0);
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -25,9 +33,10 @@ public class SpawnAmmo : NetworkBehaviour
     [ServerRpc]
     private void SpawnBoxServerRpc()
     {
+        int i = Random.Range(0, ammoBoxPosition.Length);
         GameObject box;
 
-        box = Instantiate(ammoBox, ammoBoxPosition[Random.Range(0, 11)].position, Quaternion.identity);
+        box = Instantiate(ammoBox, ammoBoxPosition[i].position, Quaternion.identity);
         box.GetComponent<NetworkObject>().Spawn();
     }
 }
