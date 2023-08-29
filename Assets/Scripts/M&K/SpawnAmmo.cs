@@ -10,15 +10,6 @@ public class SpawnAmmo : NetworkBehaviour
     [SerializeField] bool[] boxesSpawned;
     [SerializeField] GameObject ammoBox;
 
-    private void Start()
-    {
-        for(int i = 0; i< ammoBoxPosition.Length; i++)
-        {
-            ammoBoxPosition[i].position += new Vector3(0, 0.2f, 0);
-            boxesSpawned[i] = false;
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -47,8 +38,9 @@ public class SpawnAmmo : NetworkBehaviour
         int i = Random.Range(0, ammoBoxPosition.Length);
         if (!boxesSpawned[i])
         {
-            GameObject box = Instantiate(ammoBox, ammoBoxPosition[i].position, Quaternion.identity);
+            GameObject box = Instantiate(ammoBox, ammoBoxPosition[i].position, Quaternion.identity, ammoBoxPosition[i]);
             box.GetComponent<NetworkObject>().Spawn();
+            box.GetComponent<NetworkObject>().TrySetParent(ammoBoxPosition[i]);
             boxesSpawned[i] = true;
         }
     }
