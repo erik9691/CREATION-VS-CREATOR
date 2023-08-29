@@ -7,15 +7,15 @@ public class SpawnAmmo : NetworkBehaviour
 {
 
     [SerializeField] Transform[] ammoBoxPosition;
-
+    [SerializeField] bool[] boxesSpawned;
     [SerializeField] GameObject ammoBox;
-
 
     private void Start()
     {
         for(int i = 0; i< ammoBoxPosition.Length; i++)
         {
-            ammoBoxPosition[i].position += new Vector3(0, 0.15f, 0);
+            ammoBoxPosition[i].position += new Vector3(0, 0.2f, 0);
+            boxesSpawned[i] = false;
         }
     }
 
@@ -29,14 +29,27 @@ public class SpawnAmmo : NetworkBehaviour
         
     }
 
+    public void EnableSpawnLocation(Transform boxTransform)
+    {
+        for (int i = 0; i < ammoBoxPosition.Length; i++)
+        {
+            if (boxTransform.position == ammoBoxPosition[i].position)
+            {
+                boxesSpawned[i] = false;
+                return;
+            }
+        }
+    }
     
     [ServerRpc (RequireOwnership = false)]
     private void SpawnBoxServerRpc()
     {
         int i = Random.Range(0, ammoBoxPosition.Length);
-        GameObject box;
-
-        box = Instantiate(ammoBox, ammoBoxPosition[i].position, Quaternion.identity);
-        box.GetComponent<NetworkObject>().Spawn();
+        if (!boxesSpawned[i])
+        {
+            GameObject box = Instantiate(ammoBox, ammoBoxPosition[i].position, Quaternion.identity);
+            box.GetComponent<NetworkObject>().Spawn();
+            boxesSpawned[i] = true;
+        }
     }
 }

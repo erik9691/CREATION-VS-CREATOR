@@ -7,14 +7,21 @@ public class PlayerGun : NetworkBehaviour
 {
     [SerializeField]
     float _bulSpeed = 1000f, _shootRate = 1f;
+    [SerializeField]
+    int storedAmmo = 20, clipAmmo = 5, clipCapacity = 5, maxAmmo = 25, boxAmmo = 10;
 
     [SerializeField] Transform _spawnPoint;
     [SerializeField] GameObject bulletPrefab;
 
     float shootRateTime = 0;
-    [SerializeField] int storedAmmo = 20, clipAmmo = 5, clipCapacity = 5, maxAmmo = 25, boxAmmo = 10;
     bool isReloading; // para la animacion
     Transform boxTransform;
+    SpawnAmmo ammoManager;
+
+    private void Start()
+    {
+        ammoManager = GameObject.Find("AmmoBoxManager").GetComponent<SpawnAmmo>();
+    }
 
     public void Shoot(InputAction.CallbackContext obj)
     {
@@ -51,7 +58,7 @@ public class PlayerGun : NetworkBehaviour
         bullet.GetComponent<NetworkObject>().Despawn();
     }
 
-    [ServerRpc]
+    [ServerRpc (RequireOwnership = false)]
     private void SpawnBulletServerRpc(Vector3 position, Quaternion rotation)
     {
         GameObject bullet;
@@ -80,7 +87,8 @@ public class PlayerGun : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "AmmoBox")
+        if (!IsOwner) return;
+        if (other.gameObject.tag == "AmmoBox")
         {
             boxTransform = other.transform;
 
@@ -95,7 +103,7 @@ public class PlayerGun : NetworkBehaviour
                     storedAmmo += boxAmmo;
                 }
 
-                DeleteBoxServerRpc();
+                DeleteBoxServerRpc(other.gameObject);
             }
             else
             {
@@ -105,8 +113,14 @@ public class PlayerGun : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void DeleteBoxServerRpc()
+    public void DeleteBoxServerRpc(NetworkObjectReference boxGameObject)
     {
-        boxTransform.GetComponent<NetworkObject>().Despawn();
+        if (!boxGameObject.TryGet(out NetworkObject networkObject))
+        {
+            Debug.Log("error");
+        }
+        networkObject.Despawn();
+
+        ammoManager.EnableSpawnLocation(networkObject.transform);
     }
 }
