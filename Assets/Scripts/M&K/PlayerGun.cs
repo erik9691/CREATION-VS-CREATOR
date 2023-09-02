@@ -10,7 +10,7 @@ public class PlayerGun : NetworkBehaviour
     [SerializeField]
     int storedAmmo = 20, clipAmmo = 5, clipCapacity = 5, maxAmmo = 25, boxAmmo = 10;
 
-    [SerializeField] Transform _spawnPoint;
+    public Transform SpawnPoint;
     [SerializeField] GameObject bulletPrefab;
 
     float shootRateTime = 0;
@@ -37,7 +37,7 @@ public class PlayerGun : NetworkBehaviour
                 {
                     if (Time.time > shootRateTime && obj.started)
                     {
-                        SpawnBulletServerRpc(_spawnPoint.position, _spawnPoint.rotation);
+                        SpawnBulletServerRpc(SpawnPoint.position, SpawnPoint.rotation);
                         shootRateTime = Time.time + _shootRate;
 
                         clipAmmo -= 1;

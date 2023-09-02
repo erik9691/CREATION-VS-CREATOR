@@ -10,34 +10,21 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField]
     float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f;
 
+    public Transform cameraTransform;
+
     Rigidbody rb;
     PlayerInput playerInput;
     Vector2 moveInput;
-    Transform cameraTransform;
     Transform modelTransform;
-    [SerializeField] CinemachineVirtualCamera vc;
     bool puedoSaltar;
-
-    public override void OnNetworkSpawn()
-    {
-        //Solo el dueño puede usar la camara
-        if (IsOwner)
-        {
-            vc.Priority = 1;
-        }
-        else
-        {
-            vc.Priority = 0;
-        }
-    }
+    float initalSpeed;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);
-        cameraTransform = transform.parent.gameObject.transform.GetChild(1);
-        //vc = transform.parent.gameObject.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
+        initalSpeed = _speed;
 
         //lockear el cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -103,7 +90,7 @@ public class PlayerMovement : NetworkBehaviour
         }
         else if (obj.canceled)
         {
-            _speed /= _runMult;
+            _speed = initalSpeed;
         }
     }
 }

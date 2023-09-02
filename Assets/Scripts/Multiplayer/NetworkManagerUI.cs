@@ -9,16 +9,10 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button _spawnBtn;
     [SerializeField] Button _hostBtn;
     [SerializeField] Button _clientBtn;
-
     bool hostStarted = false;
-    [SerializeField] GameObject _interactablePrefab;
-
+    
     private void Awake()
     {
-        _spawnBtn.onClick.AddListener(() =>
-        {
-            SpawnInteractableServerRpc();
-        });
         _hostBtn.onClick.AddListener(() =>
         {
             Host();
@@ -37,15 +31,6 @@ public class NetworkManagerUI : MonoBehaviour
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
-    }
-
-    [ServerRpc]
-    private void SpawnInteractableServerRpc()
-    {
-        GameObject interactable;
-
-        interactable = Instantiate(_interactablePrefab, new Vector3(0, 2, 0), Quaternion.identity);
-        interactable.GetComponent<NetworkObject>().Spawn();
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
