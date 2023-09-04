@@ -64,7 +64,7 @@ public class NetworkManagerUI : MonoBehaviour
         else
         {
             response.PlayerPrefabHash = null;
-            response.Position = new Vector3(0, -20, -22);
+            response.Position = new Vector3(6.5f, -20, -27);
 
             hostStarted = true;
         }

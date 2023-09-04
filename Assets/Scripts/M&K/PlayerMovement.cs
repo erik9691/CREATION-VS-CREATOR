@@ -109,9 +109,9 @@ public class PlayerMovement : NetworkBehaviour
     private void ResetPosition()
     {
         //Cuando el Overlord te suelta volves a estar parado
-        if (transform.rotation != Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0))
+        if (transform.rotation != Quaternion.Euler(0, 0, 0))
         {
-            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }

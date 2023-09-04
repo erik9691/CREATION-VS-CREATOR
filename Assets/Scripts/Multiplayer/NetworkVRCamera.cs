@@ -10,6 +10,6 @@ public class NetworkVRCamera : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         _playerCamera.SetActive(IsOwner);
-        base.OnNetworkSpawn();
+        transform.rotation = new Quaternion(0, -90, 0, 0);
     }
 }
