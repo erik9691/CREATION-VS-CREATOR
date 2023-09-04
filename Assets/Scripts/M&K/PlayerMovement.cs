@@ -39,35 +39,21 @@ public class PlayerMovement : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-
-        //Cuando el Overlord te suelta volves a estar parado
-        if (transform.rotation != Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0))
-        {
-            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-        }
-
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
+        //Resetear la posicion cuando te suelta el Overlord
+        ResetPosition();
     }
 
     private void FixedUpdate()
     {
         if (!IsOwner) return;
 
-        //Movimiento
-        Vector3 move = new Vector3(moveInput.x, 0 , moveInput.y);
-        move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
-        move.y = 0;
-        transform.Translate(move * Time.deltaTime * _speed);
-
-        //Rotacion
-        Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
-        modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        //Movimiento Y rotacion
+        RotateAndMove();
     }
 
-
-
-
+    //Condicion para saltar
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -76,6 +62,8 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
+
+    //Funcion para saltar
     public void Jump(InputAction.CallbackContext obj)
     {
         if (puedoSaltar && obj.performed)
@@ -85,6 +73,9 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
+
+
+    //Funcion para correr
     public void Sprint(InputAction.CallbackContext obj)
     {
         if (puedoSaltar && obj.started)
@@ -94,6 +85,33 @@ public class PlayerMovement : NetworkBehaviour
         else if (obj.canceled)
         {
             _speed = initialSpeed;
+        }
+    }
+
+
+    
+
+
+
+    private void RotateAndMove()
+    {
+        //Movimiento
+        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+        move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
+        move.y = 0;
+        transform.Translate(move * Time.deltaTime * _speed);
+
+        //Rotacion de la camara
+        Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
+        modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+    }
+
+    private void ResetPosition()
+    {
+        //Cuando el Overlord te suelta volves a estar parado
+        if (transform.rotation != Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0))
+        {
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         }
     }
 }
