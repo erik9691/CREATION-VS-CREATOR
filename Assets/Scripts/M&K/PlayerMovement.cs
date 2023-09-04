@@ -15,16 +15,19 @@ public class PlayerMovement : NetworkBehaviour
     Rigidbody rb;
     PlayerInput playerInput;
     Vector2 moveInput;
+
     Transform modelTransform;
+
     bool puedoSaltar;
-    float initalSpeed;
+
+    float initialSpeed;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);
-        initalSpeed = _speed;
+        initialSpeed = _speed;
 
         //lockear el cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -90,7 +93,7 @@ public class PlayerMovement : NetworkBehaviour
         }
         else if (obj.canceled)
         {
-            _speed = initalSpeed;
+            _speed = initialSpeed;
         }
     }
 }

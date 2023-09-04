@@ -15,6 +15,7 @@ public class AssignCamera : NetworkBehaviour
         GetComponent<PlayerMovement>().cameraTransform = cameras.transform.GetChild(0);
         GetComponent<PlayerGun>().SpawnPoint = cameras.transform.GetChild(0).transform.GetChild(0);
         cameras.GetComponentInChildren<CinemachineVirtualCamera>().Follow = transform;
+        cameras.GetComponentInChildren<CinemachineVirtualCamera>().LookAt = cameras.GetComponentInChildren<CinemachineVirtualCamera>().transform;
         SpawnCamerasServerRpc();
         
     }
