@@ -7,8 +7,26 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class GrabMinion : NetworkBehaviour
 {
+    [SerializeField]
+    float releaseDistance = 1f;
+
     ulong minionId;
     NetworkObject minionSelected;
+    Vector3 anchor = Vector3.zero;
+    XRBaseInteractor handInteractor;
+
+    private void Start()
+    {
+        handInteractor = GetComponent<XRBaseInteractor>();
+    }
+
+    private void Update()
+    {
+        if (anchor != Vector3.zero && Vector3.Distance(anchor, transform.position) > releaseDistance)
+        {
+            handInteractor.allowSelect = false;
+        }
+    }
 
     public void OnSelectEnter(SelectEnterEventArgs eventArgs)
     {
@@ -16,6 +34,7 @@ public class GrabMinion : NetworkBehaviour
         minionSelected = eventArgs.interactableObject.transform.GetComponent<NetworkObject>();
         if (minionSelected != null)
         {
+            anchor = transform.position;
             RequestOwnershipServerRpc(OwnerClientId, minionSelected);
         }
     }
@@ -24,6 +43,7 @@ public class GrabMinion : NetworkBehaviour
     {
         if (minionSelected != null)
         {
+            anchor = Vector3.zero;
             ReturnOwnershipServerRpc(OwnerClientId, minionSelected);
         }
     }

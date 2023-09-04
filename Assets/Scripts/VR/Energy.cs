@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Energy : MonoBehaviour
 {
-    public float EnergyPoints;
-    [SerializeField] float _energyLimit;
-
-    [SerializeField] float _drainRate;
-    [SerializeField] float _drainAmount;
-
-    [SerializeField] InputAction grabInput;
+    [SerializeField]
+    float _drainRate = 0.5f, _drainAmount = 0.1f;
 
     [SerializeField] SkinnedMeshRenderer handMesh;
+
+    public float EnergyPoints = 1;
+
+    //note: mantener energylimit en 1 debido a que el maximo de opacidad es 1
+    float _energyLimit = 1;
     Material handMaterial;
     Color newColor;
+    XRBaseInteractor handInteractor;
 
     private void Start()
     {
-        //handMesh = GetComponent<MeshRenderer>();
+        handInteractor = GetComponent<XRBaseInteractor>();
         handMaterial = handMesh.material;
     }
 
@@ -29,7 +31,7 @@ public class Energy : MonoBehaviour
         if (collider.tag == "Safe Area")
         {
             StopAllCoroutines();
-            StartCoroutine(DrainEnergy(true));
+            StartCoroutine(DrainEnergy());
         }
     }
     private void OnTriggerEnter(Collider collider)
@@ -38,14 +40,13 @@ public class Energy : MonoBehaviour
         if (collider.tag == "Safe Area")
         {
             StopAllCoroutines();
-            StartCoroutine(DrainEnergy(false));
+            StartCoroutine(RecoverEnergy());
         }
     }
 
-    //note: mantener energylimit en 1 debido a que el maximo de opacidad es 1
-    private IEnumerator DrainEnergy(bool drainOn)
+    private IEnumerator DrainEnergy()
     {
-        while (drainOn && EnergyPoints > 0)
+        while (EnergyPoints > 0)
         {
             Debug.Log("DRAIN ON");
             yield return new WaitForSeconds(_drainRate);
@@ -55,11 +56,16 @@ public class Energy : MonoBehaviour
             newColor.a -= _drainAmount;
             handMaterial.color = newColor;
         }
-        if (EnergyPoints == 0)
+        if (EnergyPoints <= 0)
         {
-            grabInput.Disable();
+            handInteractor.allowSelect = false;
         }
-        while (!drainOn && EnergyPoints < _energyLimit)
+        
+    }
+
+    private IEnumerator RecoverEnergy()
+    {
+        while (EnergyPoints < _energyLimit)
         {
             Debug.Log("DRAIN OFF");
             yield return new WaitForSeconds(_drainRate);
@@ -69,9 +75,9 @@ public class Energy : MonoBehaviour
             newColor.a += _drainAmount;
             handMaterial.color = newColor;
         }
-        if (EnergyPoints == _energyLimit)
+        if (EnergyPoints >= _energyLimit)
         {
-            grabInput.Enable();
+            handInteractor.allowSelect = true;
         }
     }
 }

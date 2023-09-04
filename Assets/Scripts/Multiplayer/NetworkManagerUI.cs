@@ -25,6 +25,15 @@ public class NetworkManagerUI : MonoBehaviour
         });
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Host();
+            Destroy(this.gameObject);
+        }
+    }
+
     private void Host()
     {
         //Spawnea con setting para Overlord y lo cambia para que los demas spawneen como Minions
@@ -55,7 +64,7 @@ public class NetworkManagerUI : MonoBehaviour
         else
         {
             response.PlayerPrefabHash = null;
-            response.Position = new Vector3(0, -20, 0);
+            response.Position = new Vector3(0, -20, -22);
 
             hostStarted = true;
         }
