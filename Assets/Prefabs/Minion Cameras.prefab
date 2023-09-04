@@ -221,8 +221,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 8608ec81ee27a15488d33f9dad239e91, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0.7
-  m_FrequencyGain: 0.7
+  m_AmplitudeGain: 0.3
+  m_FrequencyGain: 0.3
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &952758597130928762
 GameObject:
@@ -235,6 +235,8 @@ GameObject:
   - component: {fileID: 1829195496254906289}
   - component: {fileID: 716478047149768746}
   - component: {fileID: 7784922730093570781}
+  - component: {fileID: 9103092805723491232}
+  - component: {fileID: 5400074000646216756}
   m_Layer: 0
   m_Name: AimCinemachine
   m_TagString: Untagged
@@ -313,6 +315,50 @@ MonoBehaviour:
   AutoEnableInputs: 1
   XYAxis: {fileID: 5239242457843867371, guid: 9306976ede0b4a0428d958c667a00674, type: 3}
   ZAxis: {fileID: 0}
+--- !u!114 &9103092805723491232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952758597130928762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b839505d2974744ad2214fafa1cdde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 0}
+  priorityBoostAmount: 10
+--- !u!114 &5400074000646216756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952758597130928762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 129
+  m_IgnoreTag: 
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_MinimumDistanceFromTarget: 0.1
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 0
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 0.1
+  m_Strategy: 1
+  m_MaximumEffort: 4
+  m_SmoothingTime: 0
+  m_Damping: 0
+  m_DampingWhenOccluded: 0
+  m_OptimalTargetDistance: 0
 --- !u!1 &2428313943959017407
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,6 +370,7 @@ GameObject:
   - component: {fileID: 1950269411472329063}
   - component: {fileID: 6733861608518627654}
   - component: {fileID: 356192302229490834}
+  - component: {fileID: 5331943963162809963}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -402,6 +449,36 @@ MonoBehaviour:
   AutoEnableInputs: 1
   XYAxis: {fileID: 5239242457843867371, guid: 9306976ede0b4a0428d958c667a00674, type: 3}
   ZAxis: {fileID: 0}
+--- !u!114 &5331943963162809963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2428313943959017407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1
+  m_IgnoreTag: 
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_MinimumDistanceFromTarget: 0.1
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 0
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 0.1
+  m_Strategy: 1
+  m_MaximumEffort: 4
+  m_SmoothingTime: 0
+  m_Damping: 0
+  m_DampingWhenOccluded: 0
+  m_OptimalTargetDistance: 0
 --- !u!1 &2659796827223719527
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,8 +973,8 @@ MonoBehaviour:
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
+    m_Style: 6
+    m_Time: 3
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []

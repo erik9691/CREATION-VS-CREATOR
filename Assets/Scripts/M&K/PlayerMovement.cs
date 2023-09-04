@@ -13,7 +13,7 @@ public class PlayerMovement : NetworkBehaviour
     public Transform cameraTransform;
 
     Rigidbody rb;
-    PlayerInput playerInput;
+    public PlayerInput playerInput;
     Vector2 moveInput;
 
     Transform modelTransform;
