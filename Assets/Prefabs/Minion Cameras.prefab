@@ -184,9 +184,9 @@ MonoBehaviour:
   m_YDamping: 0.2
   m_ZDamping: 0.2
   m_TargetMovementOnly: 1
-  m_ScreenX: 0.35
-  m_ScreenY: 0.7
-  m_CameraDistance: 1
+  m_ScreenX: 0.3
+  m_ScreenY: 1.3
+  m_CameraDistance: 1.3
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -775,9 +775,9 @@ MonoBehaviour:
   m_YDamping: 0.2
   m_ZDamping: 0.2
   m_TargetMovementOnly: 1
-  m_ScreenX: 0.35
-  m_ScreenY: 0.7
-  m_CameraDistance: 1.3
+  m_ScreenX: 0.3
+  m_ScreenY: 1.3
+  m_CameraDistance: 1.6
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
