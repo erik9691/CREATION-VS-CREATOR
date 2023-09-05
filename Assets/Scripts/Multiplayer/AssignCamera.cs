@@ -17,6 +17,7 @@ public class AssignCamera : NetworkBehaviour
         cameras.GetComponentInChildren<CinemachineVirtualCamera>().Follow = transform;
         cameras.GetComponentInChildren<CinemachineVirtualCamera>().LookAt = transform;
         cameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>().Follow = transform;
+        cameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>().LookAt = transform;
         cameras.transform.GetChild(2).GetComponent<SwitchVCCam>().playerInput = GetComponent<PlayerMovement>().playerInput;
 
 

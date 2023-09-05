@@ -10,6 +10,10 @@ public class SwitchVCCam : MonoBehaviour
     public PlayerInput playerInput;
     [SerializeField]
     private int priorityBoostAmount = 10;
+    [SerializeField]
+    private Canvas thirdPersonCanvas;
+    [SerializeField]
+    private Canvas aimCanvas;
 
     private CinemachineVirtualCamera virtualCamera;
     private InputAction aimAction;
@@ -35,9 +39,13 @@ public class SwitchVCCam : MonoBehaviour
     private void StartAim()
     {
         virtualCamera.Priority += priorityBoostAmount;
+        aimCanvas.enabled = true;
+        thirdPersonCanvas.enabled = false;
     }
     private void CancelAim()
     {
         virtualCamera.Priority -= priorityBoostAmount;
+        aimCanvas.enabled = false;
+        thirdPersonCanvas.enabled = true;
     }
 }
