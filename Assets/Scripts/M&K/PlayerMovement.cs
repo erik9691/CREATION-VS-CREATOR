@@ -13,7 +13,7 @@ public class PlayerMovement : NetworkBehaviour
     public Transform cameraTransform;
 
     Rigidbody rb;
-    public PlayerInput playerInput;
+    PlayerInput playerInput;
     Vector2 moveInput;
 
     Transform modelTransform;
@@ -87,9 +87,6 @@ public class PlayerMovement : NetworkBehaviour
             _speed = initialSpeed;
         }
     }
-
-
-    
 
 
 

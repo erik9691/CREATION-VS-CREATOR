@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.21108171, g: 0.05813721, b: 0.036018983, a: 1}
+  m_IndirectSpecularColor: {r: 0.21108195, g: 0.05813718, b: 0.03601958, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -878,6 +878,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1808474343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1808474344}
+  m_Layer: 0
+  m_Name: Overlord Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1808474344
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808474343}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4, y: 5.43, z: -8.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1951846899
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,6 +973,7 @@ MonoBehaviour:
   _spawnBtn: {fileID: 4361344601501572112}
   _hostBtn: {fileID: 1071454218416957160}
   _clientBtn: {fileID: 3235395083583049859}
+  _overlordSpawn: {fileID: 1808474344}
 --- !u!224 &456423092293968111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1302,6 +1334,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Missile Launcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 3763192577322600680, guid: 8c130b86bde926d478c6d6f602787dd2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745297351181466382, guid: 8c130b86bde926d478c6d6f602787dd2,
+        type: 3}
+      propertyPath: rotationSpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8572492919413149735, guid: 8c130b86bde926d478c6d6f602787dd2,
         type: 3}
@@ -1924,6 +1966,7 @@ SceneRoots:
   - {fileID: 13744357}
   - {fileID: 5787742508967669020}
   - {fileID: 1335152997}
+  - {fileID: 1808474344}
   - {fileID: 719020647}
   - {fileID: 8229993241888709157}
   - {fileID: 882670724}

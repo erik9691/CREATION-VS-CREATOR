@@ -172,9 +172,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 385969ad37424914f8b996595a2d6364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
+  _speed: 7
+  rotationSpeed: 0.3
   missilePrefab: {fileID: 3347245132410924343, guid: af883ccbc88feff4b92b9fd149d78347,
     type: 3}
+  target: {fileID: 0}
+  tempTarget: {fileID: 0}
+  playerTarget: {fileID: 0}
 --- !u!1 &8634859102399718409
 GameObject:
   m_ObjectHideFlags: 0

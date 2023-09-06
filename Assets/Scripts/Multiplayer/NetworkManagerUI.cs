@@ -10,7 +10,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button _hostBtn;
     [SerializeField] Button _clientBtn;
     bool hostStarted = false;
-    
+    [SerializeField] Transform _overlordSpawn;
     private void Awake()
     {
         _hostBtn.onClick.AddListener(() =>
@@ -64,7 +64,7 @@ public class NetworkManagerUI : MonoBehaviour
         else
         {
             response.PlayerPrefabHash = null;
-            response.Position = new Vector3(6.5f, -20, -27);
+            response.Position = _overlordSpawn.position;
 
             hostStarted = true;
         }

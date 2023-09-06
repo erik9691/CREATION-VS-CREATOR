@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 3106370945995700055}
   - component: {fileID: 4963011875705014541}
   - component: {fileID: 3425474189164170234}
+  - component: {fileID: 8474438447705316814}
   m_Layer: 0
   m_Name: Minion
   m_TagString: Player
@@ -457,7 +458,19 @@ MonoBehaviour:
     m_ActionId: 595526bd-08e5-490c-b4bc-74912807a1e4
     m_ActionName: Player/CamaraLook[/Mouse/position]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8474438447705316814}
+        m_TargetAssemblyTypeName: PlayerAim, Assembly-CSharp
+        m_MethodName: Aim
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 13f8e1fc-83b5-47e8-8a10-0682a02ec8b9
     m_ActionName: Player/Aim[/Mouse/rightButton]
   - m_PersistentCalls:
@@ -568,7 +581,6 @@ MonoBehaviour:
   _runMult: 2
   _rotationSpeed: 5
   cameraTransform: {fileID: 0}
-  playerInput: {fileID: 0}
 --- !u!114 &5911370378881023961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,7 +820,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camerasPrefab: {fileID: 218337125853181352, guid: 759dfca4e547bde48a70192a50d9ee7d,
     type: 3}
-  cameras: {fileID: 0}
 --- !u!114 &3425474189164170234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -824,6 +835,20 @@ MonoBehaviour:
   _interactMeterCapacity: 2
   _interactSpeed: 0.1
   _interactAmount: 0.1
+--- !u!114 &8474438447705316814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773661886088790811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b839505d2974744ad2214fafa1cdde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priorityBoostAmount: 10
+  virtualCamera: {fileID: 0}
 --- !u!1 &1792279088052611570
 GameObject:
   m_ObjectHideFlags: 0
