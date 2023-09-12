@@ -11,6 +11,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button _clientBtn;
     bool hostStarted = false;
     [SerializeField] Transform _overlordSpawn;
+    [SerializeField] GameObject minionUI;
     private void Awake()
     {
         _hostBtn.onClick.AddListener(() =>
@@ -21,6 +22,7 @@ public class NetworkManagerUI : MonoBehaviour
         _clientBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
+            minionUI.SetActive(true);
             Destroy(this.gameObject);
         });
     }

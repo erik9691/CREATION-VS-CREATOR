@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
 public class PlayerGun : NetworkBehaviour
 {
     [SerializeField]
@@ -18,9 +21,20 @@ public class PlayerGun : NetworkBehaviour
     Transform boxTransform;
     SpawnAmmo ammoManager;
 
+    TextMeshProUGUI clipAmmoUI;
+    TextMeshProUGUI storedAmmoUI;
+
     private void Start()
     {
         ammoManager = GameObject.Find("AmmoBoxManager").GetComponent<SpawnAmmo>();
+        clipAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("ClipAmmo").GetComponent<TextMeshProUGUI>();
+        storedAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
+    }
+
+    private void Update()
+    {
+        clipAmmoUI.text = clipAmmo.ToString();
+        storedAmmoUI.text = storedAmmo.ToString();
     }
 
     public void Shoot(InputAction.CallbackContext obj)

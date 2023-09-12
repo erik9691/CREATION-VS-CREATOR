@@ -1312,7 +1312,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ebd56ef0ab346534aaa316523c943972,
         type: 3}
       propertyPath: m_TagString
-      value: Overlord
+      value: Overlord Head
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

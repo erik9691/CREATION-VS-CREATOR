@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class Missile : NetworkBehaviour
+public class Bullet : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Overlord Head")
         {
-            DeleteMissileServerRpc();
+            DeleteBulletServerRpc();
         }
     }
 
     [ServerRpc]
-    private void DeleteMissileServerRpc()
+    private void DeleteBulletServerRpc()
     {
         gameObject.GetComponent<NetworkObject>().Despawn();
     }

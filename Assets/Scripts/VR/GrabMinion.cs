@@ -56,7 +56,7 @@ public class GrabMinion : NetworkBehaviour
         {
             minionId = networkObject.OwnerClientId;
             networkObject.ChangeOwnership(newOwnerId);
-            networkObject.gameObject.GetComponent<PlayerHealth>().TakeDamage();
+            StartCoroutine(networkObject.gameObject.GetComponent<PlayerHealth>().TakeDamage());
         }
         else
         {
@@ -70,6 +70,7 @@ public class GrabMinion : NetworkBehaviour
         //Devuelve el ID al minion
         if (networkObjectReference.TryGet(out NetworkObject networkObject))
         {
+            StopAllCoroutines();
             networkObject.ChangeOwnership(minionId);
         }
         else

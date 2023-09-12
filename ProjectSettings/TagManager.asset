@@ -9,6 +9,7 @@ TagManager:
   - AmmoBox
   - Overlord
   - Missile Launcher
+  - Overlord Head
   layers:
   - Default
   - TransparentFX

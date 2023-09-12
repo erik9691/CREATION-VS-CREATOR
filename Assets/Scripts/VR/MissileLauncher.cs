@@ -16,7 +16,7 @@ public class MissileLauncher : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         tempTarget = transform.GetChild(0);
-        playerTarget = GameObject.FindGameObjectWithTag("Overlord").transform.GetChild(0).transform.GetChild(0);
+        playerTarget = GameObject.FindGameObjectWithTag("Overlord Head").transform;
     }
 
     private void Update()
@@ -51,6 +51,12 @@ public class MissileLauncher : NetworkBehaviour
         target = playerTarget;
         newMissile = false;
     }
+
+    public void FindOverlord() 
+    {
+        playerTarget = GameObject.FindGameObjectWithTag("Overlord").transform.GetChild(0).transform.GetChild(0);
+    }
+
 
     [ServerRpc (RequireOwnership = false)]
     public void SpawnMissileServerRpc()

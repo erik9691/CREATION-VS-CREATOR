@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] int playerHealth = 10;
+    [SerializeField] float playerHealth = 10;
+    [SerializeField] float dmgAmount = 1f;
+    [SerializeField] float dmgRate = 0.5f;
 
-    public void TakeDamage()
+    public IEnumerator TakeDamage()
     {
-        playerHealth--;
+        yield return new WaitForSeconds(dmgRate);
+        playerHealth -= dmgAmount;
     }
 }
