@@ -9,12 +9,12 @@ public class PlayerInteractions : MonoBehaviour
     float _interactMeterCapacity = 5, _interactSpeed = 0.1f, _interactAmount = 0.1f;
 
     float interactMeterCurrent = 0;
-    GameObject missileLauncher;
+    GameObject interactable;
     bool isInteracting = false;
 
     public void Interact(InputAction.CallbackContext obj)
     {
-        if (missileLauncher != null && obj.started)
+        if (interactable != null && obj.started)
         {
             Debug.Log("Start");
             if (!isInteracting)
@@ -22,7 +22,7 @@ public class PlayerInteractions : MonoBehaviour
                 StartCoroutine(InteractWithLauncher());
             }
         }
-        else if (obj.canceled || missileLauncher == null)
+        else if (obj.canceled || interactable == null)
         {
             Debug.Log("Stop");
             interactMeterCurrent = 0;
@@ -33,9 +33,9 @@ public class PlayerInteractions : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Missile Launcher")
+        if (other.tag == "Interactable")
         {
-            missileLauncher = other.transform.parent.gameObject;
+            interactable = other.transform.parent.gameObject;
         }
     }
 
@@ -43,7 +43,7 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (other.tag == "Missile Launcher")
         {
-            missileLauncher = null;
+            interactable = null;
         }
     }
 
@@ -55,7 +55,15 @@ public class PlayerInteractions : MonoBehaviour
             interactMeterCurrent += _interactAmount;
             yield return new WaitForSeconds(_interactSpeed);
         }
-        missileLauncher.GetComponent<MissileLauncher>().SpawnMissileServerRpc();
+        if (interactable.GetComponent<MissileLauncher>())
+        {
+            interactable.GetComponent<MissileLauncher>().SpawnMissileServerRpc();
+        }
+        else
+        {
+            interactable.GetComponent<Turret>().SpawnTurretBulletServerRpc();
+        }
+        
         interactMeterCurrent = 0;
         isInteracting = false;
     }

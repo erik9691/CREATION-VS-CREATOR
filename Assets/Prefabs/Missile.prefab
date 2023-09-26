@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 318020081973701104}
   - component: {fileID: 876074080369864401}
   - component: {fileID: -5309125621449600142}
-  - component: {fileID: -4548486102227070331}
+  - component: {fileID: -6449739859245531945}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 23.506683, y: -9.997847, z: 33.6101}
-  m_LocalScale: {x: 1, y: 1, z: 3.0200562}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 2.758338}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7cca34244725a4f49934408558ea7178, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-4548486102227070331
+--- !u!114 &-6449739859245531945
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -208,6 +208,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3347245132410924343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34805122a12cf7d4098eb7b4ffb9452f, type: 3}
+  m_Script: {fileID: 11500000, guid: 562d2ccd601e1b541bf08d01abdad9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

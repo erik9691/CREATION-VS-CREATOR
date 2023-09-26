@@ -6,10 +6,10 @@ using Unity.Netcode;
 public class MissileLauncher : NetworkBehaviour
 {
     [SerializeField]
-    float _speed = 1f, rotationSpeed = 0.3f;
+    float _speed = 1f, rotationSpeed = 0.3f, changeSpeed = 0.2f;
     [SerializeField] GameObject missilePrefab;
 
-    public Transform target, tempTarget, playerTarget;
+    [SerializeField] Transform target, tempTarget, playerTarget, cannon;
     GameObject missile;
     bool newMissile;
 
@@ -26,21 +26,17 @@ public class MissileLauncher : NetworkBehaviour
             if (!IsInvoking("changeTarget") && newMissile)
             {
                 target = tempTarget;
-                Invoke("changeTarget", 1f);
+                Invoke("changeTarget", changeSpeed);
             }
-            //missile.transform.LookAt(target);
 
 
             Vector3 lookDirection = target.position - missile.transform.position;
             lookDirection.Normalize();
 
-            //missile.transform.rotation = Quaternion.Slerp(missile.transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * Time.deltaTime);
-
             Quaternion lookdir = Quaternion.LookRotation(lookDirection);
             lookdir = Quaternion.Euler(new Vector3(lookdir.eulerAngles.x, lookdir.eulerAngles.y, 0));
             missile.transform.rotation = Quaternion.Euler(new Vector3(missile.transform.rotation.eulerAngles.x, missile.transform.rotation.eulerAngles.y, 0));
             missile.transform.rotation = Quaternion.Slerp(missile.transform.rotation, lookdir, rotationSpeed * Time.deltaTime);
-            //missile.transform.rotation = Quaternion.Euler(new Vector3(look.eulerAngles.x, look.eulerAngles.y, 0));
 
             missile.transform.position += (target.position - missile.transform.position).normalized * _speed * Time.deltaTime;
         }
@@ -61,7 +57,7 @@ public class MissileLauncher : NetworkBehaviour
     [ServerRpc (RequireOwnership = false)]
     public void SpawnMissileServerRpc()
     {
-        missile = Instantiate(missilePrefab, transform.position, Quaternion.Euler(-90,transform.rotation.y,0 ));
+        missile = Instantiate(missilePrefab, cannon.position, cannon.rotation);
         missile.GetComponent<NetworkObject>().Spawn();
 
         newMissile = true;

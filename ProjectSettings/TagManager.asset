@@ -8,8 +8,8 @@ TagManager:
   - Floor
   - AmmoBox
   - Overlord
-  - Missile Launcher
   - Overlord Head
+  - Interactable
   layers:
   - Default
   - TransparentFX

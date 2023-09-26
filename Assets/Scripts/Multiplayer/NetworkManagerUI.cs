@@ -34,6 +34,12 @@ public class NetworkManagerUI : MonoBehaviour
             Host();
             Destroy(this.gameObject);
         }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            NetworkManager.Singleton.StartClient();
+            minionUI.SetActive(true);
+            Destroy(this.gameObject);
+        }
     }
 
     private void Host()
