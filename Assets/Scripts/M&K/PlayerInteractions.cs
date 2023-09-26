@@ -62,6 +62,8 @@ public class PlayerInteractions : MonoBehaviour
         else
         {
             interactable.GetComponent<Turret>().SpawnTurretBulletServerRpc();
+            interactable.GetComponent<TurretController>().playerInput = GetComponent<PlayerInput>();
+            interactable.GetComponent<TurretController>().isAwake = true;
         }
         
         interactMeterCurrent = 0;

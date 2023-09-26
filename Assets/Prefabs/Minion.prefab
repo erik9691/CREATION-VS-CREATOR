@@ -489,6 +489,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: dda75b51-e152-46a3-bff2-1dbb72fb5fd0
     m_ActionName: Player/Interact[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 10a1b51c-9b83-4245-bfbe-5ebdfa47e115
+    m_ActionName: Cannon/Rotate[/Keyboard/w,/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aebd4718-fcc4-4ecc-b531-43be3a18bba1
+    m_ActionName: Cannon/Shoot[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -806,6 +814,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHealth: 10
+  dmgAmount: 1
+  dmgRate: 0.5
 --- !u!114 &4963011875705014541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,7 +842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4d6f51ce388e747bd2606435b3dff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactMeterCapacity: 2
+  _interactMeterCapacity: 1
   _interactSpeed: 0.1
   _interactAmount: 0.1
 --- !u!114 &8474438447705316814

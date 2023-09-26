@@ -3,19 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class Turret : MonoBehaviour
+public class Turret : NetworkBehaviour
 {
-    [SerializeField] GameObject bulletPrefab;
     [SerializeField] float _bulSpeed = 1000f;
-    Vector3 position;
-    Quaternion rotation;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        position = transform.position;
-        rotation = transform.rotation;
-    }
+    [SerializeField] GameObject bulletPrefab;
+    [SerializeField] Transform ShootPoint;
 
     private IEnumerator DeleteBulletDelay(GameObject bullet)
     {
@@ -29,10 +21,10 @@ public class Turret : MonoBehaviour
     {
         GameObject bullet;
 
-        bullet = Instantiate(bulletPrefab, position, rotation);
+        bullet = Instantiate(bulletPrefab, ShootPoint.position, ShootPoint.rotation);
         bullet.GetComponent<NetworkObject>().Spawn();
 
-        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up * -_bulSpeed);
+        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * _bulSpeed);
 
         StartCoroutine(DeleteBulletDelay(bullet));
     }
