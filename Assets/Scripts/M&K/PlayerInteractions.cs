@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 public class PlayerInteractions : NetworkBehaviour
 {
@@ -13,6 +14,14 @@ public class PlayerInteractions : NetworkBehaviour
     GameObject interactable;
     bool isInteracting = false;
     bool isMounting = false;
+    Slider interactSlider;
+
+    private void Start()
+    {
+        interactSlider = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("Interact").GetComponent<Slider>();
+        interactSlider.gameObject.SetActive(false);
+    }
+
 
     public void Interact(InputAction.CallbackContext obj)
     {
@@ -21,30 +30,43 @@ public class PlayerInteractions : NetworkBehaviour
         {
             if (!isInteracting)
             {
+                StopAllCoroutines();
                 StartCoroutine(InteractWithLauncher());
             }
         }
         else if (obj.canceled || interactable == null)
         {
-            interactMeterCurrent = 0;
             isInteracting = false;
             StopAllCoroutines();
+            StartCoroutine(DrainSlider());
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
+        if (!IsOwner) return;
         if (other.tag == "Interactable")
         {
             interactable = other.transform.parent.gameObject;
+
+            if (interactable.GetComponent<TurretController>().n_isMounted.Value == false || interactable.GetComponent<TurretController>().n_isMounted.Value == true && isMounting)
+            {
+                interactSlider.gameObject.SetActive(true);
+            }
+            else
+            {
+                interactSlider.gameObject.SetActive(false);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (!IsOwner) return;
         if (other.tag == "Interactable")
         {
             interactable = null;
+            interactSlider.gameObject.SetActive(false);
         }
     }
 
@@ -54,6 +76,7 @@ public class PlayerInteractions : NetworkBehaviour
         while (interactMeterCurrent < _interactMeterCapacity)
         {
             interactMeterCurrent += _interactAmount;
+            interactSlider.value = interactMeterCurrent;
             yield return new WaitForSeconds(_interactSpeed);
         }
         //if (interactable.GetComponent<MissileLauncher>())
@@ -74,6 +97,18 @@ public class PlayerInteractions : NetworkBehaviour
         }
         
         interactMeterCurrent = 0;
+        interactSlider.value = interactMeterCurrent;
         isInteracting = false;
+    }
+
+    private IEnumerator DrainSlider()
+    {
+        while (interactMeterCurrent > 0)
+        {
+            interactMeterCurrent -= _interactAmount;
+            interactSlider.value = interactMeterCurrent;
+            yield return new WaitForSeconds(_interactSpeed / 2);
+        }
+        
     }
 }

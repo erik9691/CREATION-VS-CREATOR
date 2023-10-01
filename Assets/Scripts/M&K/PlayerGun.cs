@@ -28,8 +28,8 @@ public class PlayerGun : NetworkBehaviour
     private void Start()
     {
         ammoManager = GameObject.Find("AmmoBoxManager").GetComponent<SpawnAmmo>();
-        clipAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("ClipAmmo").GetComponent<TextMeshProUGUI>();
-        storedAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
+        clipAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("Ammo").transform.Find("ClipAmmo").GetComponent<TextMeshProUGUI>();
+        storedAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("Ammo").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
     }
 
     private void Update()
