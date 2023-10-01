@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class PlayerGun : NetworkBehaviour
 {
@@ -18,24 +16,19 @@ public class PlayerGun : NetworkBehaviour
 
     float shootRateTime = 0;
     bool isReloading; // para la animacion
-    Transform boxTransform;
     SpawnAmmo ammoManager;
     public bool canShoot = true;
-
-    TextMeshProUGUI clipAmmoUI;
-    TextMeshProUGUI storedAmmoUI;
 
     private void Start()
     {
         ammoManager = GameObject.Find("AmmoBoxManager").GetComponent<SpawnAmmo>();
-        clipAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("Ammo").transform.Find("ClipAmmo").GetComponent<TextMeshProUGUI>();
-        storedAmmoUI = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("Ammo").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
     }
 
     private void Update()
     {
-        clipAmmoUI.text = clipAmmo.ToString();
-        storedAmmoUI.text = storedAmmo.ToString();
+        if (!IsOwner) return;
+
+        UIManager.Instance.UpdateAmmo(clipAmmo, storedAmmo);
     }
 
     public void Shoot(InputAction.CallbackContext obj)
@@ -107,8 +100,6 @@ public class PlayerGun : NetworkBehaviour
         if (!IsOwner) return;
         if (other.gameObject.tag == "AmmoBox")
         {
-            boxTransform = other.transform;
-
             if (storedAmmo < maxAmmo)
             {
                 if (storedAmmo >= (maxAmmo - boxAmmo))

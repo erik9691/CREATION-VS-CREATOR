@@ -22,7 +22,7 @@ public class NetworkManagerUI : MonoBehaviour
         _clientBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
-            minionUI.SetActive(true);
+            UIManager.Instance.ActivateMinionUI();
             Destroy(this.gameObject);
         });
     }
@@ -37,7 +37,7 @@ public class NetworkManagerUI : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.C))
         {
             NetworkManager.Singleton.StartClient();
-            minionUI.SetActive(true);
+            UIManager.Instance.ActivateMinionUI();
             Destroy(this.gameObject);
         }
     }

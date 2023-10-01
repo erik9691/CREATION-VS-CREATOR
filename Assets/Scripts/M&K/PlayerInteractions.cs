@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
-using UnityEngine.UI;
 
 public class PlayerInteractions : NetworkBehaviour
 {
@@ -14,14 +13,6 @@ public class PlayerInteractions : NetworkBehaviour
     GameObject interactable;
     bool isInteracting = false;
     bool isMounting = false;
-    Slider interactSlider;
-
-    private void Start()
-    {
-        interactSlider = GameObject.Find("Canvas").transform.Find("Minion UI").transform.Find("Interact").GetComponent<Slider>();
-        interactSlider.gameObject.SetActive(false);
-    }
-
 
     public void Interact(InputAction.CallbackContext obj)
     {
@@ -51,11 +42,11 @@ public class PlayerInteractions : NetworkBehaviour
 
             if (interactable.GetComponent<TurretController>().n_isMounted.Value == false || interactable.GetComponent<TurretController>().n_isMounted.Value == true && isMounting)
             {
-                interactSlider.gameObject.SetActive(true);
+                UIManager.Instance.ActivateInteractSlider(true);
             }
             else
             {
-                interactSlider.gameObject.SetActive(false);
+                UIManager.Instance.ActivateInteractSlider(false);
             }
         }
     }
@@ -66,7 +57,7 @@ public class PlayerInteractions : NetworkBehaviour
         if (other.tag == "Interactable")
         {
             interactable = null;
-            interactSlider.gameObject.SetActive(false);
+            UIManager.Instance.ActivateInteractSlider(false);
         }
     }
 
@@ -76,7 +67,7 @@ public class PlayerInteractions : NetworkBehaviour
         while (interactMeterCurrent < _interactMeterCapacity)
         {
             interactMeterCurrent += _interactAmount;
-            interactSlider.value = interactMeterCurrent;
+            UIManager.Instance.UpdateInteractSlider(interactMeterCurrent);
             yield return new WaitForSeconds(_interactSpeed);
         }
         //if (interactable.GetComponent<MissileLauncher>())
@@ -97,7 +88,7 @@ public class PlayerInteractions : NetworkBehaviour
         }
         
         interactMeterCurrent = 0;
-        interactSlider.value = interactMeterCurrent;
+        UIManager.Instance.UpdateInteractSlider(interactMeterCurrent);
         isInteracting = false;
     }
 
@@ -106,9 +97,8 @@ public class PlayerInteractions : NetworkBehaviour
         while (interactMeterCurrent > 0)
         {
             interactMeterCurrent -= _interactAmount;
-            interactSlider.value = interactMeterCurrent;
+            UIManager.Instance.UpdateInteractSlider(interactMeterCurrent);
             yield return new WaitForSeconds(_interactSpeed / 2);
         }
-        
     }
 }

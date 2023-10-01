@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
-using Unity.Netcode;
 
 public class PlayerAim : MonoBehaviour
 {
     [SerializeField]
     int priorityBoostAmount = 10;
-
-    Canvas thirdPersonCanvas;
-    Canvas aimCanvas;
 
     public CinemachineVirtualCamera virtualCamera;
 
@@ -20,14 +16,12 @@ public class PlayerAim : MonoBehaviour
         if (obj.started)
         {
             virtualCamera.Priority += priorityBoostAmount;
-            //aimCanvas.enabled = true;
-            //thirdPersonCanvas.enabled = false;
+            UIManager.Instance.ChangeReticle(1);
         }
         else if (obj.canceled)
         {
             virtualCamera.Priority -= priorityBoostAmount;
-            //aimCanvas.enabled = false;
-            //thirdPersonCanvas.enabled = true;
+            UIManager.Instance.ChangeReticle(0);
         }
     }
 }
