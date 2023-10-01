@@ -5,25 +5,32 @@ using Unity.Netcode;
 
 public class OverlordHealth : NetworkBehaviour
 {
-    private NetworkVariable<int> overlordHealth = new NetworkVariable<int>();
-    private const int initialValue = 100;
+    public NetworkVariable<float> overlordHealth = new NetworkVariable<float>();
 
     public override void OnNetworkSpawn()
     {
-        overlordHealth.Value = initialValue;
+        overlordHealth.Value = 100;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+
+    }
+
+    public void TakeDamage(float damage)
+    {
+        overlordHealth.Value -= damage;
+        UpdateOverlordHealthClientRpc(overlordHealth.Value);
+
+        if (overlordHealth.Value <= 0)
         {
-            DamageTake();
+            //muere el overlord
         }
     }
 
-    private void DamageTake()
+    [ClientRpc]
+    public void UpdateOverlordHealthClientRpc(float value)
     {
-        overlordHealth.Value--;
-        Debug.Log(overlordHealth.Value);
+        UIManager.Instance.UpdateOverlordHealth(value);
     }
 }

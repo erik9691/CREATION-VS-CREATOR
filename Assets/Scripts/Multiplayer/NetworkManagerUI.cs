@@ -6,12 +6,10 @@ using UnityEngine.UI;
 
 public class NetworkManagerUI : MonoBehaviour
 {
-    [SerializeField] Button _spawnBtn;
     [SerializeField] Button _hostBtn;
     [SerializeField] Button _clientBtn;
     bool hostStarted = false;
     [SerializeField] Transform _overlordSpawn;
-    [SerializeField] GameObject minionUI;
     private void Awake()
     {
         _hostBtn.onClick.AddListener(() =>

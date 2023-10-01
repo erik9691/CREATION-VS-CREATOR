@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     TextMeshProUGUI clipAmmoUI;
     TextMeshProUGUI storedAmmoUI;
     Slider interactSlider;
+    Slider overlordSlider;
 
     public static UIManager Instance { get; private set; }
 
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
         clipAmmoUI = minionUI.transform.Find("Ammo").transform.Find("ClipAmmo").GetComponent<TextMeshProUGUI>();
         storedAmmoUI = minionUI.transform.Find("Ammo").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
         interactSlider = minionUI.transform.Find("Interact").GetComponent<Slider>();
+        overlordSlider = minionUI.transform.Find("OverlordHealth").GetComponent<Slider>();
     }
 
     public void ActivateMinionUI()
@@ -66,5 +68,10 @@ public class UIManager : MonoBehaviour
                 reticles[i].SetActive(false);
             }
         }
+    }
+
+    public void UpdateOverlordHealth(float current)
+    {
+        overlordSlider.value = current;
     }
 }

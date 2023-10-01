@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: -1585292771853215804}
   - component: {fileID: -4760223958051693112}
   - component: {fileID: -6404133291019076292}
+  - component: {fileID: 2978932562477312476}
   m_Layer: 0
   m_Name: Overlord
   m_TagString: Overlord
@@ -302,6 +303,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerCamera: {fileID: 2036648160820625719}
+--- !u!114 &2978932562477312476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4801470288627515918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510055851beac7d41addff7d61a94e1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7485325908017344611
 GameObject:
   m_ObjectHideFlags: 0
