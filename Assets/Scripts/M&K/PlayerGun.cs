@@ -20,6 +20,7 @@ public class PlayerGun : NetworkBehaviour
     bool isReloading; // para la animacion
     Transform boxTransform;
     SpawnAmmo ammoManager;
+    public bool canShoot = true;
 
     TextMeshProUGUI clipAmmoUI;
     TextMeshProUGUI storedAmmoUI;
@@ -39,7 +40,9 @@ public class PlayerGun : NetworkBehaviour
 
     public void Shoot(InputAction.CallbackContext obj)
     {
-        if (obj.started)
+        if (!IsOwner) return;
+
+        if (obj.started && canShoot)
         {
             if (storedAmmo > 0 || clipAmmo > 0)
             {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    
     [SerializeField] float playerHealth = 10;
     [SerializeField] float dmgAmount = 1f;
     [SerializeField] float dmgRate = 0.5f;
@@ -15,7 +16,7 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(dmgRate);
         playerHealth -= dmgAmount;
     }
-
+    /*
     private void Start()
     {
         rb = transform.GetComponentInChildren<Rigidbody>();
@@ -39,4 +40,5 @@ public class PlayerHealth : MonoBehaviour
         }
         animator.enable = !enable;
     }
+    */
 }

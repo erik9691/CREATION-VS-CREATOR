@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Netcode;
 
-public class PlayerInteractions : MonoBehaviour
+public class PlayerInteractions : NetworkBehaviour
 {
     [SerializeField]
     float _interactMeterCapacity = 5, _interactSpeed = 0.1f, _interactAmount = 0.1f;
@@ -11,12 +12,13 @@ public class PlayerInteractions : MonoBehaviour
     float interactMeterCurrent = 0;
     GameObject interactable;
     bool isInteracting = false;
+    bool isMounting = false;
 
     public void Interact(InputAction.CallbackContext obj)
     {
-        if (interactable != null && obj.started)
+        if (!IsOwner) return;
+        if (interactable != null && obj.started || isMounting && obj.started)
         {
-            Debug.Log("Start");
             if (!isInteracting)
             {
                 StartCoroutine(InteractWithLauncher());
@@ -24,7 +26,6 @@ public class PlayerInteractions : MonoBehaviour
         }
         else if (obj.canceled || interactable == null)
         {
-            Debug.Log("Stop");
             interactMeterCurrent = 0;
             isInteracting = false;
             StopAllCoroutines();
@@ -41,7 +42,7 @@ public class PlayerInteractions : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Missile Launcher")
+        if (other.tag == "Interactable")
         {
             interactable = null;
         }
@@ -55,15 +56,21 @@ public class PlayerInteractions : MonoBehaviour
             interactMeterCurrent += _interactAmount;
             yield return new WaitForSeconds(_interactSpeed);
         }
-        if (interactable.GetComponent<MissileLauncher>())
+        //if (interactable.GetComponent<MissileLauncher>())
+        //{
+        //    interactable.GetComponent<MissileLauncher>().SpawnMissileServerRpc();
+        //}
+        if (interactable.GetComponent<TurretController>() && !isMounting && interactable.GetComponent<TurretController>().n_isMounted.Value == false)
         {
-            interactable.GetComponent<MissileLauncher>().SpawnMissileServerRpc();
+            isMounting = true;
+            interactable.GetComponent<TurretController>().Mount(true, GetComponent<PlayerInput>());
+            GetComponent<DisableMinion>().Disable();
         }
-        else
+        else if (isMounting)
         {
-            interactable.GetComponent<Turret>().SpawnTurretBulletServerRpc();
-            interactable.GetComponent<TurretController>().playerInput = GetComponent<PlayerInput>();
-            interactable.GetComponent<TurretController>().isAwake = true;
+            interactable.GetComponent<TurretController>().Mount(false);
+            GetComponent<DisableMinion>().Enable();
+            isMounting = false;
         }
         
         interactMeterCurrent = 0;

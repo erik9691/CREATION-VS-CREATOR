@@ -358,7 +358,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0.0028771977, z: -0.00017582906}
+  m_ConnectedAnchor: {x: 0, y: 0.0028771996, z: -0.00017582953}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -445,6 +445,7 @@ GameObject:
   - component: {fileID: 4963011875705014541}
   - component: {fileID: 3425474189164170234}
   - component: {fileID: 8474438447705316814}
+  - component: {fileID: 6485983325735079308}
   m_Layer: 0
   m_Name: Minion
   m_TagString: Player
@@ -586,14 +587,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: dda75b51-e152-46a3-bff2-1dbb72fb5fd0
     m_ActionName: Player/Interact[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 10a1b51c-9b83-4245-bfbe-5ebdfa47e115
-    m_ActionName: Cannon/Rotate[/Keyboard/w,/Keyboard/s]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: aebd4718-fcc4-4ecc-b531-43be3a18bba1
-    m_ActionName: Cannon/Shoot[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -698,7 +691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341424c0e3549e94ab1639a2a2888810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulSpeed: 1500
+  _bulSpeed: 3000
   _shootRate: 0.2
   storedAmmo: 30
   clipAmmo: 5
@@ -708,6 +701,7 @@ MonoBehaviour:
   SpawnPoint: {fileID: 0}
   bulletPrefab: {fileID: 92602612815403785, guid: 252e6db3aea9c214bb2fe9608fefff97,
     type: 3}
+  canShoot: 1
 --- !u!114 &4110717607573290117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -913,6 +907,7 @@ MonoBehaviour:
   playerHealth: 10
   dmgAmount: 1
   dmgRate: 0.5
+  animator: {fileID: 0}
 --- !u!114 &4963011875705014541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -956,6 +951,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priorityBoostAmount: 10
   virtualCamera: {fileID: 0}
+--- !u!114 &6485983325735079308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773661886088790811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c40341657e14214f83ede94fd09e18f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minionComponents:
+  - {fileID: 1461679537487066336}
+  - {fileID: 4110717607573290117}
+  - {fileID: 8474438447705316814}
+  minionCollider: {fileID: 1438245584018522321}
+  minionRb: {fileID: 6699297203056067136}
 --- !u!1 &1792279088052611570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1063,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0.006855535, z: 0.0004693272}
+  m_ConnectedAnchor: {x: 0, y: 0.006855535, z: 0.00046933}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -1181,7 +1194,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 1.1641532e-10, y: 0.0053636953, z: 1.1641535e-10}
+  m_ConnectedAnchor: {x: 0, y: 0.0053636953, z: 1.1641535e-10}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -1312,7 +1325,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.1641532e-10, y: 0.0053636953, z: 1.1641535e-10}
+  m_ConnectedAnchor: {x: 1.1641532e-10, y: 0.0053636953, z: 1.1641535e-10}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -1443,7 +1456,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0071366057, y: 0.002733285, z: 0.000011533588}
+  m_ConnectedAnchor: {x: -0.007136606, y: 0.002733287, z: 0.000011533646}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -1606,7 +1619,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00015341805, y: -0.0042263623, z: 0.00036035725}
+  m_ConnectedAnchor: {x: 0.00015341619, y: -0.0042263623, z: 0.00036035755}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -1655,7 +1668,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1098514018842682349
 Transform:
   m_ObjectHideFlags: 0
@@ -1990,7 +2003,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.0071366047, y: 0.002733285, z: 0.000011533588}
+  m_ConnectedAnchor: {x: 0.0071366057, y: 0.002733287, z: 0.000011533646}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -2315,7 +2328,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.001257545, y: -0.00013073026, z: 0.00047569675}
+  m_ConnectedAnchor: {x: 0.0012575452, y: -0.00013072933, z: 0.00047569652}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -2478,7 +2491,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00015341805, y: -0.0042263623, z: 0.00036035725}
+  m_ConnectedAnchor: {x: -0.00015341619, y: -0.0042263623, z: 0.00036035755}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -2641,7 +2654,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.001257545, y: -0.00013073026, z: 0.00047569675}
+  m_ConnectedAnchor: {x: -0.0012575451, y: -0.00013072933, z: 0.00047569652}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:

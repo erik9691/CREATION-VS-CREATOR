@@ -98,7 +98,7 @@ public class PlayerMovement : NetworkBehaviour
         move.y = 0;
         transform.Translate(move * Time.deltaTime * _speed);
 
-        //Rotacion de la camara
+        //Rotacion
         Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
         modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
