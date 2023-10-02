@@ -66,17 +66,18 @@ public class NetworkManagerUI : MonoBehaviour
             response.PlayerPrefabHash = 969;
             // Position to spawn the player object (if null it uses default of Vector3.zero)
             response.Position = Vector3.zero;
+            // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
+            response.Rotation = Quaternion.identity;
         }
         else
         {
             response.PlayerPrefabHash = null;
             response.Position = _overlordSpawn.position;
-
+            response.Rotation = _overlordSpawn.rotation;
             hostStarted = true;
         }
 
-        // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
-        response.Rotation = Quaternion.identity;
+        
 
         // If response.Approved is false, you can provide a message that explains the reason why via ConnectionApprovalResponse.Reason
         // On the client-side, NetworkManager.DisconnectReason will be populated with this message via DisconnectReasonMessage

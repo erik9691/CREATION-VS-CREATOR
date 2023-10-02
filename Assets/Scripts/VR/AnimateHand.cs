@@ -13,6 +13,7 @@ public class AnimateHand : NetworkBehaviour
     float gripValue;
     float triggerValue;
     float oldTriggerValue;
+    float oldGripValue;
 
     private void Awake()
     {
@@ -20,9 +21,8 @@ public class AnimateHand : NetworkBehaviour
     }
     void Update()
     {
-        
         AnimateTrigger();
-        
+        AnimateGrip();
     }
 
     void AnimateTrigger()
@@ -30,23 +30,27 @@ public class AnimateHand : NetworkBehaviour
         triggerValue = _triggerReference.action.ReadValue<float>();
         if (triggerValue != oldTriggerValue)
         {
-            AnimateTriggerServerRpc();
+            AnimateHandServerRpc(triggerValue);
         }
         oldTriggerValue = triggerValue;
     }
 
-    [ServerRpc]
-    private void AnimateTriggerServerRpc()
-    {
-        handAnimator.SetFloat("Grip", triggerValue);
-    }
-
-
-        /* por ahora no necesitamos esta accion
     void AnimateGrip()
     {
         gripValue = _gripReference.action.ReadValue<float>();
-        handAnimator.SetFloat("Grip", gripValue);
+        if (gripValue != oldGripValue)
+        {
+            AnimateHandServerRpc(gripValue);
+        }
+        oldGripValue = gripValue;
     }
-    */
+
+    [ServerRpc]
+    private void AnimateHandServerRpc(float value)
+    {
+        handAnimator.SetFloat("Grip", value);
+    }
+
+
+    
 }
