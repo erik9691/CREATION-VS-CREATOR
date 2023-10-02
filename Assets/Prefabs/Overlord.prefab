@@ -315,6 +315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510055851beac7d41addff7d61a94e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overlordHealth:
+    m_InternalValue: 0
 --- !u!1 &7485325908017344611
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +333,7 @@ GameObject:
   - component: {fileID: 8806759779780627652}
   - component: {fileID: 7647194514176841410}
   - component: {fileID: 7250057034484401011}
+  - component: {fileID: 413465923920382749}
   m_Layer: 0
   m_Name: Left Controller
   m_TagString: Untagged
@@ -777,6 +780,26 @@ MonoBehaviour:
   _drainAmount: 0.1
   handMesh: {fileID: 3112650534669409668}
   EnergyPoints: 1
+--- !u!114 &413465923920382749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485325908017344611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c023c5dd1c47594f96487c6b16b2519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionForce: 10
+  explosionRadius: 10
+  chargeRate: 0.2
+  chargeAmount: 1
+  chargeCurrent: 0
+  chargeLimit: 20
+  _gripReference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
 --- !u!1 &8977994337142227839
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,6 +816,7 @@ GameObject:
   - component: {fileID: 3003143735212343473}
   - component: {fileID: 7219478535923095391}
   - component: {fileID: 8179499825521721776}
+  - component: {fileID: 5422671181346282358}
   m_Layer: 0
   m_Name: Right Controller
   m_TagString: Untagged
@@ -1239,6 +1263,26 @@ MonoBehaviour:
   _drainAmount: 0.1
   handMesh: {fileID: 7608393546092865838}
   EnergyPoints: 1
+--- !u!114 &5422671181346282358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977994337142227839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c023c5dd1c47594f96487c6b16b2519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionForce: 10
+  explosionRadius: 10
+  chargeRate: 0.2
+  chargeAmount: 1
+  chargeCurrent: 0
+  chargeLimit: 20
+  _gripReference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
 --- !u!1001 &2644672718411757696
 PrefabInstance:
   m_ObjectHideFlags: 0
