@@ -22,8 +22,11 @@ public class PlayerMovement : NetworkBehaviour
 
     float initialSpeed;
 
+    Animator anim;
+
     private void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);
@@ -41,6 +44,8 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
+        anim.SetFloat("VelX", moveInput.x);
+        anim.SetFloat("VelY", moveInput.y);
         //Resetear la posicion cuando te suelta el Overlord
         ResetPosition();
     }
