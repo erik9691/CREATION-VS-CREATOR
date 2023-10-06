@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class PlayerHealth : NetworkBehaviour
 {
@@ -9,6 +11,7 @@ public class PlayerHealth : NetworkBehaviour
     [SerializeField] float playerHealth = 10;
     [SerializeField] float dmgAmount = 1f;
     [SerializeField] float dmgRate = 0.5f;
+    float maxHealth;
     Rigidbody[] ragdollRb;
     Collider[] ragdollCol;
     Rigidbody mainRb;
@@ -17,12 +20,30 @@ public class PlayerHealth : NetworkBehaviour
 
     public IEnumerator TakeDamage()
     {
-        yield return new WaitForSeconds(dmgRate);
-        playerHealth -= dmgAmount;
+        while (playerHealth >= 0)
+        {
+            yield return new WaitForSeconds(dmgRate);
+            playerHealth -= dmgAmount;
+            if (playerHealth <= (maxHealth - (maxHealth / 3)))
+            {
+                UIManager.Instance.UpdateMinionHealth(1);
+                if (playerHealth <= (maxHealth - ((maxHealth / 3) * 2)))
+                {
+                    UIManager.Instance.UpdateMinionHealth(2);
+                }
+            }
+        }
+
+        GetComponent<PlayerInput>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponentInChildren<CinemachineFreeLook>().Priority += 20;
+        StartRagdollServerRpc();
     }
 
     public override void OnNetworkSpawn()
     {
+        maxHealth = playerHealth;
+
         mainCol = GetComponent<Collider>();
         mainRb = GetComponent<Rigidbody>();
 
@@ -34,14 +55,16 @@ public class PlayerHealth : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("Ragdoll");
-            StartRagdollServerRpc();
+            StartCoroutine(TakeDamage());
         }
     }
 
-    [ServerRpc]
+
+
+    [ServerRpc(RequireOwnership = false)]
     void StartRagdollServerRpc()
     {
         animator.enabled = false;
@@ -115,32 +138,4 @@ public class PlayerHealth : NetworkBehaviour
         mainCol.enabled = true;
         mainRb.isKinematic = false;
     }
-
-
-
-    /*
-    private void Start()
-    {
-        rb = transform.GetComponentInChildren<Rigidbody>();
-
-        SetEnable(false);
-    }
-    private void Update()
-    {
-        if(playerHealth <= 0)
-        {
-            SetEnable(true);
-        }
-    }
-
-    void SetEnable(bool enable)
-    {
-        bool isKinematic = !enable;
-        foreach(Rigidbody rigidbody in rb)
-        {
-            rigidbody.isKinematic = isKinematic;
-        }
-        animator.enable = !enable;
-    }
-    */
 }

@@ -26,7 +26,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);

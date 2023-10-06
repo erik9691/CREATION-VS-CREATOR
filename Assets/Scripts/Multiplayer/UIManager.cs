@@ -7,12 +7,15 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject minionUI;
-    [SerializeField] GameObject[] reticles;
+    [SerializeField] Sprite[] reticles;
+    [SerializeField] Sprite[] statuses;
 
     TextMeshProUGUI clipAmmoUI;
     TextMeshProUGUI storedAmmoUI;
     Slider interactSlider;
     Slider overlordSlider;
+    Image minionStatus;
+    Image minionReticle;
 
     public static UIManager Instance { get; private set; }
 
@@ -31,13 +34,14 @@ public class UIManager : MonoBehaviour
         storedAmmoUI = minionUI.transform.Find("Ammo").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
         interactSlider = minionUI.transform.Find("Interact").GetComponent<Slider>();
         overlordSlider = minionUI.transform.Find("OverlordHealth").GetComponent<Slider>();
+        minionStatus = minionUI.transform.Find("Status").GetComponent<Image>();
+        minionReticle = minionUI.transform.Find("Crosshair").GetComponent<Image>();
     }
 
     public void ActivateMinionUI()
     {
         minionUI.SetActive(true);
         interactSlider.gameObject.SetActive(false);
-        ChangeReticle(0);
     }
 
     public void UpdateAmmo(int cAmmo, int sAmmo)
@@ -57,17 +61,11 @@ public class UIManager : MonoBehaviour
 
     public void ChangeReticle(int retIndex)
     {
-        for (int i = 0; i < reticles.Length; i++)
-        {
-            if (i == retIndex)
-            {
-                reticles[i].SetActive(true);
-            }
-            else
-            {
-                reticles[i].SetActive(false);
-            }
-        }
+        minionReticle.sprite = reticles[retIndex];
+    }
+    public void UpdateMinionHealth(int statusIndex)
+    {
+        minionStatus.sprite = statuses[statusIndex];
     }
 
     public void UpdateOverlordHealth(float current)
