@@ -12,11 +12,6 @@ public class OverlordHealth : NetworkBehaviour
         overlordHealth.Value = 100;
     }
 
-    private void Update()
-    {
-
-    }
-
     public void TakeDamage(float damage)
     {
         overlordHealth.Value -= damage;

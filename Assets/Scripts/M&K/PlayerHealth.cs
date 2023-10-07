@@ -8,41 +8,19 @@ using Cinemachine;
 public class PlayerHealth : NetworkBehaviour
 {
     
-    [SerializeField] float playerHealth = 10;
-    [SerializeField] float dmgAmount = 1f;
-    [SerializeField] float dmgRate = 0.5f;
+    [SerializeField] float _playerHealth = 10;
+    [SerializeField] float _dmgAmount = 1f;
+    [SerializeField] float _dmgRate = 0.5f;
     float maxHealth;
     Rigidbody[] ragdollRb;
     Collider[] ragdollCol;
     Rigidbody mainRb;
     Collider mainCol;
-    [SerializeField] Animator animator;
-
-    public IEnumerator TakeDamage()
-    {
-        while (playerHealth >= 0)
-        {
-            yield return new WaitForSeconds(dmgRate);
-            playerHealth -= dmgAmount;
-            if (playerHealth <= (maxHealth - (maxHealth / 3)))
-            {
-                UIManager.Instance.UpdateMinionHealth(1);
-                if (playerHealth <= (maxHealth - ((maxHealth / 3) * 2)))
-                {
-                    UIManager.Instance.UpdateMinionHealth(2);
-                }
-            }
-        }
-
-        GetComponent<PlayerInput>().enabled = false;
-        GetComponent<PlayerMovement>().enabled = false;
-        GetComponentInChildren<CinemachineFreeLook>().Priority += 20;
-        StartRagdollServerRpc();
-    }
+    Animator animator;
 
     public override void OnNetworkSpawn()
     {
-        maxHealth = playerHealth;
+        maxHealth = _playerHealth;
 
         mainCol = GetComponent<Collider>();
         mainRb = GetComponent<Rigidbody>();
@@ -50,7 +28,7 @@ public class PlayerHealth : NetworkBehaviour
         ragdollRb = GetComponentsInChildren<Rigidbody>(true);
         ragdollCol = GetComponentsInChildren<Collider>(true);
 
-        //StopRagdollServerRpc();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -63,6 +41,32 @@ public class PlayerHealth : NetworkBehaviour
     }
 
 
+    public IEnumerator TakeDamage()
+    {
+        while (_playerHealth >= 0)
+        {
+            yield return new WaitForSeconds(_dmgRate);
+            _playerHealth -= _dmgAmount;
+            if (_playerHealth <= (maxHealth - (maxHealth / 3)))
+            {
+                UIManager.Instance.UpdateMinionHealth(1);
+                if (_playerHealth <= (maxHealth - ((maxHealth / 3) * 2)))
+                {
+                    UIManager.Instance.UpdateMinionHealth(2);
+                }
+            }
+        }
+
+        DisableInputs();
+        StartRagdollServerRpc();
+    }
+
+    void DisableInputs()
+    {
+        GetComponent<PlayerInput>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponentInChildren<CinemachineFreeLook>().Priority += 20;
+    }
 
     [ServerRpc(RequireOwnership = false)]
     void StartRagdollServerRpc()

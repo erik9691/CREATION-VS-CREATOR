@@ -6,10 +6,13 @@ using Cinemachine;
 
 public class PlayerAim : MonoBehaviour
 {
-    [SerializeField]
     int priorityBoostAmount = 10;
+    CinemachineVirtualCamera virtualCamera;
 
-    public CinemachineVirtualCamera virtualCamera;
+    private void Start()
+    {
+        virtualCamera = GetComponent<AssignCamera>().cameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>();
+    }
 
     public void Aim(InputAction.CallbackContext obj)
     {

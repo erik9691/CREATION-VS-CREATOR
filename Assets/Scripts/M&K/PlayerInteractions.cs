@@ -40,7 +40,7 @@ public class PlayerInteractions : NetworkBehaviour
         {
             interactable = other.transform.parent.gameObject;
 
-            if (interactable.GetComponent<TurretController>().n_isMounted.Value == false || interactable.GetComponent<TurretController>().n_isMounted.Value == true && isMounting)
+            if (interactable.GetComponent<TurretController>().n_IsMounted.Value == false || interactable.GetComponent<TurretController>().n_IsMounted.Value == true && isMounting)
             {
                 UIManager.Instance.ActivateInteractSlider(true);
             }
@@ -74,7 +74,7 @@ public class PlayerInteractions : NetworkBehaviour
         //{
         //    interactable.GetComponent<MissileLauncher>().SpawnMissileServerRpc();
         //}
-        if (interactable.GetComponent<TurretController>() && !isMounting && interactable.GetComponent<TurretController>().n_isMounted.Value == false)
+        if (interactable.GetComponent<TurretController>() && !isMounting && interactable.GetComponent<TurretController>().n_IsMounted.Value == false)
         {
             isMounting = true;
             interactable.GetComponent<TurretController>().Mount(true, GetComponent<PlayerInput>());

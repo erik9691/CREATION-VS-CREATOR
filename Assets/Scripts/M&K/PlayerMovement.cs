@@ -10,18 +10,13 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField]
     float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f;
 
-    public Transform cameraTransform;
-
+    Transform cameraTransform;
     Rigidbody rb;
     PlayerInput playerInput;
     Vector2 moveInput;
-
     Transform modelTransform;
-
     bool puedoSaltar;
-
     float initialSpeed;
-
     Animator anim;
 
     private void Start()
@@ -31,6 +26,7 @@ public class PlayerMovement : NetworkBehaviour
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);
         initialSpeed = _speed;
+        cameraTransform = GetComponent<AssignCamera>().cameras.transform.GetChild(0);
 
         //lockear el cursor
         Cursor.lockState = CursorLockMode.Locked;

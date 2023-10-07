@@ -7,12 +7,12 @@ using Cinemachine;
 
 public class TurretController : NetworkBehaviour
 {
-    [SerializeField] float rotateSpeed = 0.5f;
+    public NetworkVariable<bool> n_IsMounted = new NetworkVariable<bool>();
+    public bool IsMounted;
 
-    public NetworkVariable<bool> n_isMounted = new NetworkVariable<bool>();
-    public bool isMounted;
+    [SerializeField] float _rotateSpeed = 0.5f;
+    [SerializeField] GameObject _cannon;
 
-    [SerializeField] GameObject cannon;
     PlayerInput playerInput;
     CinemachineVirtualCamera cam;
     Vector2 moveInput;
@@ -25,7 +25,7 @@ public class TurretController : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (isMounted)
+        if (IsMounted)
         {
             cam.Priority = 30;
 
@@ -44,7 +44,7 @@ public class TurretController : NetworkBehaviour
 
     private void Update()
     {
-        if (isMounted)
+        if (IsMounted)
         {
             if (playerInput.actions["Shoot"].WasPressedThisFrame())
             {
@@ -56,7 +56,7 @@ public class TurretController : NetworkBehaviour
     public void Mount(bool mount, PlayerInput pi = null)
     {
         UpdateMountServerRpc(mount, GetComponent<NetworkObject>());
-        isMounted = mount;
+        IsMounted = mount;
         playerInput = pi;
     }
 
@@ -64,13 +64,13 @@ public class TurretController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void UpdateRotationServerRpc(float direction)
     {
-        cannon.transform.Rotate(-rotateSpeed*direction, 0, 0);
+        _cannon.transform.Rotate(-_rotateSpeed*direction, 0, 0);
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void UpdateMountServerRpc(bool mounted, NetworkObjectReference turretReference)
     {
-        n_isMounted.Value = mounted;
+        n_IsMounted.Value = mounted;
         if (turretReference.TryGet(out NetworkObject networkObject))
         {
             networkObject.transform.GetChild(0).transform.GetChild(1).GetChild(1).gameObject.SetActive(mounted);

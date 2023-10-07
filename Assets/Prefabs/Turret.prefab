@@ -1122,9 +1122,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulSpeed: 2000
-  bulletPrefab: {fileID: 3347245132410924343, guid: af883ccbc88feff4b92b9fd149d78347,
+  _missilePrefab: {fileID: 3347245132410924343, guid: af883ccbc88feff4b92b9fd149d78347,
     type: 3}
-  ShootPoint: {fileID: 1861805397360381458}
+  _shootPoint: {fileID: 1861805397360381458}
 --- !u!114 &1929336463069428523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,11 +1137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c3d53dc3a2572439c1a302ddafe5e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: 0.5
-  n_isMounted:
+  n_IsMounted:
     m_InternalValue: 0
-  isMounted: 0
-  cannon: {fileID: 4189105976480904809}
+  IsMounted: 0
+  _rotateSpeed: 0.5
+  _cannon: {fileID: 4189105976480904809}
 --- !u!1 &3460698557320578959
 GameObject:
   m_ObjectHideFlags: 0

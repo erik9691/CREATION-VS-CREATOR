@@ -966,6 +966,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: dda75b51-e152-46a3-bff2-1dbb72fb5fd0
     m_ActionName: Player/Interact[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5911370378881023961}
+        m_TargetAssemblyTypeName: PlayerGun, Assembly-CSharp
+        m_MethodName: ReloadAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b46be8b1-87b5-4196-9e9b-adf6ce766655
+    m_ActionName: Player/Reload[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1057,7 +1073,6 @@ MonoBehaviour:
   _speed: 7
   _runMult: 2
   _rotationSpeed: 5
-  cameraTransform: {fileID: 0}
 --- !u!114 &5911370378881023961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,15 +1087,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulSpeed: 3000
   _shootRate: 0.2
-  storedAmmo: 30
-  clipAmmo: 5
-  clipCapacity: 5
-  maxAmmo: 30
-  boxAmmo: 15
-  SpawnPoint: {fileID: 0}
+  _reloadTime: 2
+  _storedAmmo: 30
+  _clipAmmo: 5
+  _clipCapacity: 5
+  _maxAmmo: 30
+  _boxAmmo: 15
   bulletPrefab: {fileID: 92602612815403785, guid: 252e6db3aea9c214bb2fe9608fefff97,
     type: 3}
-  canShoot: 1
+  CanShoot: 1
 --- !u!114 &4110717607573290117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,10 +1298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a5f7eabde00fc4181f7e1c0b1552c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: 10
-  dmgAmount: 1
-  dmgRate: 0.5
-  animator: {fileID: 9105991773535076200}
+  _playerHealth: 10
+  _dmgAmount: 1
+  _dmgRate: 0.5
 --- !u!114 &4963011875705014541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,6 +1315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camerasPrefab: {fileID: 218337125853181352, guid: 759dfca4e547bde48a70192a50d9ee7d,
     type: 3}
+  cameras: {fileID: 0}
 --- !u!114 &3425474189164170234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1328,8 +1343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b839505d2974744ad2214fafa1cdde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  priorityBoostAmount: 10
-  virtualCamera: {fileID: 0}
 --- !u!114 &6485983325735079308
 MonoBehaviour:
   m_ObjectHideFlags: 0

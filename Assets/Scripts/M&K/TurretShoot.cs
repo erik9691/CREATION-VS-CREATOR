@@ -6,8 +6,8 @@ using Unity.Netcode;
 public class TurretShoot : NetworkBehaviour
 {
     [SerializeField] float _bulSpeed = 1000f;
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] Transform ShootPoint;
+    [SerializeField] GameObject _missilePrefab;
+    [SerializeField] Transform _shootPoint;
     bool canShoot = true;
 
     private IEnumerator DeleteBulletDelay(GameObject bullet)
@@ -24,7 +24,7 @@ public class TurretShoot : NetworkBehaviour
         {
             GameObject bullet;
 
-            bullet = Instantiate(bulletPrefab, ShootPoint.position, ShootPoint.rotation);
+            bullet = Instantiate(_missilePrefab, _shootPoint.position, _shootPoint.rotation);
             bullet.GetComponent<NetworkObject>().Spawn();
 
             bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * _bulSpeed);

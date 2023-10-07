@@ -16,7 +16,7 @@ public class DisableMinion : NetworkBehaviour
             comp.enabled = false;
         }
 
-        GetComponent<PlayerGun>().canShoot = false;
+        GetComponent<PlayerGun>().CanShoot = false;
 
         minionRb.isKinematic = true;
         minionCollider.enabled = false;
@@ -30,7 +30,7 @@ public class DisableMinion : NetworkBehaviour
             comp.enabled = true;
         }
 
-        GetComponent<PlayerGun>().canShoot = true;
+        GetComponent<PlayerGun>().CanShoot = true;
 
         minionRb.isKinematic = false;
         minionCollider.enabled = true;
