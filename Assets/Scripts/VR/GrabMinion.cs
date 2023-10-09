@@ -33,7 +33,7 @@ public class GrabMinion : NetworkBehaviour
         Debug.Log("SelectEnter 1");
         //Si agarro un Minion cambia su ownership para poder moverlo
         minionSelected = eventArgs.interactableObject.transform.GetComponent<NetworkObject>();
-        if (minionSelected != null)
+        if (minionSelected != null && minionSelected.gameObject.tag == "Player")
         {
             Debug.Log("SelectEnter 2");
             anchor = transform.position;
@@ -43,7 +43,7 @@ public class GrabMinion : NetworkBehaviour
 
     public void OnSelectExit(SelectExitEventArgs eventArgs)
     {
-        if (minionSelected != null)
+        if (minionSelected != null && minionSelected.gameObject.tag == "Player")
         {
             anchor = Vector3.zero;
             ReturnOwnershipServerRpc(OwnerClientId, minionSelected);

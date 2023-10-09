@@ -15,6 +15,7 @@ public class ExplodeHand : NetworkBehaviour
     [SerializeField] float chargeLimit = 20;
 
     [SerializeField] InputActionReference _gripReference;
+    [SerializeField] bool _isRight;
     bool fireOn = false;
 
     Collider[] colliders = new Collider[20];
@@ -37,7 +38,7 @@ public class ExplodeHand : NetworkBehaviour
         StopAllCoroutines();
         StartCoroutine(PowerDrain());
         fireOn = false;
-        StartFireServerRpc(false, GetComponentInParent<NetworkObject>());
+        StartFireServerRpc(false, GetComponentInParent<NetworkObject>(), _isRight);
     }
 
 
@@ -49,7 +50,7 @@ public class ExplodeHand : NetworkBehaviour
             chargeCurrent += chargeAmount;
         }
         fireOn = true;
-        StartFireServerRpc(true, GetComponentInParent<NetworkObject>());
+        StartFireServerRpc(true, GetComponentInParent<NetworkObject>(), _isRight);
     }
 
     IEnumerator PowerDrain()
@@ -70,17 +71,29 @@ public class ExplodeHand : NetworkBehaviour
     }
 
     [ServerRpc]
-    void StartFireServerRpc(bool activate, NetworkObjectReference networkObjectReference)
+    void StartFireServerRpc(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
     {
         if (networkObjectReference.TryGet(out NetworkObject networkObject))
         {
-            if (activate)
+            ParticleSystem fire;
+
+            if (isRight)
             {
-                networkObject.GetComponentInChildren<ParticleSystem>().Play();
+                fire = networkObject.transform.GetChild(0).GetChild(2).GetComponentInChildren<ParticleSystem>();
             }
             else
             {
-                networkObject.GetComponentInChildren<ParticleSystem>().Stop();
+                fire = networkObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<ParticleSystem>();
+            }
+            
+
+            if (activate)
+            {
+                fire.Play();
+            }
+            else
+            {
+                fire.Stop();
             }
         }
     }

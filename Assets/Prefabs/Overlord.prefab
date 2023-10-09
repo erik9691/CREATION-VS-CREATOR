@@ -543,7 +543,6 @@ GameObject:
   - component: {fileID: 8806759779780627652}
   - component: {fileID: 7647194514176841410}
   - component: {fileID: 7250057034484401011}
-  - component: {fileID: 413465923920382749}
   m_Layer: 0
   m_Name: Left Controller
   m_TagString: Untagged
@@ -652,7 +651,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: -6131295136447488360, guid: c348712bda248c246b8c49b3db54643f,
+    m_Reference: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_SelectActionValue:
     m_UseReference: 1
@@ -665,7 +664,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f,
+    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ActivateAction:
     m_UseReference: 1
@@ -991,27 +990,6 @@ MonoBehaviour:
   _drainAmount: 0.1
   handMesh: {fileID: 3112650534669409668}
   EnergyPoints: 1
---- !u!114 &413465923920382749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7485325908017344611}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c023c5dd1c47594f96487c6b16b2519, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosionForce: 10
-  explosionRadius: 10
-  chargeRate: 0.2
-  chargeAmount: 1
-  chargeCurrent: 0
-  chargeLimit: 20
-  _gripReference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
-  fire: {fileID: 0}
 --- !u!1 &8090373293402498228
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,7 +1216,6 @@ GameObject:
   - component: {fileID: 3003143735212343473}
   - component: {fileID: 7219478535923095391}
   - component: {fileID: 8179499825521721776}
-  - component: {fileID: 5422671181346282358}
   m_Layer: 0
   m_Name: Right Controller
   m_TagString: Untagged
@@ -1347,7 +1324,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 187161793506945269, guid: c348712bda248c246b8c49b3db54643f,
+    m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_SelectActionValue:
     m_UseReference: 1
@@ -1360,7 +1337,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f,
+    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ActivateAction:
     m_UseReference: 1
@@ -1686,27 +1663,6 @@ MonoBehaviour:
   _drainAmount: 0.1
   handMesh: {fileID: 7608393546092865838}
   EnergyPoints: 1
---- !u!114 &5422671181346282358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8977994337142227839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c023c5dd1c47594f96487c6b16b2519, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosionForce: 10
-  explosionRadius: 10
-  chargeRate: 0.2
-  chargeAmount: 1
-  chargeCurrent: 0
-  chargeLimit: 20
-  _gripReference: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
-  fire: {fileID: 0}
 --- !u!1001 &2644672718411757696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2056,12 +2012,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89956e675b749204c8e10395ce2b5fb9, type: 3}
---- !u!198 &3258924663365338366 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198321560017527566, guid: 89956e675b749204c8e10395ce2b5fb9,
-    type: 3}
-  m_PrefabInstance: {fileID: 3457237148380686320}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3452716027622132676 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4521404770085940, guid: 89956e675b749204c8e10395ce2b5fb9,
@@ -2158,12 +2108,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89956e675b749204c8e10395ce2b5fb9, type: 3}
---- !u!198 &4164825954765379112 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198321560017527566, guid: 89956e675b749204c8e10395ce2b5fb9,
-    type: 3}
-  m_PrefabInstance: {fileID: 4255052050607076646}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4259538257543403794 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4521404770085940, guid: 89956e675b749204c8e10395ce2b5fb9,
@@ -2294,7 +2238,7 @@ MonoBehaviour:
   chargeLimit: 20
   _gripReference: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  fire: {fileID: 4164825954765379112}
+  _isRight: 1
 --- !u!54 &3557162263787263904
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2440,7 +2384,7 @@ MonoBehaviour:
   chargeLimit: 20
   _gripReference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  fire: {fileID: 3258924663365338366}
+  _isRight: 0
 --- !u!54 &3285856361123465330
 Rigidbody:
   m_ObjectHideFlags: 0
