@@ -59,7 +59,12 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
+            anim.SetBool("Floor", true);
             puedoSaltar = true;
+        }
+        else
+        {
+            puedoSaltar = false;
         }
     }
 
@@ -69,8 +74,12 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (puedoSaltar && obj.performed)
         {
+            anim.SetBool("Jump", true);
             rb.AddForce(Vector3.up * _jumpForce);
             puedoSaltar = false;
+
+            anim.SetBool("Jump", false);
+            anim.SetBool("Floor", false);
         }
     }
 
@@ -82,10 +91,12 @@ public class PlayerMovement : NetworkBehaviour
         if (puedoSaltar && obj.started)
         {
             _speed *= _runMult;
+            anim.SetBool("Run", true);
         }
         else if (obj.canceled)
         {
             _speed = initialSpeed;
+            anim.SetBool("Run", false);
         }
     }
 
