@@ -48,7 +48,6 @@ public class Energy : MonoBehaviour
     {
         while (EnergyPoints > 0)
         {
-            Debug.Log("DRAIN ON");
             yield return new WaitForSeconds(_drainRate);
             EnergyPoints -= _drainAmount;
 
@@ -67,7 +66,6 @@ public class Energy : MonoBehaviour
     {
         while (EnergyPoints < _energyLimit)
         {
-            Debug.Log("DRAIN OFF");
             yield return new WaitForSeconds(_drainRate);
             EnergyPoints += _drainAmount;
 

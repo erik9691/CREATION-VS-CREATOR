@@ -28,7 +28,6 @@ public class ExplodeHand : NetworkBehaviour
 
     public void StartPower(InputAction.CallbackContext context)
     {
-        Debug.Log("StartPower");
         StopAllCoroutines();
         StartCoroutine(PowerCharge());
     }
@@ -66,7 +65,8 @@ public class ExplodeHand : NetworkBehaviour
     {
         if (fireOn)
         {
-            ExplodeNonAlloc();
+            Debug.Log("BOOM");
+            //ExplodeNonAllocServerRpc();
         }
     }
 
@@ -95,11 +95,40 @@ public class ExplodeHand : NetworkBehaviour
             {
                 fire.Stop();
             }
+            StartFireClientRpc(activate, networkObjectReference, isRight);
         }
     }
 
+    [ClientRpc]
+    void StartFireClientRpc(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
+    {
+        if (networkObjectReference.TryGet(out NetworkObject networkObject))
+        {
+            ParticleSystem fire;
 
-    void ExplodeNonAlloc()
+            if (isRight)
+            {
+                fire = networkObject.transform.GetChild(0).GetChild(2).GetComponentInChildren<ParticleSystem>();
+            }
+            else
+            {
+                fire = networkObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<ParticleSystem>();
+            }
+
+
+            if (activate)
+            {
+                fire.Play();
+            }
+            else
+            {
+                fire.Stop();
+            }
+        }
+    }
+
+    [ServerRpc]
+    void ExplodeNonAllocServerRpc()
     {
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders);
         if (numColliders > 0)
