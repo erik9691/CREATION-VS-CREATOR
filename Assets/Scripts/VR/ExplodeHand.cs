@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Netcode;
 
-public class ExplodeHand : MonoBehaviour
+public class ExplodeHand : NetworkBehaviour
 {
     [SerializeField] float explosionForce = 10;
     [SerializeField] float explosionRadius = 10;
@@ -14,16 +15,12 @@ public class ExplodeHand : MonoBehaviour
     [SerializeField] float chargeLimit = 20;
 
     [SerializeField] InputActionReference _gripReference;
-    public InputAction action;
+    bool fireOn = false;
 
     Collider[] colliders = new Collider[20];
-    ParticleSystem fire;
 
     private void Start()
     {
-        fire = GetComponentInChildren<ParticleSystem>();
-
-        action = _gripReference.action;
         _gripReference.action.started += StartPower;
         _gripReference.action.canceled += StopPower;
     }
@@ -39,7 +36,8 @@ public class ExplodeHand : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(PowerDrain());
-        fire.Stop();
+        fireOn = false;
+        StartFireServerRpc(false, GetComponentInParent<NetworkObject>());
     }
 
 
@@ -50,8 +48,8 @@ public class ExplodeHand : MonoBehaviour
             yield return new WaitForSeconds(chargeRate);
             chargeCurrent += chargeAmount;
         }
-        fire.Play();
-        //ExplodeNonAlloc();
+        fireOn = true;
+        StartFireServerRpc(true, GetComponentInParent<NetworkObject>());
     }
 
     IEnumerator PowerDrain()
@@ -63,11 +61,27 @@ public class ExplodeHand : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (fire.isPlaying)
+        if (fireOn)
         {
             ExplodeNonAlloc();
+        }
+    }
+
+    [ServerRpc]
+    void StartFireServerRpc(bool activate, NetworkObjectReference networkObjectReference)
+    {
+        if (networkObjectReference.TryGet(out NetworkObject networkObject))
+        {
+            if (activate)
+            {
+                networkObject.GetComponentInChildren<ParticleSystem>().Play();
+            }
+            else
+            {
+                networkObject.GetComponentInChildren<ParticleSystem>().Stop();
+            }
         }
     }
 

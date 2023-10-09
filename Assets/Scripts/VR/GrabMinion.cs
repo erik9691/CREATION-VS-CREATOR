@@ -30,10 +30,12 @@ public class GrabMinion : NetworkBehaviour
 
     public void OnSelectEnter(SelectEnterEventArgs eventArgs)
     {
+        Debug.Log("SelectEnter 1");
         //Si agarro un Minion cambia su ownership para poder moverlo
         minionSelected = eventArgs.interactableObject.transform.GetComponent<NetworkObject>();
         if (minionSelected != null)
         {
+            Debug.Log("SelectEnter 2");
             anchor = transform.position;
             RequestOwnershipServerRpc(OwnerClientId, minionSelected);
         }
@@ -51,9 +53,11 @@ public class GrabMinion : NetworkBehaviour
     [ServerRpc]
     public void RequestOwnershipServerRpc(ulong newOwnerId, NetworkObjectReference networkObjectReference)
     {
+        Debug.Log("SelectEnter 3");
         //Obtiene ID de Minion y lo reemplaza con el de Overlord
         if (networkObjectReference.TryGet(out NetworkObject networkObject))
         {
+            Debug.Log("SelectEnter 4");
             minionId = networkObject.OwnerClientId;
             networkObject.ChangeOwnership(newOwnerId);
             StartCoroutine(networkObject.gameObject.GetComponent<PlayerHealth>().TakeDamage());
