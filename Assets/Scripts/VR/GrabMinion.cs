@@ -10,9 +10,11 @@ public class GrabMinion : NetworkBehaviour
     [SerializeField]
     float releaseDistance = 1f;
 
+    [SerializeField] bool isRight;
+
     ulong minionId;
     NetworkObject minionSelected;
-    Vector3 anchor = Vector3.zero;
+    public Vector3 anchor = Vector3.zero;
     XRBaseInteractor handInteractor;
 
     private void Start()
@@ -56,7 +58,7 @@ public class GrabMinion : NetworkBehaviour
         {
             minionId = networkObject.OwnerClientId;
             networkObject.ChangeOwnership(newOwnerId);
-            StartCoroutine(networkObject.gameObject.GetComponent<PlayerHealth>().TakeDamage());
+            StartCoroutine(networkObject.gameObject.GetComponent<PlayerHealth>().TakeDamage(true, isRight));
         }
         else
         {

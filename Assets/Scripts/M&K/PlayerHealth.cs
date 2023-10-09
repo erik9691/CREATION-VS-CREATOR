@@ -41,7 +41,7 @@ public class PlayerHealth : NetworkBehaviour
     }
 
 
-    public IEnumerator TakeDamage()
+    public IEnumerator TakeDamage(bool isOverlord = false, bool isRight = true)
     {
         while (_playerHealth >= 0)
         {
@@ -59,6 +59,16 @@ public class PlayerHealth : NetworkBehaviour
 
         DisableInputs();
         StartRagdollServerRpc();
+
+        if (isOverlord)
+        {
+            Transform hand = GameObject.FindGameObjectWithTag("Overlord").transform.GetChild(0);
+            if (isRight)
+            {
+                hand.GetChild(2).GetComponent<GrabMinion>().anchor = Vector3.zero;
+            }
+        }
+
     }
 
     void DisableInputs()

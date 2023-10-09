@@ -974,6 +974,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   releaseDistance: 1
+  isRight: 0
+  anchor: {x: 0, y: 0, z: 0}
 --- !u!114 &7250057034484401011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1647,6 +1649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   releaseDistance: 1
+  isRight: 1
+  anchor: {x: 0, y: 0, z: 0}
 --- !u!114 &8179499825521721776
 MonoBehaviour:
   m_ObjectHideFlags: 0
