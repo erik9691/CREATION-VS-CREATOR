@@ -10,7 +10,7 @@ public class AnimateHand : NetworkBehaviour
     [SerializeField] InputActionReference _triggerReference;
 
     Animator handAnimator;
-    float gripValue;
+    public float gripValue;
     float triggerValue;
     float oldTriggerValue;
     float oldGripValue;

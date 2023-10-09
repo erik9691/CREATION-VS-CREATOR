@@ -9,22 +9,28 @@ public class ExplodeHand : MonoBehaviour
     [SerializeField] float explosionRadius = 10;
 
     [SerializeField] float chargeRate = 0.2f;
-    [SerializeField] float chargeAmount = 1;
+    [SerializeField] float chargeAmount = 2;
     [SerializeField] float chargeCurrent = 0;
     [SerializeField] float chargeLimit = 20;
 
     [SerializeField] InputActionReference _gripReference;
+    public InputAction action;
 
     Collider[] colliders = new Collider[20];
+    ParticleSystem fire;
 
     private void Start()
     {
-        _gripReference.action.performed += StartPower;
-        _gripReference.action.canceled += StartPower;
+        fire = GetComponentInChildren<ParticleSystem>();
+
+        action = _gripReference.action;
+        _gripReference.action.started += StartPower;
+        _gripReference.action.canceled += StopPower;
     }
 
     public void StartPower(InputAction.CallbackContext context)
     {
+        Debug.Log("StartPower");
         StopAllCoroutines();
         StartCoroutine(PowerCharge());
     }
@@ -33,6 +39,7 @@ public class ExplodeHand : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(PowerDrain());
+        fire.Stop();
     }
 
 
@@ -43,7 +50,8 @@ public class ExplodeHand : MonoBehaviour
             yield return new WaitForSeconds(chargeRate);
             chargeCurrent += chargeAmount;
         }
-        ExplodeNonAlloc();
+        fire.Play();
+        //ExplodeNonAlloc();
     }
 
     IEnumerator PowerDrain()
@@ -55,6 +63,15 @@ public class ExplodeHand : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (fire.isPlaying)
+        {
+            ExplodeNonAlloc();
+        }
+    }
+
+
     void ExplodeNonAlloc()
     {
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders);
@@ -65,6 +82,7 @@ public class ExplodeHand : MonoBehaviour
                 if (colliders[i].TryGetComponent(out Rigidbody rb))
                 {
                     rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+                    chargeCurrent = 0;
                 }
             }
         }
