@@ -25,8 +25,8 @@ public class PlayerHealth : NetworkBehaviour
         mainCol = GetComponent<Collider>();
         mainRb = GetComponent<Rigidbody>();
 
-        ragdollRb = GetComponentsInChildren<Rigidbody>(true);
-        ragdollCol = GetComponentsInChildren<Collider>(true);
+        ragdollRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
+        ragdollCol = transform.GetChild(0).GetComponentsInChildren<Collider>(true);
 
         animator = GetComponentInChildren<Animator>();
     }
