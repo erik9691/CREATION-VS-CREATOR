@@ -814,7 +814,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_InteractionLayers:
     m_Bits: 4294967295
-  m_AttachTransform: {fileID: 3112650534657543314}
+  m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
   m_DisableVisualsWhenBlockedInGroup: 1
   m_StartingSelectedInteractable: {fileID: 0}
@@ -973,7 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65076d8ad68e53b4d952b9d661b6427c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  releaseDistance: 1
+  releaseDistance: 10
   isRight: 0
   anchor: {x: 0, y: 0, z: 0}
 --- !u!114 &7250057034484401011
@@ -1489,7 +1489,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_InteractionLayers:
     m_Bits: 4294967295
-  m_AttachTransform: {fileID: 7608393546104207416}
+  m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
   m_DisableVisualsWhenBlockedInGroup: 1
   m_StartingSelectedInteractable: {fileID: 0}
@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65076d8ad68e53b4d952b9d661b6427c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  releaseDistance: 1
+  releaseDistance: 10
   isRight: 1
   anchor: {x: 0, y: 0, z: 0}
 --- !u!114 &8179499825521721776
