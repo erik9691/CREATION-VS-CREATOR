@@ -45,6 +45,7 @@ public class GrabMinion : NetworkBehaviour
     {
         if (minionSelected != null && minionSelected.gameObject.tag == "Player")
         {
+            if (!handInteractor.allowSelect) handInteractor.allowSelect = true;
             anchor = Vector3.zero;
             ReturnOwnershipServerRpc(OwnerClientId, minionSelected);
         }
