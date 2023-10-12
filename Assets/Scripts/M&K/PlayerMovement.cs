@@ -15,9 +15,10 @@ public class PlayerMovement : NetworkBehaviour
     PlayerInput playerInput;
     Vector2 moveInput;
     Transform modelTransform;
-    bool puedoSaltar;
-    float initialSpeed;
+    bool canJump;
+    float runSpeed, walkSpeed;
     Animator anim;
+    public bool inAir = true;
 
     private void Start()
     {
@@ -25,7 +26,8 @@ public class PlayerMovement : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         modelTransform = transform.GetChild(0);
-        initialSpeed = _speed;
+        runSpeed = _speed * _runMult;
+        walkSpeed = _speed;
         cameraTransform = GetComponent<AssignCamera>().cameras.transform.GetChild(0);
 
         //lockear el cursor
@@ -40,8 +42,8 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
-        anim.SetFloat("VelX", moveInput.x);
-        anim.SetFloat("VelY", moveInput.y);
+        anim.SetFloat("VelX", moveInput.x, 0.1f, Time.deltaTime);
+        anim.SetFloat("VelY", moveInput.y, 0.1f, Time.deltaTime);
         //Resetear la posicion cuando te suelta el Overlord
         ResetPosition();
     }
@@ -52,6 +54,12 @@ public class PlayerMovement : NetworkBehaviour
 
         //Movimiento Y rotacion
         RotateAndMove();
+
+        if ((anim.GetBool("isJumping") && rb.velocity.y < 0) && inAir || rb.velocity.y < -4)
+        {
+            anim.SetBool("isFalling", true);
+            inAir = true;
+        }
     }
 
     //Condicion para saltar
@@ -59,12 +67,23 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            anim.SetBool("Floor", true);
-            puedoSaltar = true;
+            canJump = true;
+            if (inAir)
+            {
+                anim.SetBool("isGrounded", true);
+                anim.SetBool("isFalling", false);
+                anim.SetBool("isJumping", false);
+                inAir = false;
+            }
         }
-        else
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Floor")
         {
-            puedoSaltar = false;
+            anim.SetBool("isGrounded", false);
+            canJump = false;
         }
     }
 
@@ -72,15 +91,17 @@ public class PlayerMovement : NetworkBehaviour
     //Funcion para saltar
     public void Jump(InputAction.CallbackContext obj)
     {
-        if (puedoSaltar && obj.performed)
+        if (canJump && obj.performed)
         {
-            anim.SetBool("Jump", true);
-            rb.AddForce(Vector3.up * _jumpForce);
-            puedoSaltar = false;
-
-            anim.SetBool("Jump", false);
-            anim.SetBool("Floor", false);
+            anim.SetBool("isJumping", true);
+            canJump = false;
         }
+    }
+
+    public void JumpForce()
+    {
+        rb.AddForce(Vector3.up * _jumpForce);
+        inAir = true;
     }
 
 
@@ -88,15 +109,15 @@ public class PlayerMovement : NetworkBehaviour
     //Funcion para correr
     public void Sprint(InputAction.CallbackContext obj)
     {
-        if (puedoSaltar && obj.started)
+        if (canJump && obj.started)
         {
-            _speed *= _runMult;
-            anim.SetBool("Run", true);
+            _speed = runSpeed;
+            anim.SetBool("isRunning", true);
         }
         else if (obj.canceled)
         {
-            _speed = initialSpeed;
-            anim.SetBool("Run", false);
+            _speed = walkSpeed;
+            anim.SetBool("isRunning", false);
         }
     }
 
@@ -108,7 +129,15 @@ public class PlayerMovement : NetworkBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
         move.y = 0;
-        transform.Translate(move * Time.deltaTime * _speed);
+
+        if (moveInput.y < 0 || moveInput.y == 0 && moveInput.x != 0)
+        {
+            transform.Translate(move * Time.deltaTime * _speed * 0.75f);
+        }
+        else
+        {
+            transform.Translate(move * Time.deltaTime * _speed);
+        }
 
         //Rotacion
         Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
@@ -120,7 +149,6 @@ public class PlayerMovement : NetworkBehaviour
         //Cuando el Overlord te suelta volves a estar parado
         if (transform.rotation != Quaternion.Euler(0, 0, 0))
         {
-            Debug.Log("Rotation reset");
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }

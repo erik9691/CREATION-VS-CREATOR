@@ -1104,6 +1104,7 @@ MonoBehaviour:
   _speed: 7
   _runMult: 2
   _rotationSpeed: 5
+  ySpeed: 0
 --- !u!114 &5911370378881023961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1865,6 +1866,7 @@ GameObject:
   - component: {fileID: 9105991773535076200}
   - component: {fileID: 4561249001318979676}
   - component: {fileID: 5833712112348197492}
+  - component: {fileID: 6257747375356127665}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -1903,7 +1905,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d3f359489413cdf458a80cc0e8224982, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1955,6 +1957,18 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &6257747375356127665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2590985121928740776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04d568cb11d2ab74da15b613c9f9f2b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3102881828749062495
 GameObject:
   m_ObjectHideFlags: 3
