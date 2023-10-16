@@ -33,7 +33,17 @@ public class TurretController : NetworkBehaviour
 
             if (moveInput.y != 0)
             {
-                UpdateRotationServerRpc(moveInput.y);
+                if (_cannon.transform.localRotation.eulerAngles.x > 200)
+                {
+                    if (_cannon.transform.localRotation.eulerAngles.x > 300 || moveInput.y == -1)
+                    {
+                        UpdateRotationServerRpc(moveInput.y);
+                    }
+                }
+                else if (_cannon.transform.localRotation.eulerAngles.x < 9 || moveInput.y == 1)
+                {
+                    UpdateRotationServerRpc(moveInput.y);
+                }
             }
         }
         else

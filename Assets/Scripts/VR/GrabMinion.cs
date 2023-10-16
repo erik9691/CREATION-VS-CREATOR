@@ -73,7 +73,10 @@ public class GrabMinion : NetworkBehaviour
         //Devuelve el ID al minion
         if (networkObjectReference.TryGet(out NetworkObject networkObject))
         {
-            StopAllCoroutines();
+            if (networkObject.GetComponent<PlayerHealth>().MinionHealth > 0)
+            {
+                StopAllCoroutines();
+            }
             networkObject.ChangeOwnership(minionId);
         }
         else

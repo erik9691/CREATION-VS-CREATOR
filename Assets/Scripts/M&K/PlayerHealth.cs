@@ -7,28 +7,37 @@ using Cinemachine;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    
-    [SerializeField] float _playerHealth = 10;
-    [SerializeField] float _dmgAmount = 1f;
-    [SerializeField] float _dmgRate = 0.5f;
+    public float MinionHealth = 10;
+
+    [SerializeField] 
+    float _dmgAmount = 1f,_dmgRate = 0.5f, _respawnTime = 5f;
+
+    [SerializeField]
+    SkinnedMeshRenderer skin;
+
     float maxHealth;
-    Rigidbody[] ragdollRb;
-    Collider[] ragdollCol;
-    Rigidbody mainRb;
-    Collider mainCol;
-    Animator animator;
+
+    PlayerMovement pMovement;
+    PlayerRagdoll pRagdoll;
+
+    Color[] ogColors = new Color[8];
+    Color[] redColors = new Color[8];
+
 
     public override void OnNetworkSpawn()
     {
-        maxHealth = _playerHealth;
+        maxHealth = MinionHealth;
+        pMovement = GetComponent<PlayerMovement>();
+        pRagdoll = GetComponent<PlayerRagdoll>();
 
-        mainCol = GetComponent<Collider>();
-        mainRb = GetComponent<Rigidbody>();
+        for (int i = 0; i < ogColors.Length; i++)
+        {
+            ogColors[i] = skin.materials[i].color;
 
-        ragdollRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
-        ragdollCol = transform.GetChild(0).GetComponentsInChildren<Collider>(true);
-
-        animator = GetComponentInChildren<Animator>();
+            redColors[i] = skin.materials[i].color;
+            redColors[i].b -= 50;
+            redColors[i].g -= 50;
+        }
     }
 
     private void Update()
@@ -38,27 +47,47 @@ public class PlayerHealth : NetworkBehaviour
         {
             StartCoroutine(TakeDamage());
         }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            pRagdoll.StopRagdollServerRpc();
+            pRagdoll.EnableInputs();
+        }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Knock")
+        {
+            MinionHealth -= _dmgAmount;
+            StartCoroutine(MakeRed());
+            StartCoroutine(pRagdoll.Knockdown());
+        }
+    }
 
     public IEnumerator TakeDamage(bool isOverlord = false, bool isRight = true)
     {
-        while (_playerHealth >= 0)
+        while (MinionHealth >= 0)
         {
             yield return new WaitForSeconds(_dmgRate);
-            _playerHealth -= _dmgAmount;
-            if (_playerHealth <= (maxHealth - (maxHealth / 3)))
+            MinionHealth -= _dmgAmount;
+
+            if (MinionHealth <= (maxHealth - (maxHealth / 3)))
             {
+                pMovement.HealthMult = 0.75f;
                 UIManager.Instance.UpdateMinionHealth(1);
-                if (_playerHealth <= (maxHealth - ((maxHealth / 3) * 2)))
+                if (MinionHealth <= (maxHealth - ((maxHealth / 3) * 2)))
                 {
+                    pMovement.HealthMult = 0.5f;
                     UIManager.Instance.UpdateMinionHealth(2);
                 }
             }
+
+            StartCoroutine(MakeRed());
+            yield return new WaitForSeconds(0.2f);
         }
 
-        DisableInputs();
-        StartRagdollServerRpc();
+        pRagdoll.DisableInputs();
+        pRagdoll.StartRagdollServerRpc();
 
         if (isOverlord)
         {
@@ -69,87 +98,38 @@ public class PlayerHealth : NetworkBehaviour
             }
         }
 
+        StartCoroutine(Respawn());
     }
 
-    void DisableInputs()
+    IEnumerator MakeRed()
     {
-        GetComponent<PlayerInput>().enabled = false;
-        GetComponent<PlayerMovement>().enabled = false;
-        GetComponentInChildren<CinemachineFreeLook>().Priority += 20;
+        for (int i = 0; i < ogColors.Length; i++)
+        {
+            skin.materials[i].color = redColors[i];
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        for (int i = 0; i < ogColors.Length; i++)
+        {
+            skin.materials[i].color = ogColors[i];
+        }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    void StartRagdollServerRpc()
+    public IEnumerator Respawn()
     {
-        animator.enabled = false;
+        yield return new WaitForSeconds(_respawnTime);
 
-        foreach (Collider col in ragdollCol)
-        {
-            col.enabled = true;
-        }
-        foreach (Rigidbody rigid in ragdollRb)
-        {
-            rigid.isKinematic = false;
-        }
+        pRagdoll.StopRagdollServerRpc();
 
-        mainCol.enabled = false;
-        mainRb.isKinematic = true;
+        Vector3 spawnLocation = GameObject.Find("Minion Spawn").transform.position;
+        transform.position = spawnLocation;
+        transform.rotation = Quaternion.identity;
 
-        StartRagdollClientRpc();
-    }
+        MinionHealth = maxHealth;
+        pMovement.HealthMult = 1f;
+        UIManager.Instance.UpdateMinionHealth(0);
 
-
-    [ClientRpc]
-    void StartRagdollClientRpc()
-    {
-        animator.enabled = false;
-
-        foreach (Collider col in ragdollCol)
-        {
-            col.enabled = true;
-        }
-        foreach (Rigidbody rigid in ragdollRb)
-        {
-            rigid.isKinematic = false;
-        }
-
-        mainCol.enabled = false;
-        mainRb.isKinematic = true;
-    }
-
-    [ServerRpc]
-    void StopRagdollServerRpc()
-    {
-        animator.enabled = true;
-
-        foreach (Collider col in ragdollCol)
-        {
-            col.enabled = false;
-        }
-        foreach (Rigidbody rigid in ragdollRb)
-        {
-            rigid.isKinematic = true;
-        }
-
-        mainCol.enabled = true;
-        mainRb.isKinematic = false;
-    }
-
-    [ClientRpc]
-    void StopRagdollClientRpc()
-    {
-        animator.enabled = true;
-
-        foreach (Collider col in ragdollCol)
-        {
-            col.enabled = false;
-        }
-        foreach (Rigidbody rigid in ragdollRb)
-        {
-            rigid.isKinematic = true;
-        }
-
-        mainCol.enabled = true;
-        mainRb.isKinematic = false;
+        pRagdoll.EnableInputs();
     }
 }

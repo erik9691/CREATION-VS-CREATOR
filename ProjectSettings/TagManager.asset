@@ -10,6 +10,7 @@ TagManager:
   - Overlord
   - Overlord Head
   - Interactable
+  - Knock
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Water
   - UI
   - VR Head
-  - 
+  - Ground
   - 
   - 
   - 

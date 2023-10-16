@@ -10,6 +10,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button _clientBtn;
     bool hostStarted = false;
     [SerializeField] Transform _overlordSpawn;
+    [SerializeField] Transform[] _minionSpawns;
     private void Awake()
     {
         _hostBtn.onClick.AddListener(() =>
@@ -65,9 +66,9 @@ public class NetworkManagerUI : MonoBehaviour
             // The Prefab hash value of the NetworkPrefab, if null the default NetworkManager player Prefab is used
             response.PlayerPrefabHash = 969;
             // Position to spawn the player object (if null it uses default of Vector3.zero)
-            response.Position = Vector3.zero;
+            response.Position = _minionSpawns[clientId - 1].position;
             // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
-            response.Rotation = Quaternion.identity;
+            response.Rotation = _minionSpawns[clientId - 1].rotation;
         }
         else
         {

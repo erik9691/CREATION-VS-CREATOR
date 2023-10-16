@@ -8,7 +8,9 @@ using Cinemachine;
 public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField]
-    float _jumpForce = 250f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f;
+    float _jumpForce = 400f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f;
+
+    public float HealthMult = 1;
 
     Transform cameraTransform;
     Rigidbody rb;
@@ -18,7 +20,9 @@ public class PlayerMovement : NetworkBehaviour
     bool canJump;
     float runSpeed, walkSpeed;
     Animator anim;
-    public bool inAir = true;
+    bool inAir = true;
+    bool onGround;
+    public LayerMask layer;
 
     private void Start()
     {
@@ -44,6 +48,9 @@ public class PlayerMovement : NetworkBehaviour
 
         anim.SetFloat("VelX", moveInput.x, 0.1f, Time.deltaTime);
         anim.SetFloat("VelY", moveInput.y, 0.1f, Time.deltaTime);
+
+        onGround = Physics.Raycast(transform.position + new Vector3(0, 1, 0), Vector3.down, 1.2f, layer);
+
         //Resetear la posicion cuando te suelta el Overlord
         ResetPosition();
     }
@@ -53,12 +60,15 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
 
         //Movimiento Y rotacion
+        SpeedControl();
         RotateAndMove();
 
         if ((anim.GetBool("isJumping") && rb.velocity.y < 0) && inAir || rb.velocity.y < -4)
         {
             anim.SetBool("isFalling", true);
+            anim.SetBool("isGrounded", false);
             inAir = true;
+            canJump = false;
         }
     }
 
@@ -67,9 +77,9 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            canJump = true;
             if (inAir)
             {
+                canJump = true;
                 anim.SetBool("isGrounded", true);
                 anim.SetBool("isFalling", false);
                 anim.SetBool("isJumping", false);
@@ -77,16 +87,6 @@ public class PlayerMovement : NetworkBehaviour
             }
         }
     }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-        {
-            anim.SetBool("isGrounded", false);
-            canJump = false;
-        }
-    }
-
 
     //Funcion para saltar
     public void Jump(InputAction.CallbackContext obj)
@@ -100,7 +100,9 @@ public class PlayerMovement : NetworkBehaviour
 
     public void JumpForce()
     {
-        rb.AddForce(Vector3.up * _jumpForce);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+        anim.SetBool("isGrounded", false);
         inAir = true;
     }
 
@@ -130,18 +132,39 @@ public class PlayerMovement : NetworkBehaviour
         move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
         move.y = 0;
 
-        if (moveInput.y < 0 || moveInput.y == 0 && moveInput.x != 0)
+        if (moveInput.y == 0 && moveInput.x == 0)
         {
-            transform.Translate(move * Time.deltaTime * _speed * 0.75f);
+            rb.velocity = new Vector3(0,rb.velocity.y, 0);
+        }
+        else if (moveInput.y < 0 || moveInput.y == 0 && moveInput.x != 0)
+        {
+            rb.AddForce(move.normalized * _speed * HealthMult * 0.75f, ForceMode.VelocityChange);
         }
         else
         {
-            transform.Translate(move * Time.deltaTime * _speed);
+            rb.AddForce(move.normalized * _speed * HealthMult, ForceMode.VelocityChange);
         }
 
         //Rotacion
         Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
         modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+    }
+
+    private void SpeedControl()
+    {
+        if (onGround)
+            rb.drag = 5;
+        else
+            rb.drag = 0;
+
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        // limit velocity if needed
+        if (flatVel.magnitude > _speed)
+        {
+            Vector3 limitedVel = flatVel.normalized * _speed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+        }
     }
 
     private void ResetPosition()
