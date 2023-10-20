@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1218366094727135414}
-  - component: {fileID: 5149203082122732328}
+  - component: {fileID: 9124395686928455114}
   m_Layer: 0
   m_Name: Minion Cameras
   m_TagString: Untagged
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 1829195496254906289}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5149203082122732328
+--- !u!114 &9124395686928455114
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

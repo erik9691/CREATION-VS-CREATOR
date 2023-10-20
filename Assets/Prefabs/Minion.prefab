@@ -1340,14 +1340,6 @@ MonoBehaviour:
   _dmgRate: 0.5
   _respawnTime: 5
   skin: {fileID: 6451983754258382949}
-  ogColors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4963011875705014541
 MonoBehaviour:
   m_ObjectHideFlags: 0
