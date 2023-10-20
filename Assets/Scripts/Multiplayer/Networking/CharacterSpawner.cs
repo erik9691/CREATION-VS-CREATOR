@@ -14,19 +14,23 @@ public class CharacterSpawner : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
+        StartCoroutine(SpawnPlayers());
+    }
 
-        for (int i = 0; i < ServerManager.Instance.ConnectedIds.Count; i++)
+    IEnumerator SpawnPlayers()
+    {
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < HostManager.Instance.ConnectedIds.Count; i++)
         {
             if (i == 0)
             {
                 GameObject overlord = Instantiate(_overlordPrefab, _overlordSpawn.position, _overlordSpawn.rotation);
-                overlord.GetComponent<NetworkObject>().SpawnAsPlayerObject(ServerManager.Instance.ConnectedIds[i]);
+                overlord.GetComponent<NetworkObject>().SpawnAsPlayerObject(HostManager.Instance.ConnectedIds[i]);
             }
             else
             {
-                GameObject minion = Instantiate(_minionPrefab, _minionSpawns[i].position, _minionSpawns[i].rotation);
-                minion.GetComponent<NetworkObject>().SpawnAsPlayerObject(ServerManager.Instance.ConnectedIds[i]);
-                //minion.GetComponent<NetworkObject>().ChangeOwnership(ServerManager.Instance.ConnectedIds[i]);
+                GameObject minion = Instantiate(_minionPrefab, _minionSpawns[i-1].position, _minionSpawns[i-1].rotation);
+                minion.GetComponent<NetworkObject>().SpawnAsPlayerObject(HostManager.Instance.ConnectedIds[i]);
             }
         }
     }

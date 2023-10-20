@@ -9,6 +9,8 @@ public class ReadyManager : NetworkBehaviour
 {
     [SerializeField] GameObject[] playerCards;
     [SerializeField] Sprite minionSprite, missingSprite;
+    [SerializeField] GameObject[] minionObjects;
+    [SerializeField] TMP_Text joinCodeText;
 
     public NetworkList<ulong> n_connectedIds;
 
@@ -28,6 +30,7 @@ public class ReadyManager : NetworkBehaviour
             {
                 AddClientId(client.ClientId);
             }
+            joinCodeText.text = HostManager.Instance.JoinCode;
         }
 
         n_connectedIds.OnListChanged += RefreshPlayerList;
@@ -44,7 +47,8 @@ public class ReadyManager : NetworkBehaviour
 
     public void ClickStart()
     {
-        ServerManager.Instance.StartGame();
+        HostManager.Instance.StartGame();
+        gameObject.GetComponent<NetworkObject>().Despawn();
     }
 
     void AddClientId(ulong id)
@@ -65,11 +69,14 @@ public class ReadyManager : NetworkBehaviour
             {
                 playerCards[i].GetComponentInChildren<Image>().sprite = minionSprite;
                 playerCards[i].GetComponentInChildren<TextMeshProUGUI>().text = "Minion " + n_connectedIds[i];
+                minionObjects[i-1].SetActive(true);
+                minionObjects[i-1].GetComponent<Animator>().Play("stumble " + i);
             }
             else
             {
                 playerCards[i].GetComponentInChildren<Image>().sprite = missingSprite;
                 playerCards[i].GetComponentInChildren<TextMeshProUGUI>().text = "Missing...";
+                minionObjects[i-1].SetActive(false);
             }
         }
     }
