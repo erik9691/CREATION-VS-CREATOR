@@ -34,8 +34,6 @@ public class PlayerMovement : NetworkBehaviour
         walkSpeed = _speed;
         cameraTransform = GetComponent<AssignCamera>().cameras.transform.GetChild(0);
 
-        UIManager.Instance.ActivateMinionUI();
-
         //lockear el cursor
         Cursor.lockState = CursorLockMode.Locked;
     }

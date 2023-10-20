@@ -1340,6 +1340,14 @@ MonoBehaviour:
   _dmgRate: 0.5
   _respawnTime: 5
   skin: {fileID: 6451983754258382949}
+  ogColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4963011875705014541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1352,7 +1360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92037dce52c74274a908b33c453a952c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camerasPrefab: {fileID: 3852591728091039631, guid: dd182b94d30a71344bc1590fc2367e6b,
+  _camerasPrefab: {fileID: 218337125853181352, guid: 759dfca4e547bde48a70192a50d9ee7d,
     type: 3}
   cameras: {fileID: 0}
 --- !u!114 &3425474189164170234
