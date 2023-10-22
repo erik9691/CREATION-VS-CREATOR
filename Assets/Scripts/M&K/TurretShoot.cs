@@ -10,13 +10,6 @@ public class TurretShoot : NetworkBehaviour
     [SerializeField] Transform _shootPoint;
     bool canShoot = true;
 
-    private IEnumerator DeleteBulletDelay(GameObject bullet)
-    {
-        yield return new WaitForSeconds(2);
-
-        bullet.GetComponent<NetworkObject>().Despawn();
-    }
-
     [ServerRpc(RequireOwnership = false)]
     public void SpawnTurretBulletServerRpc()
     {
@@ -29,7 +22,6 @@ public class TurretShoot : NetworkBehaviour
 
             bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * _bulSpeed);
 
-            StartCoroutine(DeleteBulletDelay(bullet));
             StartCoroutine(ShootDelay());
         }
     }

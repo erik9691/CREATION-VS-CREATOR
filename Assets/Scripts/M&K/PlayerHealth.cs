@@ -59,36 +59,19 @@ public class PlayerHealth : NetworkBehaviour
         if (collision.gameObject.tag == "Knock")
         {
             MinionHealth -= _dmgAmount;
-            StartCoroutine(MakeRed());
-            StartCoroutine(pRagdoll.Knockdown());
+
+            UpdateHealthUI();
+            MakeRedServerRpc();
+
+            if (MinionHealth > 0)
+            {
+                StartCoroutine(pRagdoll.Knockdown());
+            }
         }
     }
 
     public IEnumerator TakeDamage(bool isOverlord = false, bool isRight = true)
     {
-        while (MinionHealth >= 0)
-        {
-            yield return new WaitForSeconds(_dmgRate);
-            MinionHealth -= _dmgAmount;
-
-            if (MinionHealth <= (maxHealth - (maxHealth / 3)))
-            {
-                pMovement.HealthMult = 0.75f;
-                UIManager.Instance.UpdateMinionHealth(1);
-                if (MinionHealth <= (maxHealth - ((maxHealth / 3) * 2)))
-                {
-                    pMovement.HealthMult = 0.5f;
-                    UIManager.Instance.UpdateMinionHealth(2);
-                }
-            }
-
-            StartCoroutine(MakeRed());
-            yield return new WaitForSeconds(0.2f);
-        }
-
-        pRagdoll.DisableInputs();
-        pRagdoll.StartRagdollServerRpc();
-
         if (isOverlord)
         {
             Transform hand = GameObject.FindGameObjectWithTag("Overlord").transform.GetChild(0);
@@ -96,12 +79,61 @@ public class PlayerHealth : NetworkBehaviour
             {
                 hand.GetChild(2).GetComponent<GrabMinion>().anchor = Vector3.zero;
             }
+            else
+            {
+                hand.GetChild(1).GetComponent<GrabMinion>().anchor = Vector3.zero;
+            }
         }
 
-        StartCoroutine(Respawn());
+        while (MinionHealth >= 0)
+        {
+            yield return new WaitForSeconds(_dmgRate);
+
+            MinionHealth -= _dmgAmount;
+
+            UpdateHealthUI();
+            MakeRedServerRpc();
+        }
+
+        
     }
 
-    IEnumerator MakeRed()
+    void UpdateHealthUI()
+    {
+        if (MinionHealth <= (maxHealth - (maxHealth / 3)))
+        {
+            pMovement.HealthMult = 0.75f;
+            UIManager.Instance.UpdateMinionHealth(1);
+            if (MinionHealth <= (maxHealth - ((maxHealth / 3) * 2)))
+            {
+                pMovement.HealthMult = 0.5f;
+                UIManager.Instance.UpdateMinionHealth(2);
+                if (MinionHealth <= 0)
+                {
+                    pRagdoll.DisableInputs();
+                    pRagdoll.StartRagdollServerRpc();
+
+                    StartCoroutine(Respawn());
+                }
+            }
+        }
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    void MakeRedServerRpc()
+    {
+        StartCoroutine(MakeRedCoroutine());
+        MakeRedClientRpc();
+    }
+
+    [ClientRpc]
+    void MakeRedClientRpc()
+    {
+        StartCoroutine(MakeRedCoroutine());
+    }
+
+    IEnumerator MakeRedCoroutine()
     {
         for (int i = 0; i < ogColors.Length; i++)
         {

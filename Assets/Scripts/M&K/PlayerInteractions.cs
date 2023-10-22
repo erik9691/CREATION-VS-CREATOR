@@ -40,7 +40,11 @@ public class PlayerInteractions : NetworkBehaviour
         {
             interactable = other.transform.parent.gameObject;
 
-            if (interactable.GetComponent<TurretController>().n_IsMounted.Value == false || interactable.GetComponent<TurretController>().n_IsMounted.Value == true && isMounting)
+            if (interactable.GetComponent<MissileLauncher>())
+            {
+                UIManager.Instance.ActivateInteractSlider(true);
+            }
+            else if (interactable.GetComponent<TurretController>().n_IsMounted.Value == false || interactable.GetComponent<TurretController>().n_IsMounted.Value == true && isMounting)
             {
                 UIManager.Instance.ActivateInteractSlider(true);
             }
@@ -70,11 +74,13 @@ public class PlayerInteractions : NetworkBehaviour
             UIManager.Instance.UpdateInteractSlider(interactMeterCurrent);
             yield return new WaitForSeconds(_interactSpeed);
         }
-        //if (interactable.GetComponent<MissileLauncher>())
-        //{
-        //    interactable.GetComponent<MissileLauncher>().SpawnMissileServerRpc();
-        //}
-        if (interactable.GetComponent<TurretController>() && !isMounting && interactable.GetComponent<TurretController>().n_IsMounted.Value == false)
+
+        if (interactable.GetComponent<MissileLauncher>())
+        {
+            Debug.Log("SpawnMissile");
+            interactable.GetComponent<MissileLauncher>().SpawnRocketServerRpc();
+        }
+        else if (interactable.GetComponent<TurretController>() && !isMounting && interactable.GetComponent<TurretController>().n_IsMounted.Value == false)
         {
             isMounting = true;
             interactable.GetComponent<TurretController>().Mount(true, GetComponent<PlayerInput>());

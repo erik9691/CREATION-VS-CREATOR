@@ -11,6 +11,7 @@ TagManager:
   - Overlord Head
   - Interactable
   - Knock
+  - Bullet
   layers:
   - Default
   - TransparentFX

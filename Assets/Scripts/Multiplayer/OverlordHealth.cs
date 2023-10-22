@@ -14,7 +14,7 @@ public class OverlordHealth : NetworkBehaviour
 
     public void TakeDamage(float damage)
     {
-        overlordHealth.Value -= damage;
+        UpdateOverlordHealthServerRpc(damage);
         UpdateOverlordHealthClientRpc(overlordHealth.Value);
 
         if (overlordHealth.Value <= 0)
@@ -23,8 +23,14 @@ public class OverlordHealth : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    void UpdateOverlordHealthServerRpc(float value)
+    {
+        overlordHealth.Value -= value;
+    }
+
     [ClientRpc]
-    public void UpdateOverlordHealthClientRpc(float value)
+    void UpdateOverlordHealthClientRpc(float value)
     {
         UIManager.Instance.UpdateOverlordHealth(value);
     }

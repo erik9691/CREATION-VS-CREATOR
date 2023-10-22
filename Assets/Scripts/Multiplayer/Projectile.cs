@@ -7,6 +7,14 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] float dmgAmount = 1;
 
+    private void Start()
+    {
+        if (gameObject.tag == "Bullet")
+        {
+            Invoke("DeleteProjectileServerRpc", 2);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Overlord Head")

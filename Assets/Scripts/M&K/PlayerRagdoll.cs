@@ -5,7 +5,7 @@ using Unity.Netcode;
 using UnityEngine.InputSystem;
 using Cinemachine;
 
-public class PlayerRagdoll : MonoBehaviour
+public class PlayerRagdoll : NetworkBehaviour
 {
     [SerializeField]
     float _knockTime = 3f;

@@ -72,13 +72,6 @@ public class PlayerGun : NetworkBehaviour
         }
     }
 
-    IEnumerator DeleteBulletDelay(GameObject bullet)
-    {
-        yield return new WaitForSeconds(2);
-
-        bullet.GetComponent<NetworkObject>().Despawn();
-    }
-
     IEnumerator ReloadDelay()
     {
         CanShoot = false;
@@ -134,8 +127,6 @@ public class PlayerGun : NetworkBehaviour
         bullet.GetComponent<NetworkObject>().Spawn();
 
         bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up * -_bulSpeed);
-
-        StartCoroutine(DeleteBulletDelay(bullet));
     }
 
     [ServerRpc]

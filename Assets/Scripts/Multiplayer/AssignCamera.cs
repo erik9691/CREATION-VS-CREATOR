@@ -19,13 +19,13 @@ public class AssignCamera : NetworkBehaviour
         cameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>().Follow = transform;
         cameras.transform.GetChild(2).GetComponent<CinemachineVirtualCamera>().LookAt = transform;
         
-        SpawnCamerasServerRpc();
+        //SpawnCamerasServerRpc();
     }
 
 
-    [ServerRpc]
-    private void SpawnCamerasServerRpc()
-    {
-        cameras.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
-    }
+    //[ServerRpc]
+    //private void SpawnCamerasServerRpc()
+    //{
+    //    cameras.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+    //}
 }
