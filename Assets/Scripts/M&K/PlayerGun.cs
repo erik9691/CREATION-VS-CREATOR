@@ -20,6 +20,20 @@ public class PlayerGun : NetworkBehaviour
     bool isReloading; // para la animacion
     public SpawnAmmo ammoManager;
 
+    bool addBullSpead = true;
+    Vector3 bulletSpreadVariance = new Vector3(.1f, .1f, .1f);
+    [SerializeField] private ParticleSystem shootingSystem;
+    [SerializeField] private ParticleSystem impactParticleSystem;
+    [SerializeField] private TrailRenderer bulletTrail;
+    float shootDelay = .5f;
+    LayerMask mask;
+
+    private Animator anim;
+
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
     private void Start()
     {
         ammoManager = GameObject.Find("AmmoBoxManager").GetComponent<SpawnAmmo>();
@@ -35,6 +49,7 @@ public class PlayerGun : NetworkBehaviour
 
     public void Shoot(InputAction.CallbackContext obj)
     {
+        
         if (!IsOwner) return;
 
         if (obj.started && CanShoot)
@@ -49,6 +64,15 @@ public class PlayerGun : NetworkBehaviour
                 {
                     if (Time.time > shootRateTime && obj.started)
                     {
+                        anim.SetBool("isShooting", true);
+                        Vector3 direction = GetDirection();
+
+                        if (Physics.Raycast(SpawnPoint.position, direction, out RaycastHit hit, float.MaxValue, mask))
+                        {
+                            TrailRenderer trail = Instantiate(bulletTrail, SpawnPoint.position, Quaternion.identity);
+                            StartCoroutine(SpawnTrail(trail, hit));
+                        }
+
                         SpawnBulletServerRpc(SpawnPoint.position, SpawnPoint.rotation);
                         shootRateTime = Time.time + _shootRate;
 
@@ -61,6 +85,39 @@ public class PlayerGun : NetworkBehaviour
                 Debug.Log("NO AMMO :'V");
             }
         }
+    }
+    private Vector3 GetDirection()
+    {
+        Vector3 direction = transform.forward;
+        if (addBullSpead)
+        {
+            direction += new Vector3(
+                    Random.Range(-bulletSpreadVariance.x, bulletSpreadVariance.x),
+                    Random.Range(-bulletSpreadVariance.y, bulletSpreadVariance.y),
+                    Random.Range(-bulletSpreadVariance.z, bulletSpreadVariance.z)
+                );
+            direction.Normalize();
+        }
+        return direction;
+    }
+
+    private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit Hit)
+    {
+        float time = 0;
+        Vector3 startPosition = Trail.transform.position;
+
+        while(time < 1)
+        {
+            Trail.transform.position = Vector3.Lerp(startPosition, Hit.point, time);
+            time += Time.deltaTime / Trail.time;
+
+            yield return null;
+        }
+        anim.SetBool("isShooting", false);
+        Trail.transform.position = Hit.point;
+        Instantiate(impactParticleSystem, Hit.point, Quaternion.LookRotation(Hit.normal));
+
+        Destroy(Trail.gameObject, Trail.time);
     }
 
     public void ReloadAction(InputAction.CallbackContext obj)
@@ -141,4 +198,5 @@ public class PlayerGun : NetworkBehaviour
 
         ammoManager.EnableSpawnLocation(objectTransform);
     }
+
 }
