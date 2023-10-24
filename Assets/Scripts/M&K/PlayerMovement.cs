@@ -136,7 +136,7 @@ public class PlayerMovement : NetworkBehaviour
 
         if (moveInput.y == 0 && moveInput.x == 0)
         {
-            rb.velocity = new Vector3(0,rb.velocity.y, 0);
+            //rb.velocity = new Vector3(0,rb.velocity.y, 0);
         }
         else if (moveInput.y < 0 || moveInput.y == 0 && moveInput.x != 0)
         {

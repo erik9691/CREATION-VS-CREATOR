@@ -22,6 +22,11 @@ public class Projectile : MonoBehaviour
             other.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount);
             DeleteProjectileServerRpc();
         }
+        else if (other.tag == "Overlord Hand")
+        {
+            other.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount/2);
+            DeleteProjectileServerRpc();
+        }
     }
 
     [ServerRpc]

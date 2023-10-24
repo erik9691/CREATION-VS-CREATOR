@@ -7,6 +7,8 @@ using Cinemachine;
 
 public class PlayerRagdoll : NetworkBehaviour
 {
+    public bool KnockDown = false;
+
     [SerializeField]
     float _knockTime = 3f;
 
@@ -26,6 +28,16 @@ public class PlayerRagdoll : NetworkBehaviour
         ragdollCol = transform.GetChild(0).GetComponentsInChildren<Collider>(true);
 
         animator = GetComponentInChildren<Animator>();
+    }
+
+
+    private void Update()
+    {
+        if (KnockDown)
+        {
+            StartCoroutine(Knockdown());
+            KnockDown = false;
+        }
     }
 
     public IEnumerator Knockdown()

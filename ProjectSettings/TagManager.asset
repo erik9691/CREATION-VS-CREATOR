@@ -12,6 +12,7 @@ TagManager:
   - Interactable
   - Knock
   - Bullet
+  - Overlord Hand
   layers:
   - Default
   - TransparentFX
