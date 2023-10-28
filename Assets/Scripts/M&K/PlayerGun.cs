@@ -20,7 +20,7 @@ public class PlayerGun : NetworkBehaviour
     bool isReloading; // para la animacion
     public SpawnAmmo ammoManager;
 
-    bool addBullSpead = true;
+    bool addBullSpread = true;
     Vector3 bulletSpreadVariance = new Vector3(.1f, .1f, .1f);
     [SerializeField] private ParticleSystem shootingSystem;
     [SerializeField] private ParticleSystem impactParticleSystem;
@@ -89,7 +89,7 @@ public class PlayerGun : NetworkBehaviour
     private Vector3 GetDirection()
     {
         Vector3 direction = transform.forward;
-        if (addBullSpead)
+        if (addBullSpread)
         {
             direction += new Vector3(
                     Random.Range(-bulletSpreadVariance.x, bulletSpreadVariance.x),

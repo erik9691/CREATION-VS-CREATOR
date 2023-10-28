@@ -37,7 +37,7 @@ public class ExplodeHand : NetworkBehaviour
         StopAllCoroutines();
         StartCoroutine(PowerDrain());
         fireOn = false;
-        StartFireServerRpc(false, GetComponentInParent<NetworkObject>(), _isRight);
+        StartFire(false, GetComponentInParent<NetworkObject>(), _isRight);
     }
 
 
@@ -49,7 +49,7 @@ public class ExplodeHand : NetworkBehaviour
             chargeCurrent += chargeAmount;
         }
         fireOn = true;
-        StartFireServerRpc(true, GetComponentInParent<NetworkObject>(), _isRight);
+        StartFire(true, GetComponentInParent<NetworkObject>(), _isRight);
     }
 
     IEnumerator PowerDrain()
@@ -71,7 +71,7 @@ public class ExplodeHand : NetworkBehaviour
     }
 
     [ServerRpc]
-    void StartFireServerRpc(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
+    void StartFire(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
     {
         if (networkObjectReference.TryGet(out NetworkObject networkObject))
         {

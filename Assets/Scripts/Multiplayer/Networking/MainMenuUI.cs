@@ -29,18 +29,6 @@ public class MainMenuUI : MonoBehaviour
         _connectingPanel.SetActive(false);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Slash))
-        {
-            ClickHost();
-        }
-        else if (Input.GetKeyDown(KeyCode.Colon))
-        {
-            ClickClient();
-        }
-    }
-
     public void ClickHost()
     {
         HostManager.Instance.Host();
