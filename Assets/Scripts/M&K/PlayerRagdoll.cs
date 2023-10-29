@@ -66,7 +66,7 @@ public class PlayerRagdoll : MonoBehaviour
         }
 
         mainCol.enabled = false;
-        mainRb.isKinematic = true;
+        //mainRb.isKinematic = true;
 
         StartRagdollClientRpc();
     }
@@ -87,7 +87,7 @@ public class PlayerRagdoll : MonoBehaviour
         }
 
         mainCol.enabled = false;
-        mainRb.isKinematic = true;
+        //mainRb.isKinematic = true;
     }
 
 
