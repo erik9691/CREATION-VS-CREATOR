@@ -9,16 +9,18 @@ public class Rocket : MonoBehaviour
 
     [SerializeField] Transform tempTarget;
     Transform target, playerTarget;
+    bool isGrabbed = false;
 
     private void Start()
     {
         playerTarget = GameObject.FindGameObjectWithTag("Overlord Head").transform;
         target = tempTarget;
-        Invoke("changeTarget", changeSpeed);
+        Invoke("ChangeTarget", changeSpeed);
     }
 
     void Update()
     {
+        if (isGrabbed) return;
         Vector3 lookDirection = target.position - transform.position;
         lookDirection.Normalize();
 
@@ -30,9 +32,21 @@ public class Rocket : MonoBehaviour
         transform.position += (target.position - transform.position).normalized * _speed * Time.deltaTime;
     }
 
-    void changeTarget()
+    public void ChangeTarget()
     {
-        target = playerTarget;
-        Debug.Log("Target Changed");
+        if (target != playerTarget)
+        {
+            target = playerTarget;
+        }
+        else
+        {
+            target = tempTarget;
+            isGrabbed = false;
+        }
+    }
+
+    public void GotGrabbed()
+    {
+        isGrabbed = true;
     }
 }

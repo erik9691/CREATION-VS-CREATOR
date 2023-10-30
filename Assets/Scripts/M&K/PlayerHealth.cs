@@ -40,20 +40,6 @@ public class PlayerHealth : NetworkBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!IsOwner) return;
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            StartCoroutine(TakeDamage());
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            pRagdoll.StopRagdollServerRpc();
-            pRagdoll.EnableInputs();
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Knock")
@@ -67,6 +53,17 @@ public class PlayerHealth : NetworkBehaviour
             {
                 StartCoroutine(pRagdoll.Knockdown());
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Overlord Hand")
+        {
+            MinionHealth -= _dmgAmount;
+
+            UpdateHealthUI();
+            MakeRedServerRpc();
         }
     }
 

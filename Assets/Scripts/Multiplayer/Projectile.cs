@@ -17,6 +17,8 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (gameObject.tag != "Bullet") return;
+
         if (other.tag == "Overlord Head")
         {
             other.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount);
@@ -27,6 +29,18 @@ public class Projectile : MonoBehaviour
             other.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount/2);
             DeleteProjectileServerRpc();
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (gameObject.tag == "Bullet") return;
+
+        if (collision.transform.tag == "Overlord Head")
+        {
+            collision.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount);
+        }
+        //do cool explosion
+        DeleteProjectileServerRpc();
     }
 
     [ServerRpc]

@@ -70,7 +70,6 @@ public class ExplodeHand : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
     void StartFire(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
     {
         if (networkObjectReference.TryGet(out NetworkObject networkObject))

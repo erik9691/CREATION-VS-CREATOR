@@ -18,8 +18,8 @@ public class DisableMinion : NetworkBehaviour
 
         GetComponent<PlayerGun>().CanShoot = false;
 
-        minionRb.isKinematic = true;
-        minionCollider.enabled = false;
+        //minionRb.isKinematic = true;
+        //minionCollider.enabled = false;
         DisableModelServerRpc(GetComponent<NetworkObject>());
     }
 
@@ -32,8 +32,8 @@ public class DisableMinion : NetworkBehaviour
 
         GetComponent<PlayerGun>().CanShoot = true;
 
-        minionRb.isKinematic = false;
-        minionCollider.enabled = true;
+        //minionRb.isKinematic = false;
+        //minionCollider.enabled = true;
         EnableModelServerRpc(GetComponent<NetworkObject>());
     }
 

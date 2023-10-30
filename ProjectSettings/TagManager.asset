@@ -13,6 +13,7 @@ TagManager:
   - Knock
   - Bullet
   - Overlord Hand
+  - Turret
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - UI
   - VR Head
   - Ground
-  - 
+  - Mortar
   - 
   - 
   - 

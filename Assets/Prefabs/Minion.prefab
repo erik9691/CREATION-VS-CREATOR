@@ -1133,6 +1133,9 @@ MonoBehaviour:
     type: 3}
   CanShoot: 1
   ammoManager: {fileID: 0}
+  shootingSystem: {fileID: 0}
+  impactParticleSystem: {fileID: 0}
+  bulletTrail: {fileID: 0}
 --- !u!114 &4110717607573290117
 MonoBehaviour:
   m_ObjectHideFlags: 0
