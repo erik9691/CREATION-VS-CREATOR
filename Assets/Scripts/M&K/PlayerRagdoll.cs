@@ -38,6 +38,11 @@ public class PlayerRagdoll : NetworkBehaviour
             StartCoroutine(Knockdown());
             KnockDown = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StartCoroutine(Knockdown());
+        }
     }
 
     public IEnumerator Knockdown()
@@ -80,6 +85,8 @@ public class PlayerRagdoll : NetworkBehaviour
         mainCol.enabled = false;
         mainRb.isKinematic = true;
 
+        ragdollRb[0].gameObject.AddComponent<FixedJoint>().connectedBody = mainRb;
+
         StartRagdollClientRpc();
     }
 
@@ -100,13 +107,17 @@ public class PlayerRagdoll : NetworkBehaviour
 
         mainCol.enabled = false;
         mainRb.isKinematic = true;
+
+        ragdollRb[0].gameObject.AddComponent<FixedJoint>().connectedBody = mainRb;
     }
 
 
 
-    [ServerRpc]
+    [ServerRpc (RequireOwnership = false)]
     public void StopRagdollServerRpc()
     {
+        Destroy(ragdollRb[0].gameObject.GetComponent<FixedJoint>());
+
         animator.enabled = true;
 
         foreach (Collider col in ragdollCol)
@@ -127,6 +138,8 @@ public class PlayerRagdoll : NetworkBehaviour
     [ClientRpc]
     public void StopRagdollClientRpc()
     {
+        Destroy(ragdollRb[0].gameObject.GetComponent<FixedJoint>());
+
         animator.enabled = true;
 
         foreach (Collider col in ragdollCol)
