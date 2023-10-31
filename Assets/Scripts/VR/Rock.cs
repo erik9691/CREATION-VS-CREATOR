@@ -10,6 +10,11 @@ public class Rock : NetworkBehaviour
         StartCoroutine(DespawnRockCoroutine());
     }
 
+    public void EnableKnock()
+    {
+        gameObject.tag = "Knock";
+    }
+
     IEnumerator DespawnRockCoroutine()
     {
         yield return new WaitForSeconds(4);
