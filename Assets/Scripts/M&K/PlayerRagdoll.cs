@@ -75,17 +75,15 @@ public class PlayerRagdoll : NetworkBehaviour
 
         foreach (Collider col in ragdollCol)
         {
-            col.enabled = true;
+            col.isTrigger = false;
         }
         foreach (Rigidbody rigid in ragdollRb)
         {
             rigid.isKinematic = false;
         }
 
-        mainCol.enabled = false;
+        mainCol.isTrigger = true;
         mainRb.isKinematic = true;
-
-        ragdollRb[0].gameObject.AddComponent<FixedJoint>().connectedBody = mainRb;
 
         StartRagdollClientRpc();
     }
@@ -98,17 +96,15 @@ public class PlayerRagdoll : NetworkBehaviour
 
         foreach (Collider col in ragdollCol)
         {
-            col.enabled = true;
+            col.isTrigger = false;
         }
         foreach (Rigidbody rigid in ragdollRb)
         {
             rigid.isKinematic = false;
         }
 
-        mainCol.enabled = false;
+        mainCol.isTrigger = true;
         mainRb.isKinematic = true;
-
-        ragdollRb[0].gameObject.AddComponent<FixedJoint>().connectedBody = mainRb;
     }
 
 
@@ -116,42 +112,60 @@ public class PlayerRagdoll : NetworkBehaviour
     [ServerRpc (RequireOwnership = false)]
     public void StopRagdollServerRpc()
     {
-        Destroy(ragdollRb[0].gameObject.GetComponent<FixedJoint>());
+        Vector3 getUpPosition = ragdollCol[0].transform.position;
+        getUpPosition.y += 1;
+        transform.position = getUpPosition;
 
         animator.enabled = true;
 
         foreach (Collider col in ragdollCol)
         {
-            col.enabled = false;
+            col.isTrigger = true;
         }
         foreach (Rigidbody rigid in ragdollRb)
         {
             rigid.isKinematic = true;
         }
 
-        mainCol.enabled = true;
+        mainCol.isTrigger = false;
         mainRb.isKinematic = false;
 
         StopRagdollClientRpc();
     }
 
     [ClientRpc]
-    public void StopRagdollClientRpc()
+    void StopRagdollClientRpc()
     {
-        Destroy(ragdollRb[0].gameObject.GetComponent<FixedJoint>());
+        Vector3 getUpPosition = ragdollCol[0].transform.position;
+        getUpPosition.y += 1;
+        transform.position = getUpPosition;
 
         animator.enabled = true;
 
         foreach (Collider col in ragdollCol)
         {
-            col.enabled = false;
+            col.isTrigger = true;
         }
         foreach (Rigidbody rigid in ragdollRb)
         {
             rigid.isKinematic = true;
         }
 
-        mainCol.enabled = true;
+        mainCol.isTrigger = false;
         mainRb.isKinematic = false;
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    public void TurnKinematicServerRpc()
+    {
+        mainRb.isKinematic = true;
+        TurnKinematicClientRpc();
+    }
+
+    [ClientRpc]
+
+    void TurnKinematicClientRpc()
+    {
+        mainRb.isKinematic = true;
     }
 }

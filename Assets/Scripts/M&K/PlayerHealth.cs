@@ -65,6 +65,11 @@ public class PlayerHealth : NetworkBehaviour
             UpdateHealthUI();
             MakeRedServerRpc();
         }
+        else if (other.tag == "Death Zone")
+        {
+            MinionHealth = 0;
+            UpdateHealthUI();
+        }
     }
 
     public IEnumerator TakeDamage(bool isOverlord = false, bool isRight = true)

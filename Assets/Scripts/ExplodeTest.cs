@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 public class ExplodeTest : NetworkBehaviour
 {
-    Collider[] colliders = new Collider[20];
+    Collider[] colliders = new Collider[50];
     [SerializeField] float explosionForce = 100;
     [SerializeField] float explosionRadius = 100;
     GameObject a;
@@ -13,10 +13,10 @@ public class ExplodeTest : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        a = other.gameObject;
-        StartCoroutine(a.GetComponent<PlayerRagdoll>().Knockdown());
-
-        ExplodeNonAlloc();
+        if (other.tag == "Player")
+        {
+            ExplodeNonAlloc();
+        }
     }
 
     private void Update()
@@ -43,7 +43,7 @@ public class ExplodeTest : NetworkBehaviour
         //        rb.AddExplosionForce(explosionForce, explosionPos, explosionRadius, 3.0F);
         //}
 
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders, layerMask);
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders, layerMask, QueryTriggerInteraction.Collide);
         if (numColliders > 0)
         {
             Debug.Log("Try explosion with " + numColliders + " colliders");
@@ -51,8 +51,13 @@ public class ExplodeTest : NetworkBehaviour
             {
                 if (colliders[i].TryGetComponent(out Rigidbody rb))
                 {
+                    if (colliders[i].TryGetComponent(out PlayerRagdoll pr))
+                    {
+                        StartCoroutine(pr.Knockdown());
+                        return;
+                    }
                     Debug.Log("Explode" + i);
-                    rb.AddExplosionForce(explosionForce * 50, transform.position, explosionRadius, 3);
+                    rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, 3);
                 }
             }
         }
