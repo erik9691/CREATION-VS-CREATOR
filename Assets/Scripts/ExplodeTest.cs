@@ -10,12 +10,15 @@ public class ExplodeTest : NetworkBehaviour
     [SerializeField] float explosionRadius = 100;
     int layerMask = 1 << 9;
 
+    bool triggerEntered = false;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return;
+        if (!IsServer || triggerEntered) return;
         if (other.tag == "Player")
         {
             ExplodeNonAlloc();
+            triggerEntered = true;
         }
     }
 
@@ -29,15 +32,9 @@ public class ExplodeTest : NetworkBehaviour
             {
                 if (colliders[i].TryGetComponent(out PlayerRagdoll pr))
                 {
-                    //pr.KnockDown = true;
-
-                    
                     ClientRpcParams rpcParams = default;
                     rpcParams.Send.TargetClientIds = new ulong[] {pr.GetComponent<NetworkObject>().OwnerClientId};
                     SendExplosionClientRpc(pr.GetComponent<NetworkObject>(), explosionForce, transform.position, explosionRadius, rpcParams);
-
-                    //pr.ExplodeImpulse(explosionForce, transform.position, explosionRadius, 3);
-                    return;
                 }
                 Debug.Log("Explode" + i);
             }

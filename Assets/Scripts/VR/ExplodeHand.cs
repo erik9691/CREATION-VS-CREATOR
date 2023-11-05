@@ -6,8 +6,9 @@ using Unity.Netcode;
 
 public class ExplodeHand : NetworkBehaviour
 {
-    [SerializeField] float explosionForce = 10;
-    [SerializeField] float explosionRadius = 10;
+    Collider[] colliders = new Collider[50];
+    [SerializeField] float explosionForce = 1000;
+    [SerializeField] float explosionRadius = 15;
 
     [SerializeField] float chargeRate = 0.2f;
     [SerializeField] float chargeAmount = 2;
@@ -18,7 +19,7 @@ public class ExplodeHand : NetworkBehaviour
     [SerializeField] bool _isRight;
     bool fireOn = false;
 
-    Collider[] colliders = new Collider[20];
+    int layerMask = 1 << 9;
 
     private void Start()
     {
@@ -66,7 +67,7 @@ public class ExplodeHand : NetworkBehaviour
         if (fireOn)
         {
             Debug.Log("BOOM");
-            //ExplodeNonAllocServerRpc();
+            Explode();
         }
     }
 
@@ -126,20 +127,31 @@ public class ExplodeHand : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
-    void ExplodeNonAllocServerRpc()
+    void Explode()
     {
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders);
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders, layerMask, QueryTriggerInteraction.Collide);
         if (numColliders > 0)
         {
+            Debug.Log("Try explosion with " + numColliders + " colliders");
             for (int i = 0; i < numColliders; i++)
             {
-                if (colliders[i].TryGetComponent(out Rigidbody rb))
+                if (colliders[i].TryGetComponent(out PlayerRagdoll pr))
                 {
-                    rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
-                    chargeCurrent = 0;
+                    ClientRpcParams rpcParams = default;
+                    rpcParams.Send.TargetClientIds = new ulong[] {pr.GetComponent<NetworkObject>().OwnerClientId};
+                    SendExplosionClientRpc(pr.GetComponent<NetworkObject>(), explosionForce, transform.position, explosionRadius, rpcParams);
                 }
+                Debug.Log("Explode" + i);
             }
+        }
+    }
+ 
+    [ClientRpc]
+    public void SendExplosionClientRpc(NetworkObjectReference objectReference, float explosionForce, Vector3 explosionPos, float explosionRadius, ClientRpcParams rpcParams)
+    {
+        if (objectReference.TryGet(out NetworkObject minion))
+        {
+            minion.GetComponent<PlayerRagdoll>().ExplodeImpulse(explosionForce, explosionPos, explosionRadius, 3);
         }
     }
 }
