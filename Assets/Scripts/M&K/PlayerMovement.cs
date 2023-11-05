@@ -8,7 +8,7 @@ using Cinemachine;
 public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField]
-    float _jumpForce = 400f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f;
+    float _jumpForce = 400f, _speed = 7f, _runMult = 2f, _rotationSpeed = 1f, maxForce = 1;
 
     public float HealthMult = 1;
 
@@ -62,10 +62,10 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
 
         //Movimiento Y rotacion
-        SpeedControl();
+        // SpeedControl();
         RotateAndMove();
 
-        if ((anim.GetBool("isJumping") && rb.velocity.y < 0) && inAir || rb.velocity.y < -4)
+        if (anim.GetBool("isJumping") && rb.velocity.y < 0 && inAir || rb.velocity.y < -4)
         {
             anim.SetBool("isFalling", true);
             anim.SetBool("isGrounded", false);
@@ -133,19 +133,26 @@ public class PlayerMovement : NetworkBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
         move.y = 0;
-
-        if (moveInput.y == 0 && moveInput.x == 0)
+        //Find target velocity
+        Vector3 currentVelocity = rb.velocity;
+        if (moveInput.y < 0 || moveInput.y == 0 && moveInput.x != 0)
         {
-            //rb.velocity = new Vector3(0,rb.velocity.y, 0);
-        }
-        else if (moveInput.y < 0 || moveInput.y == 0 && moveInput.x != 0)
-        {
-            rb.AddForce(move.normalized * _speed * HealthMult * 0.75f, ForceMode.VelocityChange);
+            move *= _speed * HealthMult * 0.75f;
         }
         else
         {
-            rb.AddForce(move.normalized * _speed * HealthMult, ForceMode.VelocityChange);
+            move *= _speed * HealthMult;
         }
+
+        //Align direction
+        move = transform.TransformDirection(move);
+        //Calculate forces
+        Vector3 velocityChange = move - currentVelocity;
+        velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
+        //Limit force
+        Vector3.ClampMagnitude(velocityChange, maxForce);
+        rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
 
         //Rotacion
         Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
@@ -155,16 +162,20 @@ public class PlayerMovement : NetworkBehaviour
     private void SpeedControl()
     {
         if (onGround)
+        {
             rb.drag = 5;
+        } 
         else
+        {
             rb.drag = 0;
+        }
 
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         // limit velocity if needed
-        if (flatVel.magnitude > _speed)
+        if (flatVel.magnitude > _speed * HealthMult / 5)
         {
-            Vector3 limitedVel = flatVel.normalized * _speed;
+            Vector3 limitedVel = flatVel.normalized * _speed * HealthMult / 6;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }

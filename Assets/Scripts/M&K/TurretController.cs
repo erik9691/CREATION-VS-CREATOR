@@ -8,14 +8,12 @@ using Cinemachine;
 public class TurretController : NetworkBehaviour
 {
     public NetworkVariable<bool> n_IsMounted = new NetworkVariable<bool>();
-    public NetworkVariable<bool> n_IsDestroyed = new NetworkVariable<bool>();
+    
     public bool IsMounted;
 
     [SerializeField] float _rotateSpeed = 0.5f;
     [SerializeField] GameObject _cannon;
 
-    [SerializeField] int HP = 10;
-    [SerializeField] int maxHP = 10;
     PlayerInput playerInput;
     CinemachineVirtualCamera cam;
     Vector2 moveInput;
@@ -64,35 +62,6 @@ public class TurretController : NetworkBehaviour
                 GetComponent<TurretShoot>().SpawnTurretBulletServerRpc();
             }
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Overlord Hand")
-        {
-            HP--;
-            //update hp visuals
-            if (HP <= 0)
-            {
-                DestroyTurretServerRpc();
-            }
-        }
-    }
-
-    [ServerRpc]
-    void DestroyTurretServerRpc()
-    {
-        n_IsDestroyed.Value = true;
-        //do big explosion and replace with broken model
-        StartCoroutine(RespawnTurret());
-    }
-
-    IEnumerator RespawnTurret()
-    {
-        yield return new WaitForSeconds(10f);
-        //replace with fixed model
-        n_IsDestroyed.Value = false;
-        HP = maxHP;
     }
 
     public void Mount(bool mount, PlayerInput pi = null)

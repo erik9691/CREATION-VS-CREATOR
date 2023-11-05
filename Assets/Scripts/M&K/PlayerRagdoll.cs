@@ -54,6 +54,15 @@ public class PlayerRagdoll : NetworkBehaviour
         EnableInputs();
     }
 
+    public void ExplodeImpulse(float explodeForce, Vector3 explodePos, float explodeRadius, float upMod)
+    {
+        StartCoroutine(Knockdown());
+        foreach (Rigidbody rb in ragdollRb)
+        {
+            rb.AddExplosionForce(explodeForce, explodePos, explodeRadius, upMod);
+        }
+    }
+
     public void DisableInputs()
     {
         GetComponent<PlayerInput>().enabled = false;

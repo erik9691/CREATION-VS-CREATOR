@@ -14,6 +14,10 @@ public class PlayerInteractions : NetworkBehaviour
     bool isInteracting = false;
     bool isMounting = false;
 
+    TurretController turret;
+    InteractableHealth InteractableHealth;
+    MissileLauncher missileLauncher;
+
     public void Interact(InputAction.CallbackContext obj)
     {
         if (!IsOwner) return;
@@ -39,14 +43,31 @@ public class PlayerInteractions : NetworkBehaviour
         if (other.tag == "Interactable")
         {
             interactable = other.transform.parent.gameObject;
-
-            if (interactable.GetComponent<MissileLauncher>())
+            InteractableHealth = interactable.GetComponent<InteractableHealth>();
+            if (interactable.GetComponent<TurretController>())
             {
-                UIManager.Instance.ActivateInteractSlider(true);
+                turret = interactable.GetComponent<TurretController>();
             }
-            else if (interactable.GetComponent<TurretController>().n_IsMounted.Value == false || interactable.GetComponent<TurretController>().n_IsMounted.Value == true && isMounting || !interactable.GetComponent<TurretController>().n_IsDestroyed.Value)
+            else
             {
-                UIManager.Instance.ActivateInteractSlider(true);
+                missileLauncher = interactable.GetComponent<MissileLauncher>();
+            }
+            
+
+            if (!InteractableHealth.n_IsDestroyed.Value)
+            {
+                if (missileLauncher)
+                {
+                    UIManager.Instance.ActivateInteractSlider(true);
+                }
+                else if (turret.n_IsMounted.Value == false || turret.n_IsMounted.Value == true && isMounting)
+                {
+                    UIManager.Instance.ActivateInteractSlider(true);
+                }
+                else
+                {
+                    UIManager.Instance.ActivateInteractSlider(false);
+                }
             }
             else
             {
@@ -67,7 +88,7 @@ public class PlayerInteractions : NetworkBehaviour
 
     private void Update()
     {
-        if (isMounting && interactable.GetComponent<TurretController>().n_IsDestroyed.Value)
+        if (isMounting && InteractableHealth.n_IsDestroyed.Value)
         {
             interactable.GetComponent<TurretController>().Mount(false);
             GetComponent<DisableMinion>().Enable();
@@ -85,12 +106,12 @@ public class PlayerInteractions : NetworkBehaviour
             yield return new WaitForSeconds(_interactSpeed);
         }
 
-        if (interactable.GetComponent<MissileLauncher>())
+        if (missileLauncher)
         {
             Debug.Log("SpawnMissile");
             interactable.GetComponent<MissileLauncher>().SpawnRocketServerRpc();
         }
-        else if (interactable.GetComponent<TurretController>() && !isMounting && interactable.GetComponent<TurretController>().n_IsMounted.Value == false && interactable.GetComponent<TurretController>().n_IsDestroyed.Value == false)
+        else if (turret && !isMounting && turret.n_IsMounted.Value == false && InteractableHealth.n_IsDestroyed.Value == false)
         {
             isMounting = true;
             interactable.GetComponent<TurretController>().Mount(true, GetComponent<PlayerInput>());

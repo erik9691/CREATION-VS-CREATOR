@@ -8,58 +8,48 @@ public class ExplodeTest : NetworkBehaviour
     Collider[] colliders = new Collider[50];
     [SerializeField] float explosionForce = 100;
     [SerializeField] float explosionRadius = 100;
-    GameObject a;
     int layerMask = 1 << 9;
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsServer) return;
         if (other.tag == "Player")
         {
             ExplodeNonAlloc();
         }
     }
 
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    StartCoroutine(a.GetComponent<PlayerRagdoll>().Knockdown());
-
-        //    ExplodeNonAllocServerRpc();
-        //}
-    }
-
     void ExplodeNonAlloc()
     {
-        //Vector3 explosionPos = transform.position;
-        //Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, 9);
-        //Debug.Log(colliders.Length);
-        //foreach (Collider hit in colliders)
-        //{
-        //    Rigidbody rb = hit.GetComponent<Rigidbody>();
-
-        //    if (rb != null)
-        //        Debug.Log("Explode");
-        //        rb.AddExplosionForce(explosionForce, explosionPos, explosionRadius, 3.0F);
-        //}
-
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders, layerMask, QueryTriggerInteraction.Collide);
         if (numColliders > 0)
         {
             Debug.Log("Try explosion with " + numColliders + " colliders");
             for (int i = 0; i < numColliders; i++)
             {
-                if (colliders[i].TryGetComponent(out Rigidbody rb))
+                if (colliders[i].TryGetComponent(out PlayerRagdoll pr))
                 {
-                    if (colliders[i].TryGetComponent(out PlayerRagdoll pr))
-                    {
-                        StartCoroutine(pr.Knockdown());
-                        return;
-                    }
-                    Debug.Log("Explode" + i);
-                    rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, 3);
+                    //pr.KnockDown = true;
+
+                    
+                    ClientRpcParams rpcParams = default;
+                    rpcParams.Send.TargetClientIds = new ulong[] {pr.GetComponent<NetworkObject>().OwnerClientId};
+                    SendExplosionClientRpc(pr.GetComponent<NetworkObject>(), explosionForce, transform.position, explosionRadius, rpcParams);
+
+                    //pr.ExplodeImpulse(explosionForce, transform.position, explosionRadius, 3);
+                    return;
                 }
+                Debug.Log("Explode" + i);
             }
+        }
+    }
+ 
+    [ClientRpc]
+    public void SendExplosionClientRpc(NetworkObjectReference objectReference, float explosionForce, Vector3 explosionPos, float explosionRadius, ClientRpcParams rpcParams)
+    {
+        if (objectReference.TryGet(out NetworkObject minion))
+        {
+            minion.GetComponent<PlayerRagdoll>().ExplodeImpulse(explosionForce, explosionPos, explosionRadius, 3);
         }
     }
 }
