@@ -28,12 +28,6 @@ public class PlayerGun : NetworkBehaviour
     float shootDelay = .5f;
     LayerMask mask;
 
-    private Animator anim;
-
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();
-    }
     private void Start()
     {
         ammoManager = GameObject.Find("AmmoBoxManager").GetComponent<SpawnAmmo>();
@@ -64,7 +58,6 @@ public class PlayerGun : NetworkBehaviour
                 {
                     if (Time.time > shootRateTime && obj.started)
                     {
-                        anim.SetBool("isShooting", true);
                         Vector3 direction = GetDirection();
 
                         if (Physics.Raycast(SpawnPoint.position, direction, out RaycastHit hit, float.MaxValue, mask))
@@ -113,7 +106,6 @@ public class PlayerGun : NetworkBehaviour
 
             yield return null;
         }
-        anim.SetBool("isShooting", false);
         Trail.transform.position = Hit.point;
         Instantiate(impactParticleSystem, Hit.point, Quaternion.LookRotation(Hit.normal));
 
