@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject minionUI;
     [SerializeField] Sprite[] reticles;
     [SerializeField] Sprite[] statuses;
+    [SerializeField] TextMeshProUGUI minuteCounter;
 
     TextMeshProUGUI clipAmmoUI;
     TextMeshProUGUI storedAmmoUI;
@@ -71,5 +72,10 @@ public class UIManager : MonoBehaviour
     public void UpdateOverlordHealth(float current)
     {
         overlordSlider.value = current;
+    }
+
+    public void UpdateTime(string currentTime)
+    {
+        minuteCounter.text = currentTime;
     }
 }

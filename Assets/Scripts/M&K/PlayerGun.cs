@@ -17,8 +17,7 @@ public class PlayerGun : NetworkBehaviour
 
     Transform SpawnPoint;
     float shootRateTime = 0;
-    bool isReloading; // para la animacion
-    public SpawnAmmo ammoManager;
+    SpawnAmmo ammoManager;
 
     bool addBullSpread = true;
     Vector3 bulletSpreadVariance = new Vector3(.1f, .1f, .1f);
@@ -52,7 +51,7 @@ public class PlayerGun : NetworkBehaviour
             {
                 if (_clipAmmo == 0)
                 {
-                    StartCoroutine(ReloadDelay());
+                    ReloadStart();
                 }
                 else
                 {
@@ -116,20 +115,19 @@ public class PlayerGun : NetworkBehaviour
     {
         if (obj.started)
         {
-            Debug.Log("Reload");
-            StartCoroutine(ReloadDelay());
+            ReloadStart();
         }
     }
 
-    IEnumerator ReloadDelay()
+    void ReloadStart()
     {
         CanShoot = false;
-        yield return new WaitForSeconds(_reloadTime);
-        Reload();
-        CanShoot = true;
+        GetComponent<Animator>().SetBool("isReloading", true);
     }
-    private void Reload()
+
+    public void Reload()
     {
+        CanShoot = true;
         if (_storedAmmo < _clipCapacity)
         {
             _clipAmmo = _storedAmmo;

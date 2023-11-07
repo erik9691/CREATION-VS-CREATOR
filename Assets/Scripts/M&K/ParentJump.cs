@@ -8,4 +8,9 @@ public class ParentJump : MonoBehaviour
     {
         GetComponentInParent<PlayerMovement>().JumpForce();
     }
+
+    public void ReloadEvent()
+    {
+        GetComponentInParent<PlayerGun>().Reload();
+    }
 }
