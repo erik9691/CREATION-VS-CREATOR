@@ -8,36 +8,76 @@ public class InteractableHealth : NetworkBehaviour
 
     public NetworkVariable<bool> n_IsDestroyed = new NetworkVariable<bool>();
 
-    [SerializeField] int HP = 10;
-    [SerializeField] int maxHP = 10;
+    [SerializeField] int HP = 10, maxHP = 10;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Overlord Hand")
         {
+            Debug.Log("Hand Hit");
             HP--;
             //update hp visuals
             if (HP <= 0)
             {
-                DestroyInterServerRpc();
+                DestroyInterServerRpc(gameObject);
+                StartCoroutine(RespawnInter());
             }
         }
     }
 
     [ServerRpc]
-    void DestroyInterServerRpc()
+    void DestroyInterServerRpc(NetworkObjectReference objectReference)
     {
         n_IsDestroyed.Value = true;
-        //do big explosion and replace with broken model
-        GetComponentInChildren<ParticleSystem>().Play();
-        StartCoroutine(RespawnTurret());
+
+        if (objectReference.TryGet(out NetworkObject networkObject))
+        {
+            networkObject.GetComponentInChildren<ParticleSystem>().Play();
+            networkObject.transform.GetChild(0).gameObject.SetActive(false);
+            networkObject.transform.GetChild(1).gameObject.SetActive(true);
+        } 
+
+        DestroyInterClientRpc(objectReference);
     }
 
-    IEnumerator RespawnTurret()
+    [ClientRpc]
+    void DestroyInterClientRpc(NetworkObjectReference objectReference)
+    {
+        if (objectReference.TryGet(out NetworkObject networkObject))
+        {
+            networkObject.GetComponentInChildren<ParticleSystem>().Play();
+            networkObject.transform.GetChild(0).gameObject.SetActive(false);
+            networkObject.transform.GetChild(1).gameObject.SetActive(true);
+        }
+    }
+
+    IEnumerator RespawnInter()
     {
         yield return new WaitForSeconds(10f);
-        //replace with fixed model
-        n_IsDestroyed.Value = false;
+        
+        RepairModelServerRpc(gameObject);
         HP = maxHP;
+    }
+
+    [ServerRpc]
+    void RepairModelServerRpc(NetworkObjectReference objectReference)
+    {
+        n_IsDestroyed.Value = false;
+        if (objectReference.TryGet(out NetworkObject networkObject))
+        {
+            networkObject.transform.GetChild(0).gameObject.SetActive(true);
+            networkObject.transform.GetChild(1).gameObject.SetActive(false);
+        }
+        RepairModelClientRpc(objectReference);
+    }
+
+    [ClientRpc]
+    void RepairModelClientRpc(NetworkObjectReference objectReference)
+    {
+        if (objectReference.TryGet(out NetworkObject networkObject))
+        {
+            networkObject.transform.GetChild(0).gameObject.SetActive(true);
+            networkObject.transform.GetChild(1).gameObject.SetActive(false);
+        }
     }
 }

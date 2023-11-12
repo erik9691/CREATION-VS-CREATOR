@@ -161,6 +161,11 @@ public class ExplodeHand : NetworkBehaviour
                 }
                 Debug.Log("Explode" + i);
             }
+            StopAllCoroutines();
+            StartCoroutine(PowerDrain());
+            fireOn = false;
+            StartFire(false, GetComponentInParent<NetworkObject>(), _isRight);
+
         }
     }
  

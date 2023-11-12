@@ -18,7 +18,7 @@ public class ExplodeTest : NetworkBehaviour
         if (other.tag == "Player")
         {
             ExplodeNonAlloc();
-            triggerEntered = true;
+            //triggerEntered = true;
         }
     }
 

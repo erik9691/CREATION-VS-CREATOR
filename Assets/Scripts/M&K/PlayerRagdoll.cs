@@ -63,6 +63,7 @@ public class PlayerRagdoll : NetworkBehaviour
         ePos = explodePos;
 
         StartCoroutine(Knockdown());
+
         ExplodeImpulseServerRpc();
     }
 
@@ -142,7 +143,7 @@ public class PlayerRagdoll : NetworkBehaviour
     public void StopRagdollServerRpc()
     {
         Vector3 getUpPosition = ragdollCol[0].transform.position;
-        getUpPosition.y += 1;
+        getUpPosition.y += 0.5f;
         transform.position = getUpPosition;
 
         animator.enabled = true;

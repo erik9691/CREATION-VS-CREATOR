@@ -12,7 +12,11 @@ public class Rock : NetworkBehaviour
 
     public void EnableKnock()
     {
+        Rigidbody rb = GetComponent<Rigidbody>();
         gameObject.tag = "Knock";
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.constraints = RigidbodyConstraints.None;
     }
 
     IEnumerator DespawnRockCoroutine()
