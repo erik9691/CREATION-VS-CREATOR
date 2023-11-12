@@ -24,7 +24,7 @@ public class PlayerGun : NetworkBehaviour
     [SerializeField] private ParticleSystem shootingSystem;
     [SerializeField] private ParticleSystem impactParticleSystem;
     [SerializeField] private TrailRenderer bulletTrail;
-    float shootDelay = .5f;
+    //float shootDelay = .5f;
     LayerMask mask;
 
     private void Start()
@@ -122,7 +122,7 @@ public class PlayerGun : NetworkBehaviour
     void ReloadStart()
     {
         CanShoot = false;
-        GetComponent<Animator>().SetBool("isReloading", true);
+        GetComponentInChildren<Animator>().Play("Reloading");
     }
 
     public void Reload()

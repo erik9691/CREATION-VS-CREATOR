@@ -112,6 +112,7 @@ public class PlayerHealth : NetworkBehaviour
                 UIManager.Instance.UpdateMinionHealth(2);
                 if (MinionHealth <= 0)
                 {
+                    UIManager.Instance.UpdateMinionHealth(3);
                     pRagdoll.DisableInputs();
                     pRagdoll.StartRagdollServerRpc();
 

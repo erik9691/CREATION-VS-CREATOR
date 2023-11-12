@@ -16,19 +16,25 @@ public class ExplodeHand : NetworkBehaviour
     [SerializeField] float chargeLimit = 20;
 
     [SerializeField] InputActionReference _gripReference;
+    [SerializeField] InputActionReference _triggerReference;
     [SerializeField] bool _isRight;
     bool fireOn = false;
+
+    bool gripOn = false;
 
     int layerMask = 1 << 9;
 
     private void Start()
     {
-        _gripReference.action.started += StartPower;
-        _gripReference.action.canceled += StopPower;
+        _triggerReference.action.started += StartPower;
+        _triggerReference.action.canceled += StopPower;
+        _gripReference.action.started += ConfirmPower;
+        _gripReference.action.canceled += UnconfirmPower;
     }
 
     public void StartPower(InputAction.CallbackContext context)
     {
+        if (!gripOn) return;
         StopAllCoroutines();
         StartCoroutine(PowerCharge());
     }
@@ -40,7 +46,19 @@ public class ExplodeHand : NetworkBehaviour
         fireOn = false;
         StartFire(false, GetComponentInParent<NetworkObject>(), _isRight);
     }
+    public void ConfirmPower(InputAction.CallbackContext context)
+    {
+        gripOn = true;
+    }
 
+    public void UnconfirmPower(InputAction.CallbackContext context)
+    {
+        gripOn = false;
+        StopAllCoroutines();
+        StartCoroutine(PowerDrain());
+        fireOn = false;
+        StartFire(false, GetComponentInParent<NetworkObject>(), _isRight);
+    }
 
     IEnumerator PowerCharge()
     {

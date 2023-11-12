@@ -16,7 +16,7 @@ public class ChangeUI : MonoBehaviour
             Overlord.SetActive(true);
             UI.renderMode = RenderMode.WorldSpace;
             UI.GetComponent<RectTransform>().localScale = new Vector3(0.06f, 0.06f, 0.06f);
-            UI.GetComponent<RectTransform>().position = Vector3.zero;
+            UI.GetComponent<RectTransform>().position = new Vector3(0, 4.5f, 0);
         }
     }
 }

@@ -26,26 +26,13 @@ public class AnimateHand : NetworkBehaviour
 
     void AnimateTrigger()
     {
-        triggerValue = _triggerReference.action.ReadValue<float>();
         gripValue = _gripReference.action.ReadValue<float>();
-
-        if (triggerValue != oldTriggerValue)
-        {
-            if (triggerValue > gripValue || gripValue == 0)
-            {
-                AnimateHandServerRpc(triggerValue);
-            }
-        }
 
         if (gripValue != oldGripValue)
         {
-            if (gripValue > triggerValue || triggerValue == 0)
-            {
-                AnimateHandServerRpc(gripValue);
-            }
+            AnimateHandServerRpc(gripValue);
         }
-
-        oldTriggerValue = triggerValue;
+        
         oldGripValue = gripValue;
     }
 

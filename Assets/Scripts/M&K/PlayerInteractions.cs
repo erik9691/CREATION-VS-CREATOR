@@ -47,10 +47,12 @@ public class PlayerInteractions : NetworkBehaviour
             if (interactable.GetComponent<TurretController>())
             {
                 turret = interactable.GetComponent<TurretController>();
+                missileLauncher = null;
             }
             else
             {
                 missileLauncher = interactable.GetComponent<MissileLauncher>();
+                turret = null;
             }
             
 

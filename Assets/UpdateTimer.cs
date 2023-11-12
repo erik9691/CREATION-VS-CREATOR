@@ -11,8 +11,19 @@ public class UpdateTimer : MonoBehaviour
 
     void TimeChanged(int prevTime, int currentTime)
     {
-        string minutosYSegs = currentTime / 60 + ":" + currentTime % 60;
-        Debug.Log(minutosYSegs);
-        UIManager.Instance.UpdateTime(minutosYSegs);
+        string secs;
+        string minsandsecs;
+
+        if (currentTime % 60 < 10)
+        {
+            secs = "0" + currentTime % 60;
+        }
+        else
+        {
+            secs = (currentTime % 60).ToString();
+        }
+
+        minsandsecs = currentTime / 60 + ":" + secs;
+        UIManager.Instance.UpdateTime(minsandsecs);
     }
 }
