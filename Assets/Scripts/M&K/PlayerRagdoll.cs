@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using Unity.VisualScripting;
 
 public class PlayerRagdoll : NetworkBehaviour
 {
@@ -17,6 +18,8 @@ public class PlayerRagdoll : NetworkBehaviour
     Rigidbody mainRb;
     Collider mainCol;
     Animator animator;
+
+    public bool IsGrabbed;
 
     // Start is called before the first frame update
     void Start()
@@ -118,19 +121,19 @@ public class PlayerRagdoll : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void StartRagdollServerRpc()
     {
-        animator.enabled = false;
+        // animator.enabled = false;
 
-        foreach (Collider col in ragdollCol)
-        {
-            col.isTrigger = false;
-        }
-        foreach (Rigidbody rigid in ragdollRb)
-        {
-            rigid.isKinematic = false;
-        }
+        // foreach (Collider col in ragdollCol)
+        // {
+        //     col.isTrigger = false;
+        // }
+        // foreach (Rigidbody rigid in ragdollRb)
+        // {
+        //     rigid.isKinematic = false;
+        // }
 
-        mainCol.isTrigger = true;
-        mainRb.isKinematic = true;
+        // mainCol.isTrigger = true;
+        // mainRb.isKinematic = true;
 
         StartRagdollClientRpc();
     }
@@ -152,6 +155,7 @@ public class PlayerRagdoll : NetworkBehaviour
 
         mainCol.isTrigger = true;
         mainRb.isKinematic = true;
+        if (IsGrabbed) ragdollCol[0].AddComponent<FixedJoint>().connectedBody = mainRb;
     }
 
 
@@ -183,6 +187,7 @@ public class PlayerRagdoll : NetworkBehaviour
     [ClientRpc]
     void StopRagdollClientRpc()
     {
+        if (IsGrabbed) Destroy(ragdollCol[0].GetComponent<FixedJoint>());
         Vector3 getUpPosition = ragdollCol[0].transform.position;
         getUpPosition.y += 1;
         transform.position = getUpPosition;

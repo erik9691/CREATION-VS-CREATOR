@@ -22,6 +22,8 @@ public class ExplodeHand : NetworkBehaviour
 
     bool gripOn = false;
 
+    bool didExplosion = false;
+
     int layerMask = 1 << 9;
 
     private void Start()
@@ -34,7 +36,7 @@ public class ExplodeHand : NetworkBehaviour
 
     public void StartPower(InputAction.CallbackContext context)
     {
-        if (!gripOn) return;
+        if (!gripOn || didExplosion) return;
         StopAllCoroutines();
         StartCoroutine(PowerCharge());
     }
@@ -53,6 +55,7 @@ public class ExplodeHand : NetworkBehaviour
 
     public void UnconfirmPower(InputAction.CallbackContext context)
     {
+        didExplosion = false;
         gripOn = false;
         StopAllCoroutines();
         StartCoroutine(PowerDrain());
@@ -91,30 +94,7 @@ public class ExplodeHand : NetworkBehaviour
 
     void StartFire(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
     {
-        if (networkObjectReference.TryGet(out NetworkObject networkObject))
-        {
-            ParticleSystem fire;
-
-            if (isRight)
-            {
-                fire = networkObject.transform.GetChild(0).GetChild(2).GetComponentInChildren<ParticleSystem>();
-            }
-            else
-            {
-                fire = networkObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<ParticleSystem>();
-            }
-            
-
-            if (activate)
-            {
-                fire.Play();
-            }
-            else
-            {
-                fire.Stop();
-            }
-            StartFireClientRpc(activate, networkObjectReference, isRight);
-        }
+        StartFireClientRpc(activate, networkObjectReference, isRight);
     }
 
     [ClientRpc]
@@ -126,11 +106,11 @@ public class ExplodeHand : NetworkBehaviour
 
             if (isRight)
             {
-                fire = networkObject.transform.GetChild(0).GetChild(2).GetComponentInChildren<ParticleSystem>();
+                fire = networkObject.transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<ParticleSystem>();
             }
             else
             {
-                fire = networkObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<ParticleSystem>();
+                fire = networkObject.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<ParticleSystem>();
             }
 
 
@@ -145,6 +125,31 @@ public class ExplodeHand : NetworkBehaviour
         }
     }
 
+
+    void ExplodeEffect(NetworkObjectReference networkObjectReference, bool isRight)
+    {
+        ExplodeEffectClientRpc(networkObjectReference, isRight);
+    }
+
+    [ClientRpc]
+    void ExplodeEffectClientRpc(NetworkObjectReference networkObjectReference, bool isRight)
+    {
+        if (networkObjectReference.TryGet(out NetworkObject networkObject))
+        {
+            ParticleSystem explode;
+
+            if (isRight)
+            {
+                explode = networkObject.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<ParticleSystem>();
+            }
+            else
+            {
+                explode = networkObject.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<ParticleSystem>();
+            }
+
+            explode.Play();
+        }
+    }
     void Explode()
     {
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, colliders, layerMask, QueryTriggerInteraction.Collide);
@@ -161,20 +166,21 @@ public class ExplodeHand : NetworkBehaviour
                 }
                 Debug.Log("Explode" + i);
             }
+            ExplodeEffect(GetComponentInParent<NetworkObject>(), _isRight);
             StopAllCoroutines();
             StartCoroutine(PowerDrain());
             fireOn = false;
+            didExplosion = true;
             StartFire(false, GetComponentInParent<NetworkObject>(), _isRight);
-
         }
     }
  
     [ClientRpc]
-    public void SendExplosionClientRpc(NetworkObjectReference objectReference, float explosionForce, Vector3 explosionPos, float explosionRadius, ClientRpcParams rpcParams)
+    public void SendExplosionClientRpc(NetworkObjectReference objectReference, float explodeForce, Vector3 explosionPos, float explosionRadius, ClientRpcParams rpcParams)
     {
         if (objectReference.TryGet(out NetworkObject minion))
         {
-            minion.GetComponent<PlayerRagdoll>().ExplodeImpulse(explosionForce, explosionPos, explosionRadius, 3);
+            minion.GetComponent<PlayerRagdoll>().ExplodeImpulse(explodeForce, explosionPos, explosionRadius, 3);
         }
     }
 }
