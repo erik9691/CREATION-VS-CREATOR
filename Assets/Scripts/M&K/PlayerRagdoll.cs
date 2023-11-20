@@ -54,34 +54,51 @@ public class PlayerRagdoll : NetworkBehaviour
         EnableInputs();
     }
 
-    float eForce, eRadius, uMod;
-    Vector3 ePos;
     public void ExplodeImpulse(float explodeForce, Vector3 explodePos, float explodeRadius, float upMod)
     {
         Debug.Log("Explode Impulse");
-        eForce = explodeForce; eRadius = explodeRadius; uMod = upMod;
-        ePos = explodePos;
 
         StartCoroutine(Knockdown());
 
-        ExplodeImpulseServerRpc();
+        ExplodeImpulseServerRpc(GetComponent<NetworkObject>(), explodeForce, explodePos, explodeRadius, upMod);
     }
 
     [ServerRpc (RequireOwnership = false)]
-    void ExplodeImpulseServerRpc()
+    void ExplodeImpulseServerRpc(NetworkObjectReference objectReference, float explodeForceS, Vector3 explodePosS, float explodeRadiusS, float upModS)
     {
-        foreach (Rigidbody rb in ragdollRb)
-        {
-            rb.AddExplosionForce(eForce, ePos, eRadius, uMod);
-        }
-        ExplodeImpulseClientRpc();
+        Debug.Log("Explode Impulse SERVER");
+
+        // Rigidbody[] ragdolRb = null;
+
+        // if (objectReference.TryGet(out NetworkObject minion))
+        // {
+        //     ragdolRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
+        // }
+
+        // foreach (Rigidbody rb in ragdolRb)
+        // {
+        //     rb.AddExplosionForce(eForce, ePos, eRadius, uMod);
+        // }
+
+        ExplodeImpulseClientRpc(objectReference, explodeForceS, explodePosS, explodeRadiusS, upModS);
     }
     [ClientRpc]
-    void ExplodeImpulseClientRpc()
+    void ExplodeImpulseClientRpc(NetworkObjectReference objectReference, float explodeForceC, Vector3 explodePosC, float explodeRadiusC, float upModC)
     {
-        foreach (Rigidbody rb in ragdollRb)
+        Debug.Log("Explode Impulse CLIENT");
+
+        Rigidbody[] ragdolRb = null;
+
+        if (objectReference.TryGet(out NetworkObject minion))
         {
-            rb.AddExplosionForce(eForce, ePos, eRadius, uMod);
+            Debug.Log("get object CLIENT");
+            ragdolRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
+        }
+
+        foreach (Rigidbody rb in ragdolRb)
+        {
+            Debug.Log("add force CLIENT");
+            rb.AddExplosionForce(explodeForceC, explodePosC, explodeRadiusC, upModC);
         }
     }
     public void DisableInputs()
@@ -142,23 +159,23 @@ public class PlayerRagdoll : NetworkBehaviour
     [ServerRpc (RequireOwnership = false)]
     public void StopRagdollServerRpc()
     {
-        Vector3 getUpPosition = ragdollCol[0].transform.position;
-        getUpPosition.y += 0.5f;
-        transform.position = getUpPosition;
+        // Vector3 getUpPosition = ragdollCol[0].transform.position;
+        // getUpPosition.y += 0.5f;
+        // transform.position = getUpPosition;
 
-        animator.enabled = true;
+        // animator.enabled = true;
 
-        foreach (Collider col in ragdollCol)
-        {
-            col.isTrigger = true;
-        }
-        foreach (Rigidbody rigid in ragdollRb)
-        {
-            rigid.isKinematic = true;
-        }
+        // foreach (Collider col in ragdollCol)
+        // {
+        //     col.isTrigger = true;
+        // }
+        // foreach (Rigidbody rigid in ragdollRb)
+        // {
+        //     rigid.isKinematic = true;
+        // }
 
-        mainCol.isTrigger = false;
-        mainRb.isKinematic = false;
+        // mainCol.isTrigger = false;
+        // mainRb.isKinematic = false;
 
         StopRagdollClientRpc();
     }

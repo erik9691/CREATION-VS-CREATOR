@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject minionUI;
     [SerializeField] Sprite[] reticles;
     [SerializeField] Sprite[] statuses;
-    [SerializeField] TextMeshProUGUI minuteCounter;
+    [SerializeField] TextMeshProUGUI[] minuteCounters;
 
     TextMeshProUGUI clipAmmoUI;
     TextMeshProUGUI storedAmmoUI;
@@ -76,6 +76,9 @@ public class UIManager : MonoBehaviour
 
     public void UpdateTime(string currentTime)
     {
-        minuteCounter.text = currentTime;
+        foreach (TextMeshProUGUI Counter in minuteCounters)
+        {
+            Counter.text = currentTime;
+        }
     }
 }

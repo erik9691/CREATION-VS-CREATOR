@@ -77,6 +77,7 @@ public class PlayerMovement : NetworkBehaviour
     //Condicion para saltar
     private void OnCollisionEnter(Collision collision)
     {
+        if (!IsOwner) return;
         if (collision.gameObject.tag == "Floor")
         {
             if (inAir)
@@ -93,6 +94,7 @@ public class PlayerMovement : NetworkBehaviour
     //Funcion para saltar
     public void Jump(InputAction.CallbackContext obj)
     {
+        if (!IsOwner) return;
         if (canJump && obj.performed)
         {
             anim.SetBool("isJumping", true);
@@ -113,6 +115,7 @@ public class PlayerMovement : NetworkBehaviour
     //Funcion para correr
     public void Sprint(InputAction.CallbackContext obj)
     {
+        if (!IsOwner) return;
         if (canJump && obj.started)
         {
             _speed = runSpeed;

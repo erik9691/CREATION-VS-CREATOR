@@ -1133,7 +1133,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 92602612815403785, guid: 252e6db3aea9c214bb2fe9608fefff97,
     type: 3}
   CanShoot: 1
-  ammoManager: {fileID: 0}
   shootingSystem: {fileID: 0}
   impactParticleSystem: {fileID: 0}
   bulletTrail: {fileID: 0}

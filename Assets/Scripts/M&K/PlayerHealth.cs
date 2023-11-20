@@ -58,6 +58,8 @@ public class PlayerHealth : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner) return;
+
         if (other.tag == "Overlord Hand")
         {
             MinionHealth -= _dmgAmount;

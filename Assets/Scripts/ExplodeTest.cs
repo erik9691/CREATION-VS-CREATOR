@@ -17,8 +17,9 @@ public class ExplodeTest : NetworkBehaviour
         if (!IsServer || triggerEntered) return;
         if (other.tag == "Player")
         {
+            Debug.Log("Player Entered");
             ExplodeNonAlloc();
-            //triggerEntered = true;
+            triggerEntered = true;
         }
     }
 
