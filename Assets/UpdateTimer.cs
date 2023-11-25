@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class UpdateTimer : MonoBehaviour
+public class UpdateTimer : NetworkBehaviour
 {
     private void Start()
     {
@@ -25,5 +26,18 @@ public class UpdateTimer : MonoBehaviour
 
         minsandsecs = currentTime / 60 + ":" + secs;
         UIManager.Instance.UpdateTime(minsandsecs);
+
+        if (currentTime <= 0)
+        {
+            if (IsHost)
+            {
+                UIManager.Instance.GameWon();
+            }
+            else
+            {
+                UIManager.Instance.GameLost();
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
     }
 }

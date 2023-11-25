@@ -6,7 +6,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameObject minionUI;
+    [SerializeField] GameObject minionUI, gameLostUI, gameWonUI;
     [SerializeField] Sprite[] reticles;
     [SerializeField] Sprite[] statuses;
     [SerializeField] TextMeshProUGUI[] minuteCounters;
@@ -80,5 +80,15 @@ public class UIManager : MonoBehaviour
         {
             Counter.text = currentTime;
         }
+    }
+
+    public void GameLost()
+    {
+        gameLostUI.SetActive(true);
+    }
+
+    public void GameWon()
+    {
+        gameWonUI.SetActive(true);
     }
 }

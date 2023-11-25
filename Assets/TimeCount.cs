@@ -16,7 +16,7 @@ public class TimeCount : NetworkBehaviour
 
     private IEnumerator TimerDown()
     {
-        while (n_Time.Value > 1)
+        while (n_Time.Value >= 1)
         {
             yield return new WaitForSeconds(1);
             n_Time.Value--;

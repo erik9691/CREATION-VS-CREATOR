@@ -16,11 +16,6 @@ public class OverlordHealth : NetworkBehaviour
     {
         UpdateOverlordHealthServerRpc(damage);
         UpdateOverlordHealthClientRpc(overlordHealth.Value);
-
-        if (overlordHealth.Value <= 0)
-        {
-            //muere el overlord
-        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -33,5 +28,18 @@ public class OverlordHealth : NetworkBehaviour
     void UpdateOverlordHealthClientRpc(float value)
     {
         UIManager.Instance.UpdateOverlordHealth(value);
+
+        if (value <= 0)
+        {
+            if (IsHost)
+            {
+                UIManager.Instance.GameLost();
+            }
+            else
+            {
+                UIManager.Instance.GameWon();
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
     }
 }
