@@ -59,8 +59,6 @@ public class PlayerRagdoll : NetworkBehaviour
 
     public void ExplodeImpulse(float explodeForce, Vector3 explodePos, float explodeRadius, float upMod)
     {
-        Debug.Log("Explode Impulse");
-
         StartCoroutine(Knockdown());
 
         ExplodeImpulseServerRpc(GetComponent<NetworkObject>(), explodeForce, explodePos, explodeRadius, upMod);
@@ -69,7 +67,6 @@ public class PlayerRagdoll : NetworkBehaviour
     [ServerRpc (RequireOwnership = false)]
     void ExplodeImpulseServerRpc(NetworkObjectReference objectReference, float explodeForceS, Vector3 explodePosS, float explodeRadiusS, float upModS)
     {
-        Debug.Log("Explode Impulse SERVER");
 
         // Rigidbody[] ragdolRb = null;
 
@@ -88,19 +85,15 @@ public class PlayerRagdoll : NetworkBehaviour
     [ClientRpc]
     void ExplodeImpulseClientRpc(NetworkObjectReference objectReference, float explodeForceC, Vector3 explodePosC, float explodeRadiusC, float upModC)
     {
-        Debug.Log("Explode Impulse CLIENT");
-
         Rigidbody[] ragdolRb = null;
 
         if (objectReference.TryGet(out NetworkObject minion))
         {
-            Debug.Log("get object CLIENT");
             ragdolRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
         }
 
         foreach (Rigidbody rb in ragdolRb)
         {
-            Debug.Log("add force CLIENT");
             rb.AddExplosionForce(explodeForceC, explodePosC, explodeRadiusC, upModC);
         }
     }
@@ -117,9 +110,23 @@ public class PlayerRagdoll : NetworkBehaviour
         GetComponentInChildren<CinemachineFreeLook>().Priority -= 20;
     }
 
+    public void StartRagdoll()
+    {
+        
+        StartRagdollServerRpc();
+    }
+
+    public void StopRagdoll()
+    {
+        Vector3 getUpPosition = ragdollCol[0].transform.position;
+        getUpPosition.y += 1;
+        transform.position = getUpPosition;
+
+        StopRagdollServerRpc();
+    }
 
     [ServerRpc(RequireOwnership = false)]
-    public void StartRagdollServerRpc()
+    void StartRagdollServerRpc()
     {
         // animator.enabled = false;
 
@@ -140,7 +147,7 @@ public class PlayerRagdoll : NetworkBehaviour
 
 
     [ClientRpc]
-    public void StartRagdollClientRpc()
+    void StartRagdollClientRpc()
     {
         animator.enabled = false;
 
@@ -161,7 +168,7 @@ public class PlayerRagdoll : NetworkBehaviour
 
 
     [ServerRpc (RequireOwnership = false)]
-    public void StopRagdollServerRpc()
+    void StopRagdollServerRpc()
     {
         // Vector3 getUpPosition = ragdollCol[0].transform.position;
         // getUpPosition.y += 0.5f;
@@ -188,9 +195,6 @@ public class PlayerRagdoll : NetworkBehaviour
     void StopRagdollClientRpc()
     {
         if (IsGrabbed) Destroy(ragdollCol[0].GetComponent<FixedJoint>());
-        Vector3 getUpPosition = ragdollCol[0].transform.position;
-        getUpPosition.y += 1;
-        transform.position = getUpPosition;
 
         animator.enabled = true;
 
@@ -205,19 +209,5 @@ public class PlayerRagdoll : NetworkBehaviour
 
         mainCol.isTrigger = false;
         mainRb.isKinematic = false;
-    }
-
-    [ServerRpc (RequireOwnership = false)]
-    public void TurnKinematicServerRpc()
-    {
-        mainRb.isKinematic = true;
-        TurnKinematicClientRpc();
-    }
-
-    [ClientRpc]
-
-    void TurnKinematicClientRpc()
-    {
-        mainRb.isKinematic = true;
     }
 }

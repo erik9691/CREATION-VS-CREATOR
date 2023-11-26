@@ -76,6 +76,16 @@ public class PlayerHealth : NetworkBehaviour
 
     public IEnumerator TakeDamage(bool isOverlord = false, bool isRight = true)
     {
+        while (MinionHealth >= 0)
+        {
+            yield return new WaitForSeconds(_dmgRate);
+
+            MinionHealth -= _dmgAmount;
+
+            UpdateHealthUI();
+            MakeRedServerRpc();
+        }
+
         if (isOverlord)
         {
             Transform hand = GameObject.FindGameObjectWithTag("Overlord").transform.GetChild(0);
@@ -88,18 +98,6 @@ public class PlayerHealth : NetworkBehaviour
                 hand.GetChild(1).GetComponent<GrabMinion>().anchor = Vector3.zero;
             }
         }
-
-        while (MinionHealth >= 0)
-        {
-            yield return new WaitForSeconds(_dmgRate);
-
-            MinionHealth -= _dmgAmount;
-
-            UpdateHealthUI();
-            MakeRedServerRpc();
-        }
-
-        
     }
 
     void UpdateHealthUI()
@@ -116,7 +114,7 @@ public class PlayerHealth : NetworkBehaviour
                 {
                     UIManager.Instance.UpdateMinionHealth(3);
                     pRagdoll.DisableInputs();
-                    pRagdoll.StartRagdollServerRpc();
+                    pRagdoll.StartRagdoll();
 
                     StartCoroutine(Respawn());
                 }
@@ -157,7 +155,7 @@ public class PlayerHealth : NetworkBehaviour
     {
         yield return new WaitForSeconds(_respawnTime);
 
-        pRagdoll.StopRagdollServerRpc();
+        pRagdoll.StopRagdoll();
 
         Vector3 spawnLocation = GameObject.Find("Minion Spawn").transform.position;
         transform.position = spawnLocation;

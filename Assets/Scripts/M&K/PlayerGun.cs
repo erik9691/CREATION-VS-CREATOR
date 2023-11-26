@@ -113,7 +113,7 @@ public class PlayerGun : NetworkBehaviour
 
     public void ReloadAction(InputAction.CallbackContext obj)
     {
-        if (obj.started)
+        if (obj.started && _clipAmmo < _clipCapacity)
         {
             ReloadStart();
         }
@@ -121,6 +121,7 @@ public class PlayerGun : NetworkBehaviour
 
     void ReloadStart()
     {
+        if (!IsOwner) return;
         CanShoot = false;
         GetComponentInChildren<Animator>().Play("Reloading");
     }
