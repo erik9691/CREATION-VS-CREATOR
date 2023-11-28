@@ -20,6 +20,7 @@ public class LobbyItem : MonoBehaviour
 
     public void Join()
     {
+        AudioManager.Instance.PlaySfx("Join Game", gameObject);
         lobbiesList.JoinAsync(lobby);
     }
 }

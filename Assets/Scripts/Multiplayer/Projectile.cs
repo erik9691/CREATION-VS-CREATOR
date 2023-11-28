@@ -11,7 +11,7 @@ public class Projectile : MonoBehaviour
     {
         if (gameObject.tag == "Bullet")
         {
-            Invoke("DeleteProjectileServerRpc", 2);
+            Invoke("DeleteBulletServerRpc", 2);
         }
     }
 
@@ -22,12 +22,12 @@ public class Projectile : MonoBehaviour
         if (other.tag == "Overlord Head")
         {
             other.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount);
-            DeleteProjectileServerRpc();
+            DeleteBulletServerRpc();
         }
         else if (other.tag == "Overlord Hand")
         {
             other.transform.parent.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount/2);
-            DeleteProjectileServerRpc();
+            DeleteBulletServerRpc();
         }
     }
 
@@ -39,13 +39,40 @@ public class Projectile : MonoBehaviour
         {
             collision.transform.parent.parent.GetComponent<OverlordHealth>().TakeDamage(dmgAmount);
         }
-        //do cool explosion
-        DeleteProjectileServerRpc();
+
+        DeleteProjectileServerRpc(GetComponent<NetworkObject>());
     }
 
     [ServerRpc]
-    private void DeleteProjectileServerRpc()
+    private void DeleteBulletServerRpc()
     {
         gameObject.GetComponent<NetworkObject>().Despawn();
+    }
+
+    [ServerRpc]
+    private void DeleteProjectileServerRpc(NetworkObjectReference objectReference)
+    {
+        if (objectReference.TryGet(out NetworkObject networkObject))
+        {
+            StartCoroutine(DespawnDelay(networkObject));
+        }
+        
+        ExplodeEffectClientRpc(objectReference);
+    }
+
+    [ClientRpc]
+    void ExplodeEffectClientRpc(NetworkObjectReference objectRef)
+    {
+        if (objectRef.TryGet(out NetworkObject networkObject))
+        {
+            networkObject.GetComponent<MeshRenderer>().enabled = false;
+            networkObject.transform.Find("TinyExplosion").GetComponent<ParticleSystem>().Play();
+        }
+    }
+
+    IEnumerator DespawnDelay(NetworkObject objecty)
+    {
+        yield return new WaitForSeconds(3);
+        objecty.Despawn();
     }
 }

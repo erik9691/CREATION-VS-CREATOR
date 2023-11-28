@@ -41,19 +41,14 @@ public class PlayerRagdoll : NetworkBehaviour
             StartCoroutine(Knockdown());
             KnockDown = false;
         }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            StartCoroutine(Knockdown());
-        }
     }
 
     public IEnumerator Knockdown()
     {
         DisableInputs();
-        StartRagdollServerRpc();
+        StartRagdollServerRpc(GetComponent<NetworkObject>(), IsGrabbed);
         yield return new WaitForSeconds(_knockTime);
-        StopRagdollServerRpc();
+        StopRagdollServerRpc(GetComponent<NetworkObject>());
         EnableInputs();
     }
 
@@ -61,27 +56,18 @@ public class PlayerRagdoll : NetworkBehaviour
     {
         StartCoroutine(Knockdown());
 
+        GetComponent<PlayerHealth>().MinionHealth = 1;
+        StartCoroutine(GetComponent<PlayerHealth>().TakeDamage());
+
         ExplodeImpulseServerRpc(GetComponent<NetworkObject>(), explodeForce, explodePos, explodeRadius, upMod);
     }
 
     [ServerRpc (RequireOwnership = false)]
     void ExplodeImpulseServerRpc(NetworkObjectReference objectReference, float explodeForceS, Vector3 explodePosS, float explodeRadiusS, float upModS)
     {
-
-        // Rigidbody[] ragdolRb = null;
-
-        // if (objectReference.TryGet(out NetworkObject minion))
-        // {
-        //     ragdolRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
-        // }
-
-        // foreach (Rigidbody rb in ragdolRb)
-        // {
-        //     rb.AddExplosionForce(eForce, ePos, eRadius, uMod);
-        // }
-
         ExplodeImpulseClientRpc(objectReference, explodeForceS, explodePosS, explodeRadiusS, upModS);
     }
+
     [ClientRpc]
     void ExplodeImpulseClientRpc(NetworkObjectReference objectReference, float explodeForceC, Vector3 explodePosC, float explodeRadiusC, float upModC)
     {
@@ -112,102 +98,105 @@ public class PlayerRagdoll : NetworkBehaviour
 
     public void StartRagdoll()
     {
-        
-        StartRagdollServerRpc();
+        StartRagdollServerRpc(GetComponent<NetworkObject>(), IsGrabbed);
     }
 
     public void StopRagdoll()
     {
-        Vector3 getUpPosition = ragdollCol[0].transform.position;
-        getUpPosition.y += 1;
-        transform.position = getUpPosition;
-
-        StopRagdollServerRpc();
+        StopRagdollServerRpc(GetComponent<NetworkObject>());
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void StartRagdollServerRpc()
+    void StartRagdollServerRpc(NetworkObjectReference minionReference, bool grabby)
     {
-        // animator.enabled = false;
-
-        // foreach (Collider col in ragdollCol)
-        // {
-        //     col.isTrigger = false;
-        // }
-        // foreach (Rigidbody rigid in ragdollRb)
-        // {
-        //     rigid.isKinematic = false;
-        // }
-
-        // mainCol.isTrigger = true;
-        // mainRb.isKinematic = true;
-
-        StartRagdollClientRpc();
+        StartRagdollClientRpc(minionReference, grabby);
     }
 
 
     [ClientRpc]
-    void StartRagdollClientRpc()
+    void StartRagdollClientRpc(NetworkObjectReference minionRef, bool nIsGrabbed)
     {
-        animator.enabled = false;
+        Rigidbody[] nragdollRb = null;
+        Collider[] nragdollCol = null;
+        Animator nanimator = null;
+        Rigidbody nmainRb = null;
+        Collider nmainCol = null;
 
-        foreach (Collider col in ragdollCol)
+        if (minionRef.TryGet(out NetworkObject networkObject))
+        {
+            nmainCol = GetComponent<Collider>();
+            nmainRb = GetComponent<Rigidbody>();
+
+            nragdollRb = networkObject.transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
+            nragdollCol = networkObject.transform.GetChild(0).GetComponentsInChildren<Collider>(true);
+
+            nanimator = networkObject.GetComponentInChildren<Animator>(true);
+        }
+
+        nanimator.enabled = false;
+
+        foreach (Collider col in nragdollCol)
         {
             col.isTrigger = false;
         }
-        foreach (Rigidbody rigid in ragdollRb)
+        foreach (Rigidbody rigid in nragdollRb)
         {
             rigid.isKinematic = false;
         }
 
-        mainCol.isTrigger = true;
-        mainRb.isKinematic = true;
-        if (IsGrabbed) ragdollCol[0].AddComponent<FixedJoint>().connectedBody = mainRb;
+        nmainCol.isTrigger = true;
+        nmainRb.isKinematic = true;
+        if (nIsGrabbed) nragdollCol[0].AddComponent<FixedJoint>().connectedBody = nmainRb;
     }
 
 
 
     [ServerRpc (RequireOwnership = false)]
-    void StopRagdollServerRpc()
+    void StopRagdollServerRpc(NetworkObjectReference minionReference)
     {
-        // Vector3 getUpPosition = ragdollCol[0].transform.position;
-        // getUpPosition.y += 0.5f;
-        // transform.position = getUpPosition;
-
-        // animator.enabled = true;
-
-        // foreach (Collider col in ragdollCol)
-        // {
-        //     col.isTrigger = true;
-        // }
-        // foreach (Rigidbody rigid in ragdollRb)
-        // {
-        //     rigid.isKinematic = true;
-        // }
-
-        // mainCol.isTrigger = false;
-        // mainRb.isKinematic = false;
-
-        StopRagdollClientRpc();
+        StopRagdollClientRpc(GetComponent<NetworkObject>());
     }
 
     [ClientRpc]
-    void StopRagdollClientRpc()
+    void StopRagdollClientRpc(NetworkObjectReference minionRef)
     {
-        if (IsGrabbed) Destroy(ragdollCol[0].GetComponent<FixedJoint>());
+        Rigidbody[] nragdollRb = null;
+        Collider[] nragdollCol = null;
+        Animator nanimator = null;
+        Rigidbody nmainRb = null;
+        Collider nmainCol = null;
+        GameObject ngameObject = null;
 
-        animator.enabled = true;
+        if (minionRef.TryGet(out NetworkObject networkObject))
+        {
+            nmainCol = networkObject.GetComponent<Collider>();
+            nmainRb = networkObject.GetComponent<Rigidbody>();
+            ngameObject = networkObject.gameObject;
 
-        foreach (Collider col in ragdollCol)
+            nragdollRb = networkObject.transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
+            nragdollCol = networkObject.transform.GetChild(0).GetComponentsInChildren<Collider>(true);
+
+            nanimator = networkObject.GetComponentInChildren<Animator>(true);
+        }
+
+        if (nragdollCol[0].GetComponent<FixedJoint>() != null) Destroy(nragdollCol[0].GetComponent<FixedJoint>());
+
+        Vector3 getUpPosition = nragdollCol[0].transform.position;
+        getUpPosition.y += 1;
+        ngameObject.transform.position = getUpPosition;
+
+        nanimator.enabled = true;
+
+        foreach (Collider col in nragdollCol)
         {
             col.isTrigger = true;
         }
-        foreach (Rigidbody rigid in ragdollRb)
+        foreach (Rigidbody rigid in nragdollRb)
         {
             rigid.isKinematic = true;
         }
 
-        mainCol.isTrigger = false;
-        mainRb.isKinematic = false;
+        nmainCol.isTrigger = false;
+        nmainRb.isKinematic = false;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] minuteCounters;
 
     TextMeshProUGUI clipAmmoUI;
-    TextMeshProUGUI storedAmmoUI;
+    TextMeshProUGUI storedAmmoUI, respawnUI;
     Slider interactSlider;
     Slider overlordSlider;
     Image minionStatus;
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour
 
         clipAmmoUI = minionUI.transform.Find("Ammo").transform.Find("ClipAmmo").GetComponent<TextMeshProUGUI>();
         storedAmmoUI = minionUI.transform.Find("Ammo").transform.Find("StoredAmmo").GetComponent<TextMeshProUGUI>();
+        respawnUI = minionUI.transform.Find("RespawnTimer").GetComponent<TextMeshProUGUI>();
         interactSlider = minionUI.transform.Find("Interact").GetComponent<Slider>();
         overlordSlider = minionUI.transform.Find("OverlordHealth").GetComponent<Slider>();
         minionStatus = minionUI.transform.Find("Status").GetComponent<Image>();
@@ -90,5 +92,15 @@ public class UIManager : MonoBehaviour
     public void GameWon()
     {
         gameWonUI.SetActive(true);
+    }
+
+    public void UpdateRespawn(float time)
+    {
+        respawnUI.text = time.ToString();
+    }
+
+    public void ActivateRespawn(bool activate)
+    {
+        respawnUI.gameObject.SetActive(activate);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using System.Threading;
 
 public class PlayerHealth : NetworkBehaviour
 {
@@ -102,16 +103,20 @@ public class PlayerHealth : NetworkBehaviour
 
     void UpdateHealthUI()
     {
+        if (!IsOwner) return;
         if (MinionHealth <= (maxHealth - (maxHealth / 3)))
         {
+            AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
             pMovement.HealthMult = 0.75f;
             UIManager.Instance.UpdateMinionHealth(1);
             if (MinionHealth <= (maxHealth - ((maxHealth / 3) * 2)))
             {
+                AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
                 pMovement.HealthMult = 0.5f;
                 UIManager.Instance.UpdateMinionHealth(2);
                 if (MinionHealth <= 0)
                 {
+                    AudioManager.Instance.PlaySfx("Minion Death", gameObject);
                     UIManager.Instance.UpdateMinionHealth(3);
                     pRagdoll.DisableInputs();
                     pRagdoll.StartRagdoll();
@@ -153,7 +158,15 @@ public class PlayerHealth : NetworkBehaviour
 
     public IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(_respawnTime);
+        float time = _respawnTime;
+        UIManager.Instance.ActivateRespawn(true);
+        while (time >= 0)
+        {
+            yield return new WaitForSeconds(1);
+            UIManager.Instance.UpdateRespawn(time);
+            time--;
+        }
+        
 
         pRagdoll.StopRagdoll();
 
@@ -164,6 +177,7 @@ public class PlayerHealth : NetworkBehaviour
         MinionHealth = maxHealth;
         pMovement.HealthMult = 1f;
         UIManager.Instance.UpdateMinionHealth(0);
+        UIManager.Instance.ActivateRespawn(false);
 
         pRagdoll.EnableInputs();
     }

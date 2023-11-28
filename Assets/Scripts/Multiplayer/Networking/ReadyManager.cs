@@ -63,6 +63,7 @@ public class ReadyManager : NetworkBehaviour
 
     void RefreshPlayerList(NetworkListEvent<ulong> changeEvent)
     {
+        AudioManager.Instance.PlaySfx("Join Game", gameObject);
         for (int i = 1; i < playerCards.Length; i++)
         {
             if (i < n_connectedIds.Count)

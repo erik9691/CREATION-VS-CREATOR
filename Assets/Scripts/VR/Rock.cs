@@ -19,6 +19,14 @@ public class Rock : NetworkBehaviour
         rb.constraints = RigidbodyConstraints.None;
     }
 
+    private void OnCollisionEnter(Collision other) 
+    {
+        if (gameObject.tag == "Knock")
+        {
+            AudioManager.Instance.PlaySfx("Rock Hit", gameObject);
+        }
+    }
+
     IEnumerator DespawnRockCoroutine()
     {
         yield return new WaitForSeconds(4);

@@ -87,6 +87,7 @@ public class PlayerMovement : NetworkBehaviour
                 anim.SetBool("isFalling", false);
                 anim.SetBool("isJumping", false);
                 inAir = false;
+                AudioManager.Instance.PlaySfx("Land", gameObject);
             }
         }
     }
@@ -97,6 +98,7 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
         if (canJump && obj.performed)
         {
+            AudioManager.Instance.PlaySfx("Jump", gameObject);
             anim.SetBool("isJumping", true);
             canJump = false;
         }

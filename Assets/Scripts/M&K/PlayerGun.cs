@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerGun : NetworkBehaviour
 {
     [SerializeField]
-    float _bulSpeed = 1000f, _shootRate = 1f, _reloadTime = 1.5f;
+    float _bulSpeed = 1000f, _shootRate = 1f;
     [SerializeField]
     int _storedAmmo = 30, _clipAmmo = 5, _clipCapacity = 5, _maxAmmo = 30, _boxAmmo = 15;
 
@@ -49,6 +49,8 @@ public class PlayerGun : NetworkBehaviour
         {
             if (_storedAmmo > 0 || _clipAmmo > 0)
             {
+                AudioManager.Instance.PlaySfx("Laser Gun", gameObject);
+
                 if (_clipAmmo == 0)
                 {
                     ReloadStart();
@@ -155,6 +157,8 @@ public class PlayerGun : NetworkBehaviour
                 {
                     _storedAmmo += _boxAmmo;
                 }
+
+                AudioManager.Instance.PlaySfx("Grab Ammo", gameObject);
 
                 DeleteBoxServerRpc(other.gameObject);
             }

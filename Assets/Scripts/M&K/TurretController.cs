@@ -59,6 +59,7 @@ public class TurretController : NetworkBehaviour
         {
             if (playerInput.actions["Shoot"].WasPressedThisFrame())
             {
+                AudioManager.Instance.PlaySfx("Laser Cannon", gameObject);
                 GetComponent<TurretShoot>().SpawnTurretBulletServerRpc();
             }
         }
@@ -66,6 +67,7 @@ public class TurretController : NetworkBehaviour
 
     public void Mount(bool mount, PlayerInput pi = null)
     {
+        AudioManager.Instance.PlaySfx("Mount Cannon", gameObject);
         UpdateMountServerRpc(mount, GetComponent<NetworkObject>());
         IsMounted = mount;
         playerInput = pi;

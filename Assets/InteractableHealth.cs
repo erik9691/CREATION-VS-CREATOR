@@ -16,8 +16,8 @@ public class InteractableHealth : NetworkBehaviour
         {
             Debug.Log("Hand Hit");
             HP--;
-            //update hp visuals
-            if (HP <= 0)
+
+            if (HP <= 0 && n_IsDestroyed.Value != true)
             {
                 DestroyInterServerRpc(gameObject);
                 StartCoroutine(RespawnInter());
@@ -53,7 +53,7 @@ public class InteractableHealth : NetworkBehaviour
 
     IEnumerator RespawnInter()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(20f);
         
         RepairModelServerRpc(gameObject);
         HP = maxHP;

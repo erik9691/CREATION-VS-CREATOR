@@ -21,6 +21,7 @@ public class Rocket : MonoBehaviour
     void Update()
     {
         if (isGrabbed) return;
+        
         Vector3 lookDirection = target.position - transform.position;
         lookDirection.Normalize();
 
@@ -48,5 +49,6 @@ public class Rocket : MonoBehaviour
     public void GotGrabbed()
     {
         isGrabbed = true;
+        gameObject.tag = "Knock";
     }
 }

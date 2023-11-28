@@ -9,7 +9,7 @@ public class OverlordHealth : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        overlordHealth.Value = 100;
+        overlordHealth.Value = 150;
     }
 
     public void TakeDamage(float damage)

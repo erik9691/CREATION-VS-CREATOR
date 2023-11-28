@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class ChangeUI : MonoBehaviour
 {
-    [SerializeField] GameObject Overlord, mainCamera;
+    [SerializeField] GameObject Overlord, mainCamera, Lobby, Join, Play;
     [SerializeField] Canvas UI;
 
     private void Awake()
@@ -26,6 +26,9 @@ public class ChangeUI : MonoBehaviour
                 UI.renderMode = RenderMode.WorldSpace;
                 UI.GetComponent<RectTransform>().localScale = new Vector3(0.06f, 0.06f, 0.06f);
                 UI.GetComponent<RectTransform>().position = new Vector3(0, 4.5f, 0);
+                Lobby.SetActive(false);
+                Join.SetActive(false);
+                Play.SetActive(true);
             }
         }
     }
