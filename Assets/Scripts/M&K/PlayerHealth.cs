@@ -104,14 +104,13 @@ public class PlayerHealth : NetworkBehaviour
     void UpdateHealthUI()
     {
         if (!IsOwner) return;
+
         if (MinionHealth <= (maxHealth - (maxHealth / 3)))
         {
-            AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
             pMovement.HealthMult = 0.75f;
             UIManager.Instance.UpdateMinionHealth(1);
             if (MinionHealth <= (maxHealth - ((maxHealth / 3) * 2)))
             {
-                AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
                 pMovement.HealthMult = 0.5f;
                 UIManager.Instance.UpdateMinionHealth(2);
                 if (MinionHealth <= 0)
@@ -123,7 +122,19 @@ public class PlayerHealth : NetworkBehaviour
 
                     StartCoroutine(Respawn());
                 }
+                else
+                {
+                    AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
+                }
             }
+            else
+            {
+                AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
+            }
+        }
+        else
+        {
+            AudioManager.Instance.PlaySfx("Minion Hurt", gameObject);
         }
     }
 

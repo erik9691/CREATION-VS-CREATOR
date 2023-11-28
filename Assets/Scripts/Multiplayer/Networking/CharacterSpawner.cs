@@ -15,6 +15,7 @@ public class CharacterSpawner : NetworkBehaviour
     {
         if (!IsServer) return;
         StartCoroutine(SpawnPlayers());
+        ActivateMusicClientRpc();
     }
 
     IEnumerator SpawnPlayers()
@@ -33,5 +34,11 @@ public class CharacterSpawner : NetworkBehaviour
                 minion.GetComponent<NetworkObject>().SpawnAsPlayerObject(HostManager.Instance.ConnectedIds[i]);
             }
         }
+    }
+
+    [ClientRpc]
+    void ActivateMusicClientRpc()
+    {
+        AudioManager.Instance.PlayMusic("Gameplay");
     }
 }

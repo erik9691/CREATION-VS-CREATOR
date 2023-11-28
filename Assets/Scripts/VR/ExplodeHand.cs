@@ -95,6 +95,7 @@ public class ExplodeHand : NetworkBehaviour
     void StartFire(bool activate, NetworkObjectReference networkObjectReference, bool isRight)
     {
         StartFireClientRpc(activate, networkObjectReference, isRight);
+        ExplodeSoundClientRpc(networkObjectReference);
     }
 
     [ClientRpc]
@@ -117,10 +118,12 @@ public class ExplodeHand : NetworkBehaviour
             if (activate)
             {
                 fire.Play();
+                fire.GetComponent<AudioSource>().Play();
             }
             else
             {
                 fire.Stop();
+                fire.GetComponent<AudioSource>().Stop();
             }
         }
     }
@@ -172,6 +175,15 @@ public class ExplodeHand : NetworkBehaviour
             fireOn = false;
             didExplosion = true;
             StartFire(false, GetComponentInParent<NetworkObject>(), _isRight);
+        }
+    }
+
+    [ClientRpc]
+    void ExplodeSoundClientRpc(NetworkObjectReference objectReference)
+    {
+        if (objectReference.TryGet(out NetworkObject hand))
+        {
+            AudioManager.Instance.PlaySfx("Hand Explosion", hand.gameObject);
         }
     }
  

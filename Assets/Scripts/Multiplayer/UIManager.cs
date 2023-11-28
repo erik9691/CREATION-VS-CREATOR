@@ -7,7 +7,8 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameObject minionUI, gameLostUI, gameWonUI;
+    [SerializeField] GameObject minionUI;
+    public GameObject gameLostUI, gameWonUI;
     [SerializeField] Sprite[] reticles;
     [SerializeField] Sprite[] statuses;
     [SerializeField] TextMeshProUGUI[] minuteCounters;
@@ -87,11 +88,13 @@ public class UIManager : MonoBehaviour
     public void GameLost()
     {
         gameLostUI.SetActive(true);
+        AudioManager.Instance.PlayMusic("End Screen");
     }
 
     public void GameWon()
     {
         gameWonUI.SetActive(true);
+        AudioManager.Instance.PlayMusic("End Screen");
     }
 
     public void UpdateRespawn(float time)

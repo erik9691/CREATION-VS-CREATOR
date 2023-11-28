@@ -67,6 +67,7 @@ public class Projectile : MonoBehaviour
         {
             networkObject.GetComponent<MeshRenderer>().enabled = false;
             networkObject.transform.Find("TinyExplosion").GetComponent<ParticleSystem>().Play();
+            AudioManager.Instance.PlaySfx("Missile Explosion", networkObject.gameObject);
         }
     }
 

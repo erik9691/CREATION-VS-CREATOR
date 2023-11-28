@@ -124,6 +124,7 @@ public class PlayerGun : NetworkBehaviour
     void ReloadStart()
     {
         if (!IsOwner) return;
+        AudioManager.Instance.PlaySfx("Reload", gameObject);
         CanShoot = false;
         GetComponentInChildren<Animator>().Play("Reloading");
     }

@@ -18,8 +18,11 @@ public class PlayerRagdoll : NetworkBehaviour
     Rigidbody mainRb;
     Collider mainCol;
     Animator animator;
+    GameObject wonUI, lostUI;
 
     public bool IsGrabbed;
+
+    bool gameEnd = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,9 @@ public class PlayerRagdoll : NetworkBehaviour
 
         ragdollRb = transform.GetChild(0).GetComponentsInChildren<Rigidbody>(true);
         ragdollCol = transform.GetChild(0).GetComponentsInChildren<Collider>(true);
+
+        wonUI = UIManager.Instance.gameWonUI;
+        lostUI = UIManager.Instance.gameLostUI;
 
         animator = GetComponentInChildren<Animator>();
     }
@@ -40,6 +46,12 @@ public class PlayerRagdoll : NetworkBehaviour
         {
             StartCoroutine(Knockdown());
             KnockDown = false;
+        }
+
+        if ((wonUI.activeInHierarchy || lostUI.activeInHierarchy) && gameEnd == false)
+        {
+            DisableInputs();
+            gameEnd = true;
         }
     }
 
